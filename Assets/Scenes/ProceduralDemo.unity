@@ -329,7 +329,9 @@ MonoBehaviour:
   rooms:
   - {fileID: 5684972917573014482, guid: 02226cf9414773e408b4db0152614235, type: 3}
   - {fileID: 1224279844138013557, guid: a2d91a6aee2bf3349b156d0cb80c163f, type: 3}
+  - {fileID: 1224279844138013557, guid: a2d91a6aee2bf3349b156d0cb80c163f, type: 3}
   corridor: {fileID: 2565459888925047785, guid: 8645ccc9152fb324d9460a716686fb9d, type: 3}
+  roomCount: 3
 --- !u!4 &2009757072
 Transform:
   m_ObjectHideFlags: 0
