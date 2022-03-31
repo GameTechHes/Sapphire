@@ -490,12 +490,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   doorModel: {fileID: 9074594807983055082, guid: 15745f8b70e5d524183539fa272d90a3, type: 3}
-  doors:
+  doorsTransforms:
   - {fileID: 7630555889561633751}
   - {fileID: 7630555889077697520}
   - {fileID: 7630555889394850874}
   - {fileID: 7630555890611109007}
   isDoorActive: 00010000
+  rotation: 0
 --- !u!1 &488677674298756681
 GameObject:
   m_ObjectHideFlags: 0

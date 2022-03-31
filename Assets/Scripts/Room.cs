@@ -1,25 +1,26 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Room : MonoBehaviour
 {
     public GameObject doorModel;
 
-    [Header("Doors transforms")] public List<Transform> doors;
+    [FormerlySerializedAs("doors")] [Header("Doors transforms")] public List<Transform> doorsTransforms;
 
     [Header("Doors activation")] public List<bool> isDoorActive;
 
-    private int xIndex;
-    private int zIndex;
+    public int rotation;
+
 
     // Start is called before the first frame update
     void Start()
     {
         for (var i = 0; i < isDoorActive.Count; i++)
         {
-            if (!isDoorActive[i] && doors[i] != null)
+            if (!isDoorActive[i] && doorsTransforms[i] != null)
             {
-                var door = Instantiate(doorModel, doors[i]);
+                var door = Instantiate(doorModel, doorsTransforms[i]);
                 door.transform.Translate(Vector3.left * 0.675f + Vector3.back * 0.1f, Space.Self);
             }
         }
@@ -30,7 +31,7 @@ public class Room : MonoBehaviour
         var activeDoors = new List<Transform>();
         for (int i = 0; i < isDoorActive.Count; i++)
         {
-            if (isDoorActive[i]) activeDoors.Add(doors[i]);
+            if (isDoorActive[i]) activeDoors.Add(doorsTransforms[i]);
         }
 
         return activeDoors;
@@ -48,16 +49,10 @@ public class Room : MonoBehaviour
         var result = new List<Transform>();
         for (var i = 0; i < isDoorActive.Count; i++)
         {
-            result.Add(doors[(i + rotationAmount) % doors.Count]);
+            result.Add(doorsTransforms[(i + rotationAmount) % doorsTransforms.Count]);
         }
 
         return result;
-    }
-
-    public void SetIndexes(int xIndex, int zIndex)
-    {
-        this.xIndex = xIndex;
-        this.zIndex = zIndex;
     }
 
 }
