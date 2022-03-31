@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using StarterAssets;
  
 public class shoot : MonoBehaviour
 {
@@ -12,10 +13,14 @@ public class shoot : MonoBehaviour
    public int timeBetweenShots = 1;   
    public float launchVelocity = 700f;
    public Text _ammoText;
+   GameObject PlayerArmature;
+	private StarterAssetsInputs _input;
 
 
    void Start(){
       _ammoText.text = ammoCount.ToString();
+      PlayerArmature = GameObject.Find("PlayerArmature");
+      _input = PlayerArmature.GetComponent<StarterAssetsInputs>();
    }
 
    IEnumerator Fire(){
@@ -33,9 +38,13 @@ public class shoot : MonoBehaviour
    }
  
    void Update(){
-      if(_canShoot && Keyboard.current.enterKey.wasPressedThisFrame){
-         _canShoot = false;
-         StartCoroutine(Fire());
+      if(_input.shoot){
+         _input.shoot = false;
+         if(_canShoot && Keyboard.current.enterKey.wasPressedThisFrame){
+            Debug.Log("Player shot.");
+            _canShoot = false;
+            StartCoroutine(Fire());
+         }
       }
    }
 }

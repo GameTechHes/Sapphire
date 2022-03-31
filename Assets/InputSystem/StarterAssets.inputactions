@@ -49,6 +49,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "DisplayMap",
+                    "type": "Button",
+                    "id": "b78f02ee-c3c7-4e2c-bbc8-0c2be2d099ab",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -238,8 +247,25 @@
                     "action": "Shoot",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b47f4d02-95ef-4ddf-88ad-d865c3120eeb",
+                    "path": "<Keyboard>/m",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "DisplayMap",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "UI",
+            "id": "2c0a7ffc-5c14-4427-aae4-26403305e7aa",
+            "actions": [],
+            "bindings": []
         }
     ],
     "controlSchemes": [

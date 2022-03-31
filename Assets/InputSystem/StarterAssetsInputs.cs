@@ -12,6 +12,10 @@ namespace StarterAssets
 		public Vector2 look;
 		public bool jump;
 		public bool sprint;
+		public bool shoot;
+
+		[Header("UI Input Values")]
+		public bool displayMap;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -41,14 +45,31 @@ namespace StarterAssets
 			JumpInput(value.isPressed);
 		}
 
+		public void OnShoot(InputValue value)
+		{
+			ShootInput(value.isPressed);
+		}
+
 		public void OnSprint(InputValue value)
 		{
 			SprintInput(value.isPressed);
+		}
+
+		public void OnDisplayMap(InputValue value)
+		{
+			Debug.Log("DisplayMap");
+			DisplayMapInput(value.isPressed);
 		}
 #else
 	// old input sys if we do decide to have it (most likely wont)...
 #endif
 
+
+
+		public void DisplayMapInput(bool newDisplayMapState)
+		{
+			displayMap = newDisplayMapState;
+		}
 
 		public void MoveInput(Vector2 newMoveDirection)
 		{
@@ -63,6 +84,11 @@ namespace StarterAssets
 		public void JumpInput(bool newJumpState)
 		{
 			jump = newJumpState;
+		}
+
+		public void ShootInput(bool newShootInput)
+		{
+			shoot = newShootInput;
 		}
 
 		public void SprintInput(bool newSprintState)
