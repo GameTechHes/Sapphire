@@ -154,8 +154,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomPrefabs:
   - {fileID: 827034184, guid: cd22cd0b51a68e7469d906110934e079, type: 3}
+  - {fileID: 5764105261261946897, guid: b37f4c6b57935254a90af4dd83f3c5a9, type: 3}
   corridorPrefab: {fileID: 2565459888925047785, guid: 8645ccc9152fb324d9460a716686fb9d, type: 3}
-  totalRoomCount: 4
+  totalRoomCount: 5
 --- !u!4 &150047825
 Transform:
   m_ObjectHideFlags: 0

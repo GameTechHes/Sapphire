@@ -1,69 +1,63 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class Room : MonoBehaviour
 {
     public GameObject doorModel;
 
-    [Header("Doors transforms")]
-    public Transform door1;
-    public Transform door2;
-    public Transform door3;
-    public Transform door4;
+    [Header("Doors transforms")] public List<Transform> doors;
 
-    [Header("Doors activation")]
-    public bool isDoor1Active;
-    public bool isDoor2Active;
-    public bool isDoor3Active;
-    public bool isDoor4Active;
-    
-    [Header("Doors initial state")]
-    public bool isDoor1Present;
-    public bool isDoor2Present;
-    public bool isDoor3Present;
-    public bool isDoor4Present;
-    
+    [Header("Doors activation")] public List<bool> isDoorActive;
+
+    private int xIndex;
+    private int zIndex;
+
     // Start is called before the first frame update
     void Start()
     {
-        if (!isDoor1Active || isDoor1Present)
+        for (var i = 0; i < isDoorActive.Count; i++)
         {
-            var door = Instantiate(doorModel, door1);
-            door.transform.Translate(Vector3.left * 0.675f + Vector3.back * 0.1f, Space.Self);
-        }
-        if (!isDoor2Active || isDoor2Present)
-        {
-            var door = Instantiate(doorModel, door2);
-            door.transform.Translate(Vector3.left * 0.675f + Vector3.back * 0.1f, Space.Self);
-        }
-        if (!isDoor3Active || isDoor3Present)
-        {
-            var door = Instantiate(doorModel, door3);
-            door.transform.Translate(Vector3.left * 0.675f + Vector3.back * 0.1f, Space.Self);
-        }
-        if (!isDoor4Active || isDoor4Present)
-        {
-            var door = Instantiate(doorModel, door4);
-            door.transform.Translate(Vector3.left * 0.675f + Vector3.back * 0.1f, Space.Self);
+            if (!isDoorActive[i])
+            {
+                var door = Instantiate(doorModel, doors[i]);
+                door.transform.Translate(Vector3.left * 0.675f + Vector3.back * 0.1f, Space.Self);
+            }
         }
     }
 
     public List<Transform> GetActiveDoors()
     {
         var activeDoors = new List<Transform>();
-        if(isDoor1Active) activeDoors.Add(door1);
-        if(isDoor2Active) activeDoors.Add(door2);
-        if(isDoor3Active) activeDoors.Add(door3);
-        if(isDoor4Active) activeDoors.Add(door4);
+        for (int i = 0; i < isDoorActive.Count; i++)
+        {
+            if (isDoorActive[i]) activeDoors.Add(doors[i]);
+        }
+
         return activeDoors;
     }
 
-    // Update is called once per frame
-    void Update()
+    /**
+     * res[0] = +x direction
+     * res[1] = +y direction
+     * res[2] = -x direction
+     * res[3] = -y direction
+     */
+    public List<Transform> GetDoorsInOrder()
     {
-        
+        var rotationAmount = Mathf.RoundToInt(Quaternion.Angle(Quaternion.identity, transform.rotation) / 90) % 4;
+        var result = new List<Transform>();
+        for (var i = 0; i < isDoorActive.Count; i++)
+        {
+            result.Add(doors[(i + rotationAmount) % doors.Count]);
+        }
+
+        return result;
     }
+
+    public void SetIndexes(int xIndex, int zIndex)
+    {
+        this.xIndex = xIndex;
+        this.zIndex = zIndex;
+    }
+
 }
