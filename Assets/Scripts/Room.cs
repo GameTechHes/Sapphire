@@ -17,7 +17,7 @@ public class Room : MonoBehaviour
     {
         for (var i = 0; i < isDoorActive.Count; i++)
         {
-            if (!isDoorActive[i])
+            if (!isDoorActive[i] && doors[i] != null)
             {
                 var door = Instantiate(doorModel, doors[i]);
                 door.transform.Translate(Vector3.left * 0.675f + Vector3.back * 0.1f, Space.Self);
