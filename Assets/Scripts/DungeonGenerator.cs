@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class DungeonGenerator : MonoBehaviour
@@ -18,27 +19,6 @@ public class DungeonGenerator : MonoBehaviour
     void Start()
     {
         InstantiateRoom(roomPrefabs[0], 0, 0, new Vector2Int(0, 0));
-        // grid = new Room[gridSize.x, gridSize.y];
-        //
-        //
-        // for (int i = 0; i < gridSize.x; i++)
-        // {
-        //     for (int j = 0; j < gridSize.y; j++)
-        //     {
-        //         if (roomCount == totalRoomCount)
-        //         {
-        //             break;
-        //         }
-        //
-        //         roomCount++;
-        //         var room = Instantiate(roomPrefabs[0], new Vector3(i * SCALE_FACTOR, 0.0f, j * SCALE_FACTOR),
-        //             Quaternion.identity).GetComponent<Room>();
-        //         foreach (var door in room.GetActiveDoors())
-        //         {
-        //             var corridor = Instantiate(corridorPrefab, door).GetComponent<Corridor>();
-        //             corridor.transform.position += corridor.transform.position - corridor.start.position;
-        //         }
-        //     }
     }
 
     private void InstantiateRoom(Room roomPrefab, int x, int y, Vector2Int origin)
@@ -47,17 +27,20 @@ public class DungeonGenerator : MonoBehaviour
         {
             return;
         }
+
         roomCount++;
         var rotationIndex = GetNewRoomRotation(roomPrefab, x, y);
         if (rotationIndex == null)
         {
             return;
         }
+
         var rotation = Quaternion.AngleAxis(rotationIndex.Value * 90, Vector3.up);
         var room = Instantiate(roomPrefab, new Vector3(x * SCALE_FACTOR, 0.0f, y * SCALE_FACTOR),
             rotation).GetComponent<Room>();
+        Debug.Log("Instantiate " + room.gameObject.name + $" at {x},{y}");
         room.rotation = rotationIndex.Value;
-        
+
         rooms.Add(new Vector2Int(x, y), room);
 
         if (roomPrefab.GetActiveDoors().Count > 1)
@@ -68,12 +51,13 @@ public class DungeonGenerator : MonoBehaviour
                 {
                     var corridor = Instantiate(corridorPrefab, room.doorsTransforms[i]).GetComponent<Corridor>();
                     corridor.transform.position += corridor.transform.position - corridor.start.position;
-                    var xFactor = Mathf.RoundToInt(Vector3.Dot(corridor.end.transform.forward, Vector3.forward));
-                    var zFactor = Mathf.RoundToInt(Vector3.Dot(corridor.end.transform.forward, Vector3.right));
+                    var xFactor = Mathf.RoundToInt(Vector3.Dot(corridor.end.transform.forward, Vector3.right));
+                    var yFactor = Mathf.RoundToInt(Vector3.Dot(corridor.end.transform.forward, Vector3.forward));
+                    Debug.Log(Vector3.Dot(corridor.end.transform.forward, Vector3.forward) + ", " + Vector3.Dot(corridor.end.transform.forward, Vector3.right));
                     // TODO: Add randomness
-                    Debug.Log((i + rotationIndex.Value) % 4);
                     var roomPrefabToInstantiate = roomPrefabs[Mathf.Min(roomCount, roomPrefabs.Count - 1)];
-                    InstantiateRoom(roomPrefabToInstantiate, x + xFactor, y + zFactor, new Vector2Int(-xFactor, -zFactor));
+                    InstantiateRoom(roomPrefabToInstantiate, x + xFactor, y + yFactor,
+                        new Vector2Int(-xFactor, -yFactor));
                 }
             }
         }
@@ -83,10 +67,14 @@ public class DungeonGenerator : MonoBehaviour
     {
         var adjRooms = GetAdjacentRooms(xIndex, yIndex);
 
+        if (adjRooms.Count(a => a != null) == 0)
+        {
+            return 0;
+        }
+
         // For each orientations
         for (int i = 0; i < 4; i++)
         {
-            var isOrientationValid = true;
             // For each adjacent rooms
             for (int j = 0; j < 4; j++)
             {
@@ -94,18 +82,12 @@ public class DungeonGenerator : MonoBehaviour
                 if (adjRooms[j] != null)
                 {
                     // Check if adjacent doors are both active
-                    if (!(room.isDoorActive[(i + j) % room.isDoorActive.Count] &&
-                        adjRooms[j].GetDoorsInOrder()[(i + 2) % 4]))
+                    if (room.isDoorActive[(i + j) % room.isDoorActive.Count] &&
+                        adjRooms[j].GetDoorsInOrder()[(i + 2) % 4])
                     {
-                        isOrientationValid = false;
-                        break;
+                        return i;
                     }
                 }
-            }
-
-            if (isOrientationValid)
-            {
-                return i;
             }
             // Return rotation of first match
         }
@@ -134,41 +116,8 @@ public class DungeonGenerator : MonoBehaviour
         coord = new Vector2Int(xIndex, yIndex - 1);
         if (rooms.ContainsKey(coord))
             adjRooms[3] = rooms[coord];
-        
+
 
         return adjRooms;
     }
-
-    // Corridor lastCorridor = null;
-    //
-    //
-    // for (int i = 0; i < roomCount; i++)
-    // {
-    //     
-    //     Room generatedRoom =
-    //         Instantiate(rooms[i].gameObject).GetComponent<Room>();
-    //     if (lastCorridor != null)
-    //     {
-    //         generatedRoom.transform.rotation = lastCorridor.end.rotation * generatedRoom.doors[0].rotation;
-    //         generatedRoom.transform.position = lastCorridor.end.transform.position -
-    //                                            generatedRoom.doors[0].position;
-    //     }
-    //
-    //     Transform roomDoor;
-    //     if (generatedRoom.doors.Count > 1)
-    //     {
-    //         roomDoor = generatedRoom.doors[1];
-    //     }
-    //     else
-    //     {
-    //         roomDoor = generatedRoom.doors[0];
-    //     }
-    //     roomDoor.Translate(Vector3.forward * (corridor.length / 2), Space.Self);
-    //     if (i < roomCount - 1)
-    //     {
-    //         lastCorridor = Instantiate(corridor, roomDoor);
-    //     }
-    // }
-    // }
-    
 }

@@ -47,7 +47,7 @@ public class Room : MonoBehaviour
     {
         var rotationAmount = Mathf.RoundToInt(Quaternion.Angle(Quaternion.identity, transform.rotation) / 90) % 4;
         var result = new List<Transform>();
-        for (var i = 0; i < isDoorActive.Count; i++)
+        for (var i = 0; i < doorsTransforms.Count; i++)
         {
             result.Add(doorsTransforms[(i + rotationAmount) % doorsTransforms.Count]);
         }
