@@ -264,8 +264,30 @@
         {
             "name": "UI",
             "id": "2c0a7ffc-5c14-4427-aae4-26403305e7aa",
-            "actions": [],
-            "bindings": []
+            "actions": [
+                {
+                    "name": "ResumeGame",
+                    "type": "Button",
+                    "id": "8af4d217-a681-458e-ab61-4a8c5240cf38",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "3914aaeb-5fd6-4441-bedb-3ec35e260e01",
+                    "path": "<Keyboard>/m",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "ResumeGame",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [
