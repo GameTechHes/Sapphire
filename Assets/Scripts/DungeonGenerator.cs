@@ -1,34 +1,36 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class DungeonGenerator : MonoBehaviour
 {
+    public Room centralRoomPrefab;
     public List<Room> roomPrefabs;
 
     public Corridor corridorPrefab;
 
-    public int totalRoomCount;
+    [FormerlySerializedAs("totalRoomCount")] public int maxRooms;
 
-    private int roomCount;
-    private const float SCALE_FACTOR = 18.0f * 2.0f;
+    private int _roomCount;
+    private const float ScaleFactor = 18.0f * 2.0f;
 
-    private Dictionary<Vector2Int, Room> rooms = new Dictionary<Vector2Int, Room>();
+    private readonly Dictionary<Vector2Int, Room> _rooms = new Dictionary<Vector2Int, Room>();
 
     // Start is called before the first frame update
     void Start()
     {
-        InstantiateRoom(roomPrefabs[0], 0, 0, new Vector2Int(0, 0));
+        InstantiateRoom(centralRoomPrefab, 0, 0);
     }
 
-    private void InstantiateRoom(Room roomPrefab, int x, int y, Vector2Int origin)
+    private void InstantiateRoom(Room roomPrefab, int x, int y)
     {
-        if (rooms.ContainsKey(new Vector2Int(x, y)))
+        if (_rooms.ContainsKey(new Vector2Int(x, y)))
         {
             return;
         }
 
-        roomCount++;
+        _roomCount++;
         var rotationIndex = GetNewRoomRotation(roomPrefab, x, y);
         if (rotationIndex == null)
         {
@@ -36,28 +38,24 @@ public class DungeonGenerator : MonoBehaviour
         }
 
         var rotation = Quaternion.AngleAxis(rotationIndex.Value * 90, Vector3.up);
-        var room = Instantiate(roomPrefab, new Vector3(x * SCALE_FACTOR, 0.0f, y * SCALE_FACTOR),
+        var room = Instantiate(roomPrefab, new Vector3(x * ScaleFactor, 0.0f, y * ScaleFactor),
             rotation).GetComponent<Room>();
-        Debug.Log("Instantiate " + room.gameObject.name + $" at {x},{y}");
         room.rotation = rotationIndex.Value;
 
-        rooms.Add(new Vector2Int(x, y), room);
+        _rooms.Add(new Vector2Int(x, y), room);
 
         if (roomPrefab.GetActiveDoors().Count > 1)
         {
             for (int i = 0; i < roomPrefab.isDoorActive.Count; i++)
             {
-                if (roomPrefab.isDoorActive[i] && roomCount < totalRoomCount)
+                if (roomPrefab.isDoorActive[i] && _roomCount < maxRooms)
                 {
                     var corridor = Instantiate(corridorPrefab, room.doorsTransforms[i]).GetComponent<Corridor>();
                     corridor.transform.position += corridor.transform.position - corridor.start.position;
                     var xFactor = Mathf.RoundToInt(Vector3.Dot(corridor.end.transform.forward, Vector3.right));
                     var yFactor = Mathf.RoundToInt(Vector3.Dot(corridor.end.transform.forward, Vector3.forward));
-                    Debug.Log(Vector3.Dot(corridor.end.transform.forward, Vector3.forward) + ", " + Vector3.Dot(corridor.end.transform.forward, Vector3.right));
-                    // TODO: Add randomness
-                    var roomPrefabToInstantiate = roomPrefabs[Mathf.Min(roomCount, roomPrefabs.Count - 1)];
-                    InstantiateRoom(roomPrefabToInstantiate, x + xFactor, y + yFactor,
-                        new Vector2Int(-xFactor, -yFactor));
+                    var roomPrefabToInstantiate = roomPrefabs[Random.Range(0, roomPrefabs.Count)];
+                    InstantiateRoom(roomPrefabToInstantiate, x + xFactor, y + yFactor);
                 }
             }
         }
@@ -105,17 +103,17 @@ public class DungeonGenerator : MonoBehaviour
             null // -y
         };
         var coord = new Vector2Int(xIndex + 1, yIndex);
-        if (rooms.ContainsKey(coord))
-            adjRooms[0] = rooms[coord];
+        if (_rooms.ContainsKey(coord))
+            adjRooms[0] = _rooms[coord];
         coord = new Vector2Int(xIndex, yIndex + 1);
-        if (rooms.ContainsKey(coord))
-            adjRooms[1] = rooms[coord];
+        if (_rooms.ContainsKey(coord))
+            adjRooms[1] = _rooms[coord];
         coord = new Vector2Int(xIndex - 1, yIndex);
-        if (rooms.ContainsKey(coord))
-            adjRooms[2] = rooms[coord];
+        if (_rooms.ContainsKey(coord))
+            adjRooms[2] = _rooms[coord];
         coord = new Vector2Int(xIndex, yIndex - 1);
-        if (rooms.ContainsKey(coord))
-            adjRooms[3] = rooms[coord];
+        if (_rooms.ContainsKey(coord))
+            adjRooms[3] = _rooms[coord];
 
 
         return adjRooms;

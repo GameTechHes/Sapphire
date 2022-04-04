@@ -38,10 +38,10 @@ public class Room : MonoBehaviour
     }
 
     /**
-     * res[0] = +x direction
-     * res[1] = +y direction
-     * res[2] = -x direction
-     * res[3] = -y direction
+     * result[0] => +x direction
+     * result[1] => +y direction
+     * result[2] => -x direction
+     * result[3] => -y direction
      */
     public List<Transform> GetDoorsInOrder()
     {
