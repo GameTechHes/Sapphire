@@ -19,7 +19,6 @@ public class displayMiniMap : MonoBehaviour
     {
         minicam = GameObject.Find("MiniCameraUI");
         minicam.SetActive(displayMap);
-        PlayerArmature = GameObject.Find("PlayerArmature");
         //controller = PlayerArmature.GetComponent<ThirdPersonController>();
         PlayerArmature = GameObject.Find("PlayerArmature");
         _input = PlayerArmature.GetComponent<StarterAssetsInputs>();

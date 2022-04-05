@@ -316,7 +316,7 @@ GameObject:
   - component: {fileID: 7411155674921691749}
   - component: {fileID: 2720084783542056765}
   m_Layer: 0
-  m_Name: launch_origin
+  m_Name: LaunchOrigin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2413,7 +2413,7 @@ MonoBehaviour:
     m_ActionName: UI/New action
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: f62a4b92-ef5e-4175-8f4c-c9075429d32c
+  m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!1 &9026455026663114429

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class levitation : MonoBehaviour
 {
+    public bool shouldWait;
+    public float degreesPerSecond;
     public float frequency = 1f;
     // Position Storage Variables
     Vector3 posOffset = new Vector3 ();
@@ -15,13 +17,17 @@ public class levitation : MonoBehaviour
     void Start () {
         // Store the starting position & rotation of the object
         posOffset = transform.position;
-        StartCoroutine(setLevitation());
+        if(shouldWait)
+            StartCoroutine(setLevitation());
+        else
+            levitate = true;
+
     }
      
     // Update is called once per frame
     void Update () {
         // Spin object around Y-Axis
-        // transform.Rotate(new Vector3(0f, Time.deltaTime * degreesPerSecond, 0f), Space.World);
+        transform.Rotate(new Vector3(0f, Time.deltaTime * degreesPerSecond, 0f), Space.World);
  
         if(levitate == true){
             tempPos = posOffset;
