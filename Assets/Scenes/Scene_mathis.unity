@@ -304,6 +304,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2091648872144792914, guid: 02226cf9414773e408b4db0152614235, type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 55
+      objectReference: {fileID: 0}
     - target: {fileID: 3858017844471758970, guid: 02226cf9414773e408b4db0152614235, type: 3}
       propertyPath: m_Name
       value: Room
