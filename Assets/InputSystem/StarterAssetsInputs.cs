@@ -12,6 +12,11 @@ namespace StarterAssets
 		public Vector2 look;
 		public bool jump;
 		public bool sprint;
+		public bool shoot;
+		public bool resumeGame;
+
+		[Header("UI Input Values")]
+		public bool displayMap;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -36,19 +41,53 @@ namespace StarterAssets
 			}
 		}
 
+		public void OnResumeGame(InputValue value)
+		{
+			Debug.Log("Resume Game");
+			ResumeGameInput(value.isPressed);
+		}
+
 		public void OnJump(InputValue value)
 		{
 			JumpInput(value.isPressed);
+		}
+
+		public void OnShoot(InputValue value)
+		{
+			ShootInput(value.isPressed);
 		}
 
 		public void OnSprint(InputValue value)
 		{
 			SprintInput(value.isPressed);
 		}
+
+		public void OnDisplayMap(InputValue value)
+		{
+			Debug.Log("DisplayMap");
+			DisplayMapInput(value.isPressed);
+		}
 #else
 	// old input sys if we do decide to have it (most likely wont)...
 #endif
 
+		public void StopPlayerMovement(){
+			move = Vector2.zero;
+			look = Vector2.zero;
+			jump = false;
+			shoot = false;
+			sprint = false;
+		}
+
+		public void DisplayMapInput(bool newDisplayMapState)
+		{
+			displayMap = newDisplayMapState;
+		}
+
+		public void ResumeGameInput(bool newResumeGameState)
+		{
+			resumeGame = newResumeGameState;
+		}
 
 		public void MoveInput(Vector2 newMoveDirection)
 		{
@@ -63,6 +102,11 @@ namespace StarterAssets
 		public void JumpInput(bool newJumpState)
 		{
 			jump = newJumpState;
+		}
+
+		public void ShootInput(bool newShootInput)
+		{
+			shoot = newShootInput;
 		}
 
 		public void SprintInput(bool newSprintState)

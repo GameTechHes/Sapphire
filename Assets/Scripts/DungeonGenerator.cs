@@ -1,53 +1,121 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class DungeonGenerator : MonoBehaviour
 {
-    public List<Room> rooms;
+    public Room centralRoomPrefab;
+    public List<Room> roomPrefabs;
 
-    public Corridor corridor;
+    public Corridor corridorPrefab;
 
-    public int roomCount;
+    [FormerlySerializedAs("totalRoomCount")] public int maxRooms;
+
+    private int _roomCount;
+    private const float ScaleFactor = 18.0f * 2.0f;
+
+    private readonly Dictionary<Vector2Int, Room> _rooms = new Dictionary<Vector2Int, Room>();
 
     // Start is called before the first frame update
     void Start()
     {
-        Corridor lastCorridor = null;
+        InstantiateRoom(centralRoomPrefab, 0, 0);
+    }
 
-
-        for (int i = 0; i < roomCount; i++)
+    private void InstantiateRoom(Room roomPrefab, int x, int y)
+    {
+        if (_rooms.ContainsKey(new Vector2Int(x, y)))
         {
-            
-            Room generatedRoom =
-                Instantiate(rooms[i].gameObject).GetComponent<Room>();
-            if (lastCorridor != null)
-            {
-                generatedRoom.transform.rotation = lastCorridor.end.rotation * generatedRoom.doors[0].rotation;
-                generatedRoom.transform.position = lastCorridor.end.transform.position -
-                                                   generatedRoom.doors[0].position;
-            }
+            return;
+        }
 
-            Transform roomDoor;
-            if (generatedRoom.doors.Count > 1)
+        _roomCount++;
+        var rotationIndex = GetNewRoomRotation(roomPrefab, x, y);
+        if (rotationIndex == null)
+        {
+            return;
+        }
+
+        var rotation = Quaternion.AngleAxis(rotationIndex.Value * 90, Vector3.up);
+        var room = Instantiate(roomPrefab, new Vector3(x * ScaleFactor, 0.0f, y * ScaleFactor),
+            rotation).GetComponent<Room>();
+        room.rotation = rotationIndex.Value;
+
+        _rooms.Add(new Vector2Int(x, y), room);
+
+        if (roomPrefab.GetActiveDoors().Count > 1)
+        {
+            for (int i = 0; i < roomPrefab.isDoorActive.Count; i++)
             {
-                roomDoor = generatedRoom.doors[1];
-            }
-            else
-            {
-                roomDoor = generatedRoom.doors[0];
-            }
-            roomDoor.Translate(Vector3.forward * (corridor.length / 2), Space.Self);
-            if (i < roomCount - 1)
-            {
-                lastCorridor = Instantiate(corridor, roomDoor);
+                if (roomPrefab.isDoorActive[i] && _roomCount < maxRooms)
+                {
+                    var corridor = Instantiate(corridorPrefab, room.doorsTransforms[i]).GetComponent<Corridor>();
+                    corridor.transform.position += corridor.transform.position - corridor.start.position;
+                    var xFactor = Mathf.RoundToInt(Vector3.Dot(corridor.end.transform.forward, Vector3.right));
+                    var yFactor = Mathf.RoundToInt(Vector3.Dot(corridor.end.transform.forward, Vector3.forward));
+                    var roomPrefabToInstantiate = roomPrefabs[Random.Range(0, roomPrefabs.Count)];
+                    InstantiateRoom(roomPrefabToInstantiate, x + xFactor, y + yFactor);
+                }
             }
         }
     }
 
-
-// Update is called once per frame
-    void Update()
+    private int? GetNewRoomRotation(Room room, int xIndex, int yIndex)
     {
+        var adjRooms = GetAdjacentRooms(xIndex, yIndex);
+
+        if (adjRooms.Count(a => a != null) == 0)
+        {
+            return 0;
+        }
+
+        // For each orientations
+        for (int i = 0; i < 4; i++)
+        {
+            // For each adjacent rooms
+            for (int j = 0; j < 4; j++)
+            {
+                // If adjacent room is not null
+                if (adjRooms[j] != null)
+                {
+                    // Check if adjacent doors are both active
+                    if (room.isDoorActive[(i + j) % room.isDoorActive.Count] &&
+                        adjRooms[j].GetDoorsInOrder()[(i + 2) % 4])
+                    {
+                        return i;
+                    }
+                }
+            }
+            // Return rotation of first match
+        }
+
+        return null;
+    }
+
+    private Room[] GetAdjacentRooms(int xIndex, int yIndex)
+    {
+        var adjRooms = new Room[]
+        {
+            null, // +x 
+            null, // +y
+            null, // -x
+            null // -y
+        };
+        var coord = new Vector2Int(xIndex + 1, yIndex);
+        if (_rooms.ContainsKey(coord))
+            adjRooms[0] = _rooms[coord];
+        coord = new Vector2Int(xIndex, yIndex + 1);
+        if (_rooms.ContainsKey(coord))
+            adjRooms[1] = _rooms[coord];
+        coord = new Vector2Int(xIndex - 1, yIndex);
+        if (_rooms.ContainsKey(coord))
+            adjRooms[2] = _rooms[coord];
+        coord = new Vector2Int(xIndex, yIndex - 1);
+        if (_rooms.ContainsKey(coord))
+            adjRooms[3] = _rooms[coord];
+
+
+        return adjRooms;
     }
 }
