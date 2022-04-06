@@ -15,8 +15,10 @@ public class PowerUpArrowAmmo : PowerUpBase
 
     void OnCollisionEnter(Collision collision)
     {
-        shootScript.ajustAmmoCount(10);
-        Destroy(gameObject);
+        if (collision.gameObject.tag == "Player"){
+            shootScript.ajustAmmoCount(10);
+            Destroy(gameObject);
+        }
     }
 
     // Update is called once per frame
