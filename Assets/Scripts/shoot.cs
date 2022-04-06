@@ -27,8 +27,7 @@ public class shoot : MonoBehaviour
       if (ammoCount > 0){
          yield return null;
       
-      ammoCount--;
-      _ammoText.text = ammoCount.ToString();
+      ajustAmmoCount(-1);
       Debug.Log("A button was pressed");
       GameObject ball = Instantiate(projectile, transform.position, transform.rotation);
       ball.GetComponent<Rigidbody>().AddRelativeForce(new Vector3(0, launchVelocity,0));
@@ -46,5 +45,10 @@ public class shoot : MonoBehaviour
             StartCoroutine(Fire());
          }
       }
+   }
+
+   public void ajustAmmoCount(int diff){
+      ammoCount += diff;
+      _ammoText.text = ammoCount.ToString();
    }
 }

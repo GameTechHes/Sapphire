@@ -537,12 +537,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   doorModel: {fileID: 9074594807983055082, guid: 15745f8b70e5d524183539fa272d90a3, type: 3}
-  doors:
+  doorsTransforms:
   - {fileID: 2745815976135559566}
   - {fileID: 2745815976721035689}
   - {fileID: 2745815975966545507}
   - {fileID: 2745815977182803670}
   isDoorActive: 01010101
+  rotation: 0
 --- !u!1001 &5275429246452418654
 PrefabInstance:
   m_ObjectHideFlags: 0

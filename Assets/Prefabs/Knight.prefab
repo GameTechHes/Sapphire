@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7316417065234386541}
   m_Layer: 0
   m_Name: Knight
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -177,8 +177,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3749913773585745855}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.20000005, y: 0.44500005, z: -4}
+  m_LocalRotation: {x: 0.011703178, y: 0.002281228, z: -0.000026699514, w: 0.99992895}
+  m_LocalPosition: {x: 0.19543853, y: 0.4684049, z: -3.9997158}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7316417065234386541}
@@ -316,7 +316,7 @@ GameObject:
   - component: {fileID: 7411155674921691749}
   - component: {fileID: 2720084783542056765}
   m_Layer: 0
-  m_Name: launch_origin
+  m_Name: LaunchOrigin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2087,7 +2087,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6736610242019661776}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d0e8e1d7753408452b38d1eec61cc07d, type: 3}
   m_Name: 
@@ -2126,8 +2126,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 189.7122, y: 77.792}
-  m_SizeDelta: {x: 70, y: 70}
+  m_AnchoredPosition: {x: 216, y: 179}
+  m_SizeDelta: {x: 79.4, y: 76.2667}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6683078549904526706
 CanvasRenderer:
@@ -2413,7 +2413,7 @@ MonoBehaviour:
     m_ActionName: UI/New action
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: f62a4b92-ef5e-4175-8f4c-c9075429d32c
+  m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!1 &9026455026663114429
