@@ -35,12 +35,7 @@ public class scaleMinicam : MonoBehaviour
         Debug.Log("Distance Z" + (maxZ - minZ).ToString());
         distanceZ = maxZ - minZ;
         distanceX = maxX - minX;
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        minicam.transform.rotation = originalRotation;
         if(distanceX < distanceZ){
             minicam.orthographicSize = 0.5f * distanceZ;
         } else{
@@ -48,5 +43,12 @@ public class scaleMinicam : MonoBehaviour
             float desiredHalfHeight = 0.5f * unitsPerPixel * rectTransform.rect.height;
             minicam.orthographicSize = desiredHalfHeight;
         }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        minicam.transform.rotation = originalRotation;
+        
     }
 }
