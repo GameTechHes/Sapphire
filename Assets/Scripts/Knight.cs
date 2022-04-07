@@ -7,7 +7,7 @@ public class Knight : MonoBehaviour
 
     public HealthBar healthBar;
     private float counter;
-    
+
     // Start is called before the first frame update
     void Start()
     {

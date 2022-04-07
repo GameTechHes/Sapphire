@@ -1,7 +1,5 @@
-using System;
 using UnityEngine;
 using UnityEngine.AI;
-using Random = UnityEngine.Random;
 
 public class Bot : MonoBehaviour
 {
@@ -9,16 +7,12 @@ public class Bot : MonoBehaviour
     public static float MIN_SPEED = 0.5f;
     public static float speed;
 
-    [SerializeField]
-    private float wanderRadius;
+    [SerializeField] private float wanderRadius;
 
-    [SerializeField]
-    private float maxWanderTimer;
-    [SerializeField]
-    private float minWanderTimer;
+    [SerializeField] private float maxWanderTimer;
+    [SerializeField] private float minWanderTimer;
 
-    [SerializeField]
-    private float angleMax;
+    [SerializeField] private float angleMax;
 
     private Animator animator;
 
@@ -38,7 +32,7 @@ public class Bot : MonoBehaviour
         Vector3 lookPos = destination - transform.position;
         lookPos.y = 0;
         Quaternion rotation = Quaternion.LookRotation(lookPos);
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 2);  
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 2);
     }
 
     void Start()
@@ -56,18 +50,18 @@ public class Bot : MonoBehaviour
     void Update()
     {
         if (!GetComponent<NavMeshAgent>().enabled) return;
-        if(agent.remainingDistance - agent.stoppingDistance < 0.1){
-            if(animator.GetBool("walking")) animator.SetBool("walking", false);
-            
+        if (agent.remainingDistance - agent.stoppingDistance < 0.1)
+        {
+            if (animator.GetBool("walking")) animator.SetBool("walking", false);
+
             timer += Time.deltaTime;
 
             if (timer >= wanderTimer)
             {
-
                 Vector3 randDirection = Random.insideUnitSphere * wanderRadius;
                 randDirection += transform.position;
                 NavMeshHit navHit;
-                if(NavMesh.SamplePosition(randDirection, out navHit, wanderRadius, NavMesh.AllAreas))
+                if (NavMesh.SamplePosition(randDirection, out navHit, wanderRadius, NavMesh.AllAreas))
                 {
                     Vector3 newPos = navHit.position;
                     animator.SetBool("walking", true);
@@ -77,6 +71,10 @@ public class Bot : MonoBehaviour
                     print("New target");
                 }
             }
-        }else timer=0;
+        }
+        else
+        {
+            timer = 0;
+        }
     }
 }
