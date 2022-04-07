@@ -354,7 +354,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Knight
       objectReference: {fileID: 0}
-<<<<<<< HEAD
     - target: {fileID: 3749913773585745850, guid: e42f7a335ef318c42a5f80fbcfa0ce76, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.20000005
@@ -407,8 +406,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-=======
->>>>>>> 17dbe68337b1da4e1202ff0265a3c2497a023401
     - target: {fileID: 7316417065234386541, guid: e42f7a335ef318c42a5f80fbcfa0ce76, type: 3}
       propertyPath: m_RootOrder
       value: 3
