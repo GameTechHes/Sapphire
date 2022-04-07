@@ -1,29 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PowerUpArrowAmmo : PowerUpBase
 {
-    GameObject LaunchOrigin;
-    shoot shootScript;
-    // Start is called before the first frame update
-    void Start()
-    {
-        LaunchOrigin = GameObject.Find("LaunchOrigin");
-        shootScript = LaunchOrigin.GetComponent<shoot>();
-    }
+    public int ammoReward = 10;
 
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider collider)
     {
-        if (collision.gameObject.tag == "Player"){
-            shootScript.ajustAmmoCount(10);
+        if (collider.gameObject.tag == "Player")
+        {
+            collider.gameObject.GetComponent<Shoot>().AddAmmo(ammoReward);
             Destroy(gameObject);
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

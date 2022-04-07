@@ -250,6 +250,17 @@
                 },
                 {
                     "name": "",
+                    "id": "feaf2a41-7b2e-42d8-9379-9b590398ff4b",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Shoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "b47f4d02-95ef-4ddf-88ad-d865c3120eeb",
                     "path": "<Keyboard>/m",
                     "interactions": "",
