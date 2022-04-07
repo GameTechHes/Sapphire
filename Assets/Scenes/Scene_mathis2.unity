@@ -280,6 +280,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 616215116, guid: e42f7a335ef318c42a5f80fbcfa0ce76, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 616215116, guid: e42f7a335ef318c42a5f80fbcfa0ce76, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1679443176135076696, guid: e42f7a335ef318c42a5f80fbcfa0ce76, type: 3}
       propertyPath: m_Name
       value: Knight
@@ -370,6 +378,25 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e42f7a335ef318c42a5f80fbcfa0ce76, type: 3}
+--- !u!1 &592382903 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4471810060607484112, guid: f8d61b92649bad15991a448eb0eedbc8, type: 3}
+  m_PrefabInstance: {fileID: 227083018}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &592382909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 592382903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d9bb7094b659f2128c6c1e67615d47f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  viewAngle: 80
+  detectionRadius: 10
 --- !u!1 &984669127 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8145881679222591132, guid: 507ab28736ae0634faf6ce617128dc7c, type: 3}
