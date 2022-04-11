@@ -13,6 +13,7 @@ namespace StarterAssets
 		public bool jump;
 		public bool sprint;
 		public bool shoot;
+		public bool aim;
 		public bool resumeGame;
 
 		[Header("UI Input Values")]
@@ -64,6 +65,11 @@ namespace StarterAssets
 		public void OnDisplayMap(InputValue value)
 		{
 			DisplayMapInput(value.isPressed);
+		}
+
+		public void OnAim(InputValue value)
+		{
+			aim = value.isPressed;
 		}
 #else
 	// old input sys if we do decide to have it (most likely wont)...

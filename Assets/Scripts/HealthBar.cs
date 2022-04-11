@@ -21,7 +21,7 @@ public class HealthBar : MonoBehaviour
 
     public void SetProgress(int health)
     {
-        if (health >= 0)
+        if (health >= 0 && _slider != null)
         {
             _slider.value = health / (float)_maxHealth;
             healthCount.text = health.ToString();

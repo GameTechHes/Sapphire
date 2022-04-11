@@ -1762,6 +1762,7 @@ GameObject:
   - component: {fileID: 5749675697393819959}
   - component: {fileID: 5749675697393819952}
   - component: {fileID: 5749675697393819957}
+  - component: {fileID: 658308784}
   m_Layer: 7
   m_Name: KnightCharacter
   m_TagString: Player
@@ -1903,11 +1904,26 @@ MonoBehaviour:
   jump: 0
   sprint: 0
   shoot: 0
+  aim: 0
   resumeGame: 0
   displayMap: 0
   analogMovement: 0
   cursorLocked: 1
   cursorInputForLook: 1
+--- !u!114 &658308784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4831124644429290595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2fc808ec0551404ab6fb94c5862c04c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  healthBar: {fileID: 107491292}
 --- !u!1 &5057451808294959618
 GameObject:
   m_ObjectHideFlags: 0
