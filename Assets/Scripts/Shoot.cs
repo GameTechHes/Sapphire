@@ -8,8 +8,8 @@ public class Shoot : MonoBehaviour
     public GameObject launchStart;
     public int ammoCount = 10;
     public int timeBetweenShots = 1;
-    public float launchVelocity = 700f;
-    public float projectileLifetime = 2;
+    public float launchVelocity = 100f;
+    public float projectileLifetime = 5;
     public Text ammoText;
     private bool _canShoot = true;
 
@@ -21,9 +21,8 @@ public class Shoot : MonoBehaviour
 
     IEnumerator Fire()
     {
-        yield return null;
-        var ball = Instantiate(projectile, launchStart.transform.position, launchStart.transform.rotation);
-        ball.GetComponent<Rigidbody>().AddRelativeForce(new Vector3(0, launchVelocity, 0));
+        var ball = Instantiate(projectile, launchStart.transform.position, launchStart.transform.rotation * projectile.transform.rotation);
+        ball.GetComponent<Rigidbody>().AddRelativeForce(new Vector3(0, 0, -launchVelocity));
         Destroy(ball, projectileLifetime);
         yield return new WaitForSeconds(timeBetweenShots);
         _canShoot = true;
