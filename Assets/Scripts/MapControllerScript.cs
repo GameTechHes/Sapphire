@@ -16,9 +16,8 @@ public class MapControllerScript : MonoBehaviour
     GameObject minicamUI;
     public Camera minicam;
 
-    GameObject PlayerArmature;
-    private StarterAssetsInputs _input;
-    private PlayerInput _playerInput;
+    public StarterAssetsInputs starterAssetsInputs;
+    public PlayerInput playerInput;
 
     // Start is called before the first frame update
     void Start()
@@ -26,26 +25,22 @@ public class MapControllerScript : MonoBehaviour
         minicamUI = GameObject.Find("MiniCameraUI");
         minicamUI.SetActive(displayMap);
         //controller = PlayerArmature.GetComponent<ThirdPersonController>();
-        PlayerArmature = GameObject.Find("PlayerArmature");
-        _input = PlayerArmature.GetComponent<StarterAssetsInputs>();
-        _playerInput = PlayerArmature.GetComponent<PlayerInput>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if((_input.resumeGame || _input.displayMap) && canToggle){
-            _input.displayMap = false;
-            Debug.Log(displayMap);
+        if((starterAssetsInputs.resumeGame || starterAssetsInputs.displayMap) && canToggle){
+            starterAssetsInputs.displayMap = false;
             StartCoroutine(toggleMiniMap());
         }
     }
 
     private void ResumeGame(){
-			if(_input.resumeGame){
-                _input.resumeGame = false;
-				_playerInput.actions.FindActionMap("Player").Enable();
-            	_playerInput.actions.FindActionMap("UI").Disable();
+			if(starterAssetsInputs.resumeGame){
+                starterAssetsInputs.resumeGame = false;
+				playerInput.actions.FindActionMap("Player").Enable();
+            	playerInput.actions.FindActionMap("UI").Disable();
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;
 			}
@@ -78,9 +73,9 @@ public class MapControllerScript : MonoBehaviour
         minicamUI.SetActive(displayMap);
         //PlayerArmature.GetComponent<ThirdPersonController>().enabled = !displayMap;
         if(displayMap){
-            _input.StopPlayerMovement();
-            _playerInput.actions.FindActionMap("Player").Disable();
-            _playerInput.actions.FindActionMap("UI").Enable();
+            starterAssetsInputs.StopPlayerMovement();
+            playerInput.actions.FindActionMap("Player").Disable();
+            playerInput.actions.FindActionMap("UI").Enable();
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
         } else{
