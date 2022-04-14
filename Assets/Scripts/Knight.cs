@@ -1,4 +1,3 @@
-using StarterAssets;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,7 +8,6 @@ public class Knight : MonoBehaviour
 
     public HealthBar healthBar;
     private float counter;
-    private StarterAssetsInputs _input;
     private Animator _controller;
 
     // Start is called before the first frame update
@@ -18,7 +16,6 @@ public class Knight : MonoBehaviour
         _health = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
         healthBar.SetProgress(_health);
-        _input = GetComponent<StarterAssetsInputs>();
         _controller = GetComponent<Animator>();
     }
 

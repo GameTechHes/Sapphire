@@ -178,6 +178,11 @@ namespace StarterAssets
 			// set target speed based on move speed, sprint speed and if sprint is pressed
 			float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
 
+			if (_input.aim)
+			{
+				targetSpeed = 0;
+			}
+
 			// a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
 			// note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
@@ -252,6 +257,11 @@ namespace StarterAssets
 				if (_verticalVelocity < 0.0f)
 				{
 					_verticalVelocity = -2f;
+				}
+
+				if (_input.aim)
+				{
+					_input.jump = false;
 				}
 
 				// Jump

@@ -26,6 +26,7 @@ public class Shoot : MonoBehaviour
         Destroy(ball, projectileLifetime);
         yield return new WaitForSeconds(timeBetweenShots);
         _canShoot = true;
+        
     }
 
     public void OnShoot()
