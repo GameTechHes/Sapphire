@@ -22,7 +22,7 @@ public class Shoot : MonoBehaviour
     IEnumerator Fire()
     {
         var ball = Instantiate(projectile, launchStart.transform.position, launchStart.transform.rotation * projectile.transform.rotation);
-        ball.GetComponent<Rigidbody>().AddRelativeForce(new Vector3(0, 0, -launchVelocity));
+        ball.GetComponent<Rigidbody>().AddForce(launchStart.transform.forward * launchVelocity);
         Destroy(ball, projectileLifetime);
         yield return new WaitForSeconds(timeBetweenShots);
         _canShoot = true;

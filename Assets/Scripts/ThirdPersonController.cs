@@ -194,8 +194,6 @@ namespace StarterAssets
                 targetSpeed = 0;
             }
 
-            print($"X: {_input.move.x}, Y: {_input.move.y}");
-
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
             // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
