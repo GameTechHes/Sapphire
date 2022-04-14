@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2372086947077225964}
   - component: {fileID: 508818570855057702}
   - component: {fileID: 4551713866318324650}
+  - component: {fileID: 2516547793303684131}
   m_Layer: 0
   m_Name: FloorTIle
   m_TagString: Untagged
@@ -97,6 +98,18 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -4023542552031888103, guid: 9554d4dacd26c8448bb4f3f907ff1fe9, type: 3}
+--- !u!114 &2516547793303684131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2021926822154840307}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fff395322ba32060da8e3f0a5815b827, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5065866416767485257
 GameObject:
   m_ObjectHideFlags: 0

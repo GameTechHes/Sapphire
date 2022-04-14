@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 public class miniMapInputHandler : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IScrollHandler
  {
     public Camera minicam;
+    public GameObject myPrefab;
      public void OnPointerDown( PointerEventData eventData )
      {
      }
@@ -69,9 +70,15 @@ public class miniMapInputHandler : MonoBehaviour, IPointerClickHandler, IPointer
 
         if (Physics.Raycast(MapRay, out miniMapHit, Mathf.Infinity))
         {
-            Debug.Log("miniMapHit: " + miniMapHit.collider.gameObject);
+            Debug.Log("miniMapHit: " + miniMapHit.collider);
             Debug.DrawRay(MapRay.origin, MapRay.direction*1000, Color.green, 5);
+
+            if(miniMapHit.collider.GetComponent<SpawnArea>() != null){
+                Debug.Log("Can Spawn a mob here!");
+                Instantiate(myPrefab, miniMapHit.collider.transform.position, Quaternion.identity);
+            }
         }
+
         
     }
  }
