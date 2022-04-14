@@ -4,16 +4,16 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 using StarterAssets;
+using UnityEngine.UI;
 
 public class MapControllerScript : MonoBehaviour
 {
     private bool displayMap = false;
     private bool canToggle = true;
     private float toggleTime = 0.2f;
-    private float minSize = 5;
-    private float maxSize = 200;
 
     GameObject minicamUI;
+    Canvas canvas;
     public Camera minicam;
 
     GameObject PlayerArmature;
@@ -50,26 +50,7 @@ public class MapControllerScript : MonoBehaviour
                 Cursor.lockState = CursorLockMode.Locked;
 			}
 		}
-    
-    public void foo(){
-        Debug.Log("Click");    
-    }
 
-    public void OnScrollWheel(){
-        Vector2  vec = Mouse.current.scroll.ReadValue();
-        float scrollingUnit = 20;
-        float scroll = vec.y;
-        if(scroll > 0 && minicam.orthographicSize - scrollingUnit > minSize){
-            scrollingUnit = -20;
-        }
-        else if(scroll < 0 && minicam.orthographicSize + scrollingUnit < maxSize){
-            scrollingUnit = 20;
-        }
-        else{
-            scrollingUnit = 0;
-        }
-        minicam.orthographicSize += scrollingUnit;
-    } 
 
     IEnumerator toggleMiniMap()
     {
