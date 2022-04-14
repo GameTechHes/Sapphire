@@ -10,7 +10,7 @@ public class MapControllerScript : MonoBehaviour
     private bool displayMap = false;
     private bool canToggle = true;
     private float toggleTime = 0.2f;
-    private float minSize = 15;
+    private float minSize = 5;
     private float maxSize = 200;
 
     GameObject minicamUI;

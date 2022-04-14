@@ -903,8 +903,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3749913773585745855}
-  m_LocalRotation: {x: 0.013823209, y: -0.006823835, z: 0.0000943385, w: 0.9998812}
-  m_LocalPosition: {x: 0.21364349, y: 0.46581817, z: -3.9995246}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.20000005, y: 1.5150002, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7316417065234386541}
@@ -2299,7 +2299,7 @@ GameObject:
   - component: {fileID: 4712310272219042496}
   - component: {fileID: 1474254312916654353}
   - component: {fileID: 9158687915601290067}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2481,7 +2481,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6095503136088812906}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.20000005, y: 0.44500017, z: -4}
+  m_LocalPosition: {x: 0.20000005, y: 0.44500005, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6095503136668179793}
@@ -2746,7 +2746,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 128
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: 4f3a9852194e6fcaca4b2e980b87d32d, type: 2}
   m_TargetDisplay: 0
