@@ -3,10 +3,6 @@ using UnityEngine.AI;
 
 public class Bot : MonoBehaviour
 {
-    public static float MAX_SPEED = 2.5f;
-    public static float MIN_SPEED = 0.5f;
-    public static float speed;
-
     [SerializeField] private float wanderRadius;
 
     [SerializeField] private float maxWanderTimer;
@@ -15,7 +11,6 @@ public class Bot : MonoBehaviour
     [SerializeField] private float angleMax;
 
     private Animator animator;
-    private bool hasSeenPlayer = false;
 
     private NavMeshAgent agent;
     private float wanderTimer;
@@ -30,22 +25,16 @@ public class Bot : MonoBehaviour
         Quaternion rotation = Quaternion.LookRotation(lookPos);
         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 2);
     }
-    public void setHasSeenPlayer(bool val){
-        hasSeenPlayer = val;
-    }
-    public bool getHasSeenPlayer(){
-        return hasSeenPlayer;
+    public void setAgentSpeed(float speed){
+        agent.speed = speed;
     }
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
+        animator.SetBool("walking", false);
+        animator.SetBool("die", false);
 
-        // GameObject floor = GameObject.Find("Floor");
-        // floorMinX = floor.GetComponent<MeshFilter>().mesh.bounds.min.x * floor.transform.localScale.x;
-        // floorMaxX = floor.GetComponent<MeshFilter>().mesh.bounds.max.x * floor.transform.localScale.x;
-        // floorMinZ = floor.GetComponent<MeshFilter>().mesh.bounds.min.z * floor.transform.localScale.z;
-        // floorMaxZ = floor.GetComponent<MeshFilter>().mesh.bounds.max.z * floor.transform.localScale.z;
     }
     public void setNewDestination(Vector3 dest){
         NavMeshHit navHit;
@@ -62,14 +51,16 @@ public class Bot : MonoBehaviour
     public void resetCurrentPath(){
         agent.ResetPath();
     }
-
     void Update()
     {
         if (!GetComponent<NavMeshAgent>().enabled) return;
         if (agent.remainingDistance - agent.stoppingDistance < 0.1 )
         {
+
             if (animator.GetBool("walking")) animator.SetBool("walking", false);
-            if(!hasSeenPlayer){
+            if (animator.GetBool("playerDetected")) animator.SetBool("playerDetected", false);
+
+            if(!animator.GetBool("closeEnough")){
                 timer += Time.deltaTime;
                 if (timer >= wanderTimer)
                 {
