@@ -26,6 +26,7 @@ public class scaleMinicam : MonoBehaviour
         float maxX = -10000f;
         float maxZ = -10000f;
         foreach(GameObject refPoint in GameObject.FindGameObjectsWithTag("ReferencePoint")){
+             Debug.Log("ReferencePoint");
              minX = refPoint.transform.position.x < minX ?  refPoint.transform.position.x : minX;
              minZ = refPoint.transform.position.z < minZ ?  refPoint.transform.position.z : minZ;
              maxX = refPoint.transform.position.x > maxX ?  refPoint.transform.position.x : maxX;
@@ -41,7 +42,8 @@ public class scaleMinicam : MonoBehaviour
         } else{
             float unitsPerPixel = distanceX / rectTransform.rect.width;
             float desiredHalfHeight = 0.5f * unitsPerPixel * rectTransform.rect.height;
-            minicam.orthographicSize = desiredHalfHeight;
+            Debug.Log(desiredHalfHeight.ToString());
+            minicam.orthographicSize = 10;
         }
     }
 
