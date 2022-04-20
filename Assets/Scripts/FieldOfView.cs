@@ -10,7 +10,7 @@ public class FieldOfView : MonoBehaviour
     public float timeBeforeUnfocusPlayer = 10;
     public float playerRange = 3;
     private float time = 0;
-    private int layerMask = ~(1 << 3 | 1 << 6);
+    private int layerMask = ~(1 << 3 | 1 << 7);
     private Bot bot;
     private Animator animator;
     private GameObject playerOnFocus;
