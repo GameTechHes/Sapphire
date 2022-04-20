@@ -2,8 +2,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
+
+
 public class Room : MonoBehaviour
-{
+{   
     public GameObject doorModel;
 
     [FormerlySerializedAs("doors")] [Header("Doors transforms")] public List<Transform> doorsTransforms;
@@ -16,6 +18,7 @@ public class Room : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
         for (var i = 0; i < isDoorActive.Count; i++)
         {
             if (!isDoorActive[i] && doorsTransforms[i] != null)
@@ -51,7 +54,6 @@ public class Room : MonoBehaviour
         {
             result.Add(doorsTransforms[(i + rotationAmount) % doorsTransforms.Count]);
         }
-
         return result;
     }
 

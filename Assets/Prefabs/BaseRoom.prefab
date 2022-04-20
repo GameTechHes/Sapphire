@@ -594,6 +594,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5275429248542898068}
   - component: {fileID: 827034184}
+  - component: {fileID: 7469905110266049375}
   m_Layer: 0
   m_Name: BaseRoom
   m_TagString: Untagged
@@ -639,6 +640,18 @@ MonoBehaviour:
   - {fileID: 2745815977182803670}
   isDoorActive: 01010101
   rotation: 0
+--- !u!114 &7469905110266049375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5275429248542898075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f3fe1201f768961480cdecb4b53946e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5758981346924169041
 GameObject:
   m_ObjectHideFlags: 0

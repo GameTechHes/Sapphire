@@ -17,10 +17,14 @@ public class DungeonGenerator : MonoBehaviour
 
     private readonly Dictionary<Vector2Int, Room> _rooms = new Dictionary<Vector2Int, Room>();
 
+
     // Start is called before the first frame update
     void Start()
     {
         InstantiateRoom(centralRoomPrefab, 0, 0);
+        var bake = GetComponent<BakeBaby>();
+        bake.BakeAll();
+
     }
 
     private void InstantiateRoom(Room roomPrefab, int x, int y)
