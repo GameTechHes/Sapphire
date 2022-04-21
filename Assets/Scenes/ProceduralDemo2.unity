@@ -248,6 +248,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   powerupPrefabs:
   - {fileID: 4906778647779674378, guid: a4a53d833ee63f421b8f89c481b3066b, type: 3}
+  Sapphir: {fileID: 6657136115112920884, guid: ed42fb102bbe88da3846ddf12ec6354f, type: 3}
   threshold: 1
 --- !u!4 &589118424
 Transform:
