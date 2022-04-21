@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.AI.Navigation;
 
+
+/* IMPORTANT */
+/*
+ *   This Script is executed before every other script
+ *   Take this is consideration for every modifications
+*/
 public class BakeBaby : MonoBehaviour
 {
     NavMeshSurface surface;
@@ -12,7 +18,6 @@ public class BakeBaby : MonoBehaviour
         surface = GetComponent<NavMeshSurface>();
     }
 
-    // Update is called once per frame
 
     public void BakeAll(){
         Debug.Log("BUILDING");
