@@ -30,7 +30,7 @@ public class FieldOfView : MonoBehaviour
     {
         bot = GetComponent<Bot>();
         animator = GetComponent<Animator>();
-        animator.SetBool("closeEnough", false);
+        animator.SetBool("attack", false);
         animator.SetBool("playerDetected", false);
         if (viewAngle > 90) viewAngle = 90;
 
@@ -70,7 +70,7 @@ public class FieldOfView : MonoBehaviour
         {
             case BotState.Idle:
                 bot.setAgentSpeed(2);
-                animator.SetBool("closeEnough", false);
+                animator.SetBool("attack", false);
                 animator.SetBool("playerDetected", false);
 
                 foreach (var hitCollider in hitColliders)
@@ -83,9 +83,9 @@ public class FieldOfView : MonoBehaviour
                         {
                             if (isInRaycast(direction_idle, "[IDLE]"))
                             {
+                                animator.SetBool("playerDetected", true);
                                 bot.resetCurrentPath(); //just in case something is going wrong
                                 bot.setNewDestination(playerOnFocus.transform.position);
-                                animator.SetBool("playerDetected", true);
                                 time = 0;
                                 print("[IDLE] setting new target");
                                 state = BotState.Focus;
@@ -98,11 +98,12 @@ public class FieldOfView : MonoBehaviour
             case BotState.Focus:
                 Debug.Assert(playerOnFocus == null);
                 Vector3 direction = playerOnFocus.transform.position - transform.position;
+                animator.SetBool("walking", false);
+                animator.SetBool("playerDetected", true);
                 bot.setAgentSpeed(4);
                 if (direction.magnitude <= playerRange)
                 {
                     print("TOUCH");
-                    animator.SetBool("closeEnough", true);
                     bot.resetCurrentPath();
                     state = BotState.Attacking;
                     break;
@@ -129,13 +130,12 @@ public class FieldOfView : MonoBehaviour
                 }
                 break;
             case BotState.Attacking:
-                //TODO faire le raycyast pour arrêter de tapper
-                animator.SetBool("closeEnough", true);
+                animator.SetBool("attack", true);
                 Debug.Log("[Attack]");
                 Vector3 direction_attack = playerOnFocus.transform.position - transform.position;
                 if (direction_attack.magnitude > playerRange)
                 {
-                    animator.SetBool("closeEnough", false);
+                    animator.SetBool("attack", false);
                     state = BotState.Idle;
                     break;
                 }
@@ -183,7 +183,7 @@ public class FieldOfView : MonoBehaviour
                         if (direction.magnitude < 1)
                         {
                             print("TOUCH");
-                            animator.SetBool("closeEnough", true);
+                            animator.SetBool("attack", true);
                             bot.resetCurrentPath();
                             return;
                         }
@@ -200,7 +200,7 @@ public class FieldOfView : MonoBehaviour
                     {
                         Debug.DrawRay(ray_src, direction, Color.red);
                         Debug.Log("Did not Hit");
-                        animator.SetBool("closeEnough", false);
+                        animator.SetBool("attack", false);
                     }
 
                 }

@@ -27,7 +27,7 @@ public class DungeonGenerator : MonoBehaviour
             We can do this because the BakeBaby script is executed before
             So we are sure that bake is initialized
         */
-        bake.BakeAll();     
+        bake.BakeAll();
 
     }
 

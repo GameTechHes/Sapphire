@@ -41,7 +41,11 @@ public class Bot : MonoBehaviour
         if (NavMesh.SamplePosition(dest, out navHit, wanderRadius, NavMesh.AllAreas))
         {
             Vector3 newPos = navHit.position;
-            animator.SetBool("walking", true);
+            if(!animator.GetBool("playerDetected")){
+                animator.SetBool("walking", true);
+            }else{
+                animator.SetBool("walking", false);
+            }
             agent.SetDestination(newPos);
             timer = 0;
             wanderTimer = Random.Range(minWanderTimer, maxWanderTimer);
@@ -60,7 +64,7 @@ public class Bot : MonoBehaviour
             if (animator.GetBool("walking")) animator.SetBool("walking", false);
             if (animator.GetBool("playerDetected")) animator.SetBool("playerDetected", false);
 
-            if(!animator.GetBool("closeEnough")){
+            if(!animator.GetBool("attack")){
                 timer += Time.deltaTime;
                 if (timer >= wanderTimer)
                 {

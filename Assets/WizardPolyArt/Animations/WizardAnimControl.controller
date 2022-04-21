@@ -41,7 +41,7 @@ AnimatorStateTransition:
     m_ConditionEvent: playerDetected
     m_EventTreshold: 0
   - m_ConditionMode: 2
-    m_ConditionEvent: closeEnough
+    m_ConditionEvent: attack
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 5591847963722971922}
@@ -116,7 +116,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: closeEnough
+    m_ConditionEvent: attack
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 7582943955138406397}
@@ -144,7 +144,7 @@ AnimatorStateTransition:
     m_ConditionEvent: playerDetected
     m_EventTreshold: 0
   - m_ConditionMode: 2
-    m_ConditionEvent: closeEnough
+    m_ConditionEvent: attack
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 5591847963722971922}
@@ -200,7 +200,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: closeEnough
+  - m_Name: attack
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -240,7 +240,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: closeEnough
+    m_ConditionEvent: attack
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: playerDetected
@@ -294,9 +294,6 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 2
     m_ConditionEvent: playerDetected
-    m_EventTreshold: 0
-  - m_ConditionMode: 1
-    m_ConditionEvent: closeEnough
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102747604133315158}
@@ -440,7 +437,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: closeEnough
+    m_ConditionEvent: attack
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: playerDetected
