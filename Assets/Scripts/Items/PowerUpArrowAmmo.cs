@@ -1,15 +1,18 @@
 using UnityEngine;
 
-public class PowerUpArrowAmmo : PowerUpBase
+namespace Items
 {
-    public int ammoReward = 10;
-
-    void OnTriggerEnter(Collider collider)
+    public class PowerUpArrowAmmo : PowerUpBase
     {
-        if (collider.gameObject.tag == "Player")
+        public int ammoReward = 10;
+
+        void OnTriggerEnter(Collider collider)
         {
-            collider.gameObject.GetComponent<Shoot>().AddAmmo(ammoReward);
-            Destroy(gameObject);
+            if (collider.gameObject.CompareTag("Player"))
+            {
+                collider.gameObject.GetComponent<Shoot>().AddAmmo(ammoReward);
+                Destroy(gameObject);
+            }
         }
     }
 }

@@ -1,13 +1,16 @@
 using UnityEngine;
 
-public class PowerUpSapphire : PowerUpBase
+namespace Items
 {
-    void OnTriggerEnter(Collider collider)
+    public class PowerUpSapphire : PowerUpBase
     {
-        if (collider.gameObject.CompareTag("Player"))
+        void OnTriggerEnter(Collider collider)
         {
-            collider.gameObject.GetComponent<SapphireController>().AddSapphire();
-            Destroy(gameObject);
+            if (collider.gameObject.CompareTag("Player"))
+            {
+                collider.gameObject.GetComponent<SapphireController>().AddSapphire();
+                Destroy(gameObject);
+            }
         }
     }
 }

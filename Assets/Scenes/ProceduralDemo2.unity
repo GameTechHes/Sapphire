@@ -249,7 +249,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   powerupPrefabs:
   - {fileID: 4906778647779674378, guid: a4a53d833ee63f421b8f89c481b3066b, type: 3}
-  Sapphir: {fileID: -6590056139038518383, guid: 67dd16df086151f2f82cd9c768fe9793, type: 3}
+  sapphire: {fileID: -6590056139038518383, guid: 67dd16df086151f2f82cd9c768fe9793, type: 3}
   threshold: 1
 --- !u!4 &589118424
 Transform:

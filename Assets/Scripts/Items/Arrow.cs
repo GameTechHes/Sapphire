@@ -1,9 +1,12 @@
 using UnityEngine;
 
-public class Arrow : MonoBehaviour
+namespace Items
 {
-    private void OnTriggerEnter(Collider other)
+    public class Arrow : MonoBehaviour
     {
-        Destroy(gameObject);
+        private void OnTriggerEnter(Collider other)
+        {
+            Destroy(gameObject);
+        }
     }
 }

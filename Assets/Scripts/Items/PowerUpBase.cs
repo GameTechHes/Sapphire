@@ -1,19 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PowerUpBase : MonoBehaviour
+namespace Items
 {
-    GameObject PlayerArmature;
-    // Start is called before the first frame update
-    void Start()
+    /**
+     * TODO: Delete this class if player armature not used
+     */
+    public class PowerUpBase : MonoBehaviour
     {
-        PlayerArmature = GameObject.Find("PlayerArmature");
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
+        private GameObject _playerArmature;
         
+        void Start()
+        {
+            _playerArmature = GameObject.Find("PlayerArmature");
+        }
     }
 }

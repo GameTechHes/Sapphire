@@ -1,34 +1,39 @@
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
+using UnityEngine;
 
-public class BonusSpawner : MonoBehaviour
+namespace Items
 {
-    public List<PowerUpBase> powerupPrefabs;
-    public PowerUpSapphire Sapphir;
-    public int threshold;
-
-    // Start is called before the first frame update
-    void Start()
+    public class BonusSpawner : MonoBehaviour
     {
-        GameObject[] spawnPoints = GameObject.FindGameObjectsWithTag("SpawningPoint");
-        List<GameObject> spawnPointsList = spawnPoints.ToList();
+        public List<PowerUpBase> powerupPrefabs;
+        public PowerUpSapphire sapphire;
+        public int threshold;
 
-        for(int i = 0; i < 3; ++i){
-            int currentIndex = Random.Range(0, spawnPointsList.Count);
-            GameObject currentSpawnPoint = spawnPointsList[currentIndex];
-            Vector3 spawnPosition = currentSpawnPoint.transform.position;
-            spawnPosition.y += 1;
-            Instantiate(Sapphir, spawnPosition, Quaternion.identity);
-            spawnPointsList.RemoveAt(currentIndex);
-        }
+        void Start()
+        {
+            var spawnPoints = GameObject.FindGameObjectsWithTag("SpawningPoint");
+            var spawnPointsList = spawnPoints.ToList();
 
-        foreach(GameObject spawnPoint in spawnPointsList){
-            float randomNumber = Random.Range(0, 100);
-            if(randomNumber >= threshold){
-                Vector3 spawnPosition = spawnPoint.transform.position;
+            for (int i = 0; i < 3; ++i)
+            {
+                int currentIndex = Random.Range(0, spawnPointsList.Count);
+                GameObject currentSpawnPoint = spawnPointsList[currentIndex];
+                Vector3 spawnPosition = currentSpawnPoint.transform.position;
                 spawnPosition.y += 1;
-                Instantiate(powerupPrefabs[0], spawnPosition, Quaternion.identity);
+                Instantiate(sapphire, spawnPosition, Quaternion.identity);
+                spawnPointsList.RemoveAt(currentIndex);
+            }
+
+            foreach (GameObject spawnPoint in spawnPointsList)
+            {
+                float randomNumber = Random.Range(0, 100);
+                if (randomNumber >= threshold)
+                {
+                    Vector3 spawnPosition = spawnPoint.transform.position;
+                    spawnPosition.y += 1;
+                    Instantiate(powerupPrefabs[0], spawnPosition, Quaternion.identity);
+                }
             }
         }
     }
