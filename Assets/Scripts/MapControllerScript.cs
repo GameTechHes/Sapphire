@@ -36,7 +36,6 @@ public class MapControllerScript : MonoBehaviour
     {
         if((_input.resumeGame || _input.displayMap) && canToggle){
             _input.displayMap = false;
-            Debug.Log(displayMap);
             StartCoroutine(toggleMiniMap());
         }
     }

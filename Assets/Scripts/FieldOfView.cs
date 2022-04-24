@@ -96,7 +96,6 @@ public class FieldOfView : MonoBehaviour
                 break;
 
             case BotState.Focus:
-                Debug.Assert(playerOnFocus == null);
                 Vector3 direction = playerOnFocus.transform.position - transform.position;
                 animator.SetBool("walking", false);
                 animator.SetBool("playerDetected", true);

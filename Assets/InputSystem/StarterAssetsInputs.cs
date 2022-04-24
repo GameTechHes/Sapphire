@@ -43,7 +43,6 @@ namespace StarterAssets
 
 		public void OnResumeGame(InputValue value)
 		{
-			Debug.Log("Resume Game");
 			ResumeGameInput(value.isPressed);
 		}
 
@@ -64,7 +63,6 @@ namespace StarterAssets
 
 		public void OnDisplayMap(InputValue value)
 		{
-			Debug.Log("DisplayMap");
 			DisplayMapInput(value.isPressed);
 		}
 #else

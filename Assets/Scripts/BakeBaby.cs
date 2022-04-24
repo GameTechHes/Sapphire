@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Unity.AI.Navigation;
+using UnityEngine;
 
 
 /* IMPORTANT */
@@ -20,7 +18,7 @@ public class BakeBaby : MonoBehaviour
 
 
     public void BakeAll(){
-        Debug.Log("BUILDING");
+        Debug.Log("Baking nav mesh");
         surface.BuildNavMesh();
     }
 }

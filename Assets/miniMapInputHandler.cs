@@ -17,7 +17,6 @@ public class miniMapInputHandler : MonoBehaviour, IPointerClickHandler, IPointer
      }
 
      public void OnScroll(PointerEventData eventData){
-        Debug.Log(eventData.scrollDelta);
         float minSize = 5;
         float maxSize = 200;
         float scrollingUnit = 20;
