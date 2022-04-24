@@ -1,27 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
+using Items;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SapphireController : MonoBehaviour
+namespace Player
 {
-    public int totalSapphire;
-    private int sapphireCounter = 0;
-    public Text sapphireText;
-
-    void setText(){
-        sapphireText.text = sapphireCounter.ToString() + " / " + totalSapphire.ToString();
-    }
-
-    void Start()
+    public class SapphireController : MonoBehaviour
     {
-        setText();
-    }
+        public Text sapphireText;
 
-    public void AddSapphire()
-    {
-        sapphireCounter += 1;
-        setText();
-        Debug.Log("Sapphire collected!");
+        private int _totalSapphire;
+        private int _sapphireCounter;
+
+        void Start()
+        {
+            _totalSapphire = FindObjectsOfType<PowerUpSapphire>().Length;
+            SetText();
+        }
+
+        public void AddSapphire()
+        {
+            _sapphireCounter += 1;
+            SetText();
+        }
+
+        private void SetText(){
+            sapphireText.text = _sapphireCounter + " / " + _totalSapphire;
+        }
     }
 }

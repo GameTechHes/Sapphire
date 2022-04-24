@@ -1,47 +1,52 @@
-using System;
 using Cinemachine;
 using StarterAssets;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Knight : MonoBehaviour
+namespace Player
 {
-    private int _health;
-    public int maxHealth = 100;
-
-    public HealthBar healthBar;
-    public CinemachineVirtualCamera followCamera;
-    public StarterAssetsInputs inputs;
-    private Animator _controller;
-
-    public float AimSpeed = 4.0f;
-    private float _cameraDistance = 4.0f;
-
-    // Start is called before the first frame update
-    void Start()
+    public class Knight : MonoBehaviour
     {
-        _health = maxHealth;
-        healthBar.SetMaxHealth(maxHealth);
-        healthBar.SetProgress(_health);
-        _controller = GetComponent<Animator>();
-    }
+        public int maxHealth = 100;
+        public float aimSpeed = 4.0f;
+        public HealthBar healthBar;
+        public CinemachineVirtualCamera followCamera;
+        private StarterAssetsInputs _inputs;
 
-    private void Update()
-    {
-        if (inputs.aim)
+        private int _health;
+        private Animator _controller;
+        private float _cameraDistance = 4.0f;
+        private Cinemachine3rdPersonFollow _cinemachine3RdPersonFollow;
+
+        void Start()
         {
-            _cameraDistance = Mathf.Lerp(_cameraDistance, 2.0f, Time.deltaTime * AimSpeed);
-            followCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>().CameraDistance = _cameraDistance;
+            _health = maxHealth;
+            healthBar.SetMaxHealth(maxHealth);
+            healthBar.SetProgress(_health);
+            _controller = GetComponent<Animator>();
+            _inputs = GetComponent<StarterAssetsInputs>();
+            _cinemachine3RdPersonFollow = followCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
         }
-        else
-        {
-            _cameraDistance = Mathf.Lerp(_cameraDistance, 4.0f, Time.deltaTime * AimSpeed);
-            followCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>().CameraDistance = _cameraDistance;
-        }
-    }
 
-    void OnAim(InputValue value)
-    {
-        _controller.SetBool("Aim", value.isPressed);
+        private void Update()
+        {
+            if (_inputs.aim)
+            {
+                _cameraDistance = Mathf.Lerp(_cameraDistance, 2.0f, Time.deltaTime * aimSpeed);
+                _cinemachine3RdPersonFollow.CameraDistance = _cameraDistance;
+                _cinemachine3RdPersonFollow.CameraSide = Mathf.Lerp(_cinemachine3RdPersonFollow.CameraSide, 1.0f, Time.deltaTime * aimSpeed);
+            }
+            else
+            {
+                _cameraDistance = Mathf.Lerp(_cameraDistance, 4.0f, Time.deltaTime * aimSpeed);
+                _cinemachine3RdPersonFollow.CameraDistance = _cameraDistance;
+                _cinemachine3RdPersonFollow.CameraSide = Mathf.Lerp(_cinemachine3RdPersonFollow.CameraSide, 0.5f, Time.deltaTime * aimSpeed);
+            }
+        }
+
+        void OnAim(InputValue value)
+        {
+            _controller.SetBool("Aim", value.isPressed);
+        }
     }
 }
