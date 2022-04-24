@@ -2,78 +2,71 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class miniMapInputHandler : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IScrollHandler
- {
-    public Camera minicam;
-    public GameObject myPrefab;
-     public void OnPointerDown( PointerEventData eventData )
-     {
-     }
- 
-     public void OnPointerUp( PointerEventData eventData )
-     {
-     }
-
-     public void OnScroll(PointerEventData eventData){
-        float minSize = 5;
-        float maxSize = 200;
-        float scrollingUnit = 20;
-        float scroll = eventData.scrollDelta.y;
-        if(scroll > 0 && minicam.orthographicSize - scrollingUnit > minSize){
-            scrollingUnit = -20;
-        }
-        else if(scroll < 0 && minicam.orthographicSize + scrollingUnit < maxSize){
-            scrollingUnit = 20;
-        }
-        else{
-            scrollingUnit = 0;
-        }
-        minicam.orthographicSize += scrollingUnit;
-     }
-
- 
-     public void OnPointerClick(PointerEventData eventData){
-        
-        Vector2 curosr = new Vector2(0, 0);
-
-        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(GetComponent<RawImage>().rectTransform,
-            eventData.pressPosition, eventData.pressEventCamera, out curosr))
-        {
-
-            Texture texture = GetComponent<RawImage>().texture;
-            Rect rect = GetComponent<RawImage>().rectTransform.rect;
-
-            float coordX = Mathf.Clamp(0, (((curosr.x - rect.x) * texture.width) / rect.width), texture.width);
-            float coordY = Mathf.Clamp(0, (((curosr.y - rect.y) * texture.height) / rect.height), texture.height);
-
-            float calX = coordX / texture.width;
-            float calY = coordY / texture.height;
-
-       
-            curosr = new Vector2(calX, calY);
-            
-            CastRayToWorld(curosr);
-        }
-        
-        
-    }
-    
-    private void CastRayToWorld(Vector2 vec)
+namespace Minimap
+{
+    public class MiniMapInputHandler : MonoBehaviour, IPointerClickHandler, IScrollHandler
     {
-        Ray MapRay = minicam.ScreenPointToRay(new Vector2(vec.x * minicam.pixelWidth,
-            vec.y * minicam.pixelHeight));
+        public Camera minicam;
+        public GameObject myPrefab;
 
-        RaycastHit miniMapHit;
-
-        if (Physics.Raycast(MapRay, out miniMapHit, Mathf.Infinity))
+        public void OnScroll(PointerEventData eventData)
         {
-            Debug.DrawRay(MapRay.origin, MapRay.direction*1000, Color.green, 5);
+            var minSize = 5.0f;
+            var maxSize = 200.0f;
+            var scrollingUnit = 20.0f;
+            var scroll = eventData.scrollDelta.y;
+            if (scroll > 0 && minicam.orthographicSize - scrollingUnit > minSize)
+            {
+                scrollingUnit = -20;
+            }
+            else if (scroll < 0 && minicam.orthographicSize + scrollingUnit < maxSize)
+            {
+                scrollingUnit = 20;
+            }
+            else
+            {
+                scrollingUnit = 0;
+            }
+            minicam.orthographicSize += scrollingUnit;
+        }
 
-            if(miniMapHit.collider.GetComponent<SpawnArea>() != null){
-                Instantiate(myPrefab, miniMapHit.collider.transform.position, Quaternion.identity);
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            print("Clicked");
+            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(GetComponent<RawImage>().rectTransform,
+                    eventData.pressPosition, eventData.pressEventCamera, out var cursor))
+            {
+                var texture = GetComponent<RawImage>().texture;
+                var rect = GetComponent<RawImage>().rectTransform.rect;
+
+                var coordX = Mathf.Clamp(0, (((cursor.x - rect.x) * texture.width) / rect.width), texture.width);
+                var coordY = Mathf.Clamp(0, (((cursor.y - rect.y) * texture.height) / rect.height), texture.height);
+
+                var calX = coordX / texture.width;
+                var calY = coordY / texture.height;
+
+
+                cursor = new Vector2(calX, calY);
+
+                CastRayToWorld(cursor);
             }
         }
 
-        
+        private void CastRayToWorld(Vector2 vec)
+        {
+            var mapRay = minicam.ScreenPointToRay(new Vector2(vec.x * minicam.pixelWidth,
+                vec.y * minicam.pixelHeight));
+
+            if (Physics.Raycast(mapRay, out var miniMapHit, Mathf.Infinity))
+            {
+                Debug.DrawRay(mapRay.origin, mapRay.direction * 1000, Color.green, 5);
+
+                if (miniMapHit.collider.GetComponent<SpawnArea>() != null)
+                {
+                    Instantiate(myPrefab, miniMapHit.collider.transform.position, Quaternion.identity);
+                }
+            }
+        }
     }
- }
+}

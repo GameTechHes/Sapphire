@@ -1,88 +1,70 @@
 using System.Collections;
-using System.Collections.Generic;
+using StarterAssets;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.EventSystems;
-using StarterAssets;
 
-public class MapControllerScript : MonoBehaviour
+namespace Minimap
 {
-    private bool displayMap = false;
-    private bool canToggle = true;
-    private float toggleTime = 0.2f;
-    private float minSize = 15;
-    private float maxSize = 200;
-
-    GameObject minicamUI;
-    public Camera minicam;
-
-    public StarterAssetsInputs starterAssetsInputs;
-    public PlayerInput playerInput;
-
-    // Start is called before the first frame update
-    void Start()
+    public class MapControllerScript : MonoBehaviour
     {
-        minicamUI = GameObject.Find("MiniCameraUI");
-        minicamUI.SetActive(displayMap);
-        //controller = PlayerArmature.GetComponent<ThirdPersonController>();
-    }
+        public Camera minicam;
+        public StarterAssetsInputs starterAssetsInputs;
+        public PlayerInput playerInput;
+        public GameObject minicamUI;
 
-    // Update is called once per frame
-    void Update()
-    {
-        if((starterAssetsInputs.resumeGame || starterAssetsInputs.displayMap) && canToggle){
-            starterAssetsInputs.displayMap = false;
-            StartCoroutine(toggleMiniMap());
-        }
-    }
+        private bool _displayMap = false;
+        private bool _canToggle = true;
+        private const float ToggleTime = 0.2f;
+        private const float MinSize = 15;
+        private const float MaxSize = 200;
 
-    private void ResumeGame(){
-			if(starterAssetsInputs.resumeGame){
-                starterAssetsInputs.resumeGame = false;
-				playerInput.actions.FindActionMap("Player").Enable();
-            	playerInput.actions.FindActionMap("UI").Disable();
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
-			}
-		}
-    
-    public void foo(){
-        Debug.Log("Click");    
-    }
-
-    public void OnScrollWheel(){
-        Vector2  vec = Mouse.current.scroll.ReadValue();
-        float scrollingUnit = 20;
-        float scroll = vec.y;
-        if(scroll > 0 && minicam.orthographicSize - scrollingUnit > minSize){
-            scrollingUnit = -20;
-        }
-        else if(scroll < 0 && minicam.orthographicSize + scrollingUnit < maxSize){
-            scrollingUnit = 20;
-        }
-        else{
-            scrollingUnit = 0;
-        }
-        minicam.orthographicSize += scrollingUnit;
-    } 
-
-    IEnumerator toggleMiniMap()
-    {
-        displayMap = !displayMap;
-        //Debug.Log(displayMap);
-        minicamUI.SetActive(displayMap);
-        //PlayerArmature.GetComponent<ThirdPersonController>().enabled = !displayMap;
-        if(displayMap){
-            starterAssetsInputs.StopPlayerMovement();
-            playerInput.actions.FindActionMap("Player").Disable();
-            playerInput.actions.FindActionMap("UI").Enable();
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-        } else{
+        void Start()
+        {
+            minicamUI.SetActive(_displayMap);
             ResumeGame();
         }
-        canToggle = false;
-        yield return new WaitForSeconds(toggleTime);
-        canToggle = true;
+
+        void Update()
+        {
+            if ((starterAssetsInputs.resumeGame || starterAssetsInputs.displayMap) && _canToggle)
+            {
+                starterAssetsInputs.displayMap = false;
+                StartCoroutine(ToggleMiniMap());
+            }
+        }
+
+        private void ResumeGame()
+        {
+            if (starterAssetsInputs.resumeGame)
+            {
+                starterAssetsInputs.resumeGame = false;
+                playerInput.actions.FindActionMap("Player").Enable();
+                playerInput.actions.FindActionMap("UI").Disable();
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+        }
+
+        private IEnumerator ToggleMiniMap()
+        {
+            _displayMap = !_displayMap;
+            minicamUI.SetActive(_displayMap);
+            if (_displayMap)
+            {
+                starterAssetsInputs.StopPlayerMovement();
+                playerInput.actions.FindActionMap("Player").Disable();
+                playerInput.actions.FindActionMap("UI").Enable();
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+            }
+            else
+            {
+                ResumeGame();
+            }
+
+            _canToggle = false;
+            yield return new WaitForSeconds(ToggleTime);
+            _canToggle = true;
+        }
     }
 }

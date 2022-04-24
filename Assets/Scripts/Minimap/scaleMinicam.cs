@@ -1,56 +1,56 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class scaleMinicam : MonoBehaviour
+namespace Minimap
 {
-    float distanceX = 0;
-    float distanceZ = 0;
-    Camera minicam;
-    public GameObject camUI;
-    RectTransform rectTransform;
-    Quaternion originalRotation;
-
-    // Start is called before the first frame update
-    void Start()
+    /**
+     * TODO: To remove if not used anymore
+     */
+    public class ScaleMinicam : MonoBehaviour
     {
-        minicam = GetComponent<Camera>();
-        originalRotation = minicam.transform.rotation;
+        public GameObject camUI;
 
-        if(camUI){
-            Debug.Log("CamUI found");
-        }
-        rectTransform = camUI.GetComponent<RectTransform>();
-        float minX = 10000f;
-        float minZ = 10000f;
-        float maxX = -10000f;
-        float maxZ = -10000f;
-        foreach(GameObject refPoint in GameObject.FindGameObjectsWithTag("ReferencePoint")){
-             Debug.Log("ReferencePoint");
-             minX = refPoint.transform.position.x < minX ?  refPoint.transform.position.x : minX;
-             minZ = refPoint.transform.position.z < minZ ?  refPoint.transform.position.z : minZ;
-             maxX = refPoint.transform.position.x > maxX ?  refPoint.transform.position.x : maxX;
-             maxZ = refPoint.transform.position.z > maxZ ?  refPoint.transform.position.z : maxZ;
-        }
-        Debug.Log("Distance X" + (maxX - minX).ToString());
-        Debug.Log("Distance Z" + (maxZ - minZ).ToString());
-        distanceZ = maxZ - minZ;
-        distanceX = maxX - minX;
+        private float _distanceX;
+        private float _distanceZ;
+        private Camera _minicam;
+        private RectTransform _rectTransform;
+        private Quaternion _originalRotation;
 
-        if(distanceX < distanceZ){
-            minicam.orthographicSize = 0.5f * distanceZ;
-        } else{
-            float unitsPerPixel = distanceX / rectTransform.rect.width;
-            float desiredHalfHeight = 0.5f * unitsPerPixel * rectTransform.rect.height;
-            Debug.Log(desiredHalfHeight.ToString());
-            minicam.orthographicSize = 10;
-        }
-    }
+        void Start()
+        {
+            _minicam = GetComponent<Camera>();
+            _originalRotation = _minicam.transform.rotation;
+            _rectTransform = camUI.GetComponent<RectTransform>();
+            
+            var minX = 10000f;
+            var minZ = 10000f;
+            var maxX = -10000f;
+            var maxZ = -10000f;
+            foreach (var refPoint in GameObject.FindGameObjectsWithTag("ReferencePoint"))
+            {
+                minX = refPoint.transform.position.x < minX ? refPoint.transform.position.x : minX;
+                minZ = refPoint.transform.position.z < minZ ? refPoint.transform.position.z : minZ;
+                maxX = refPoint.transform.position.x > maxX ? refPoint.transform.position.x : maxX;
+                maxZ = refPoint.transform.position.z > maxZ ? refPoint.transform.position.z : maxZ;
+            }
 
-    // Update is called once per frame
-    void Update()
-    {
-        minicam.transform.rotation = originalRotation;
-        
+            _distanceZ = maxZ - minZ;
+            _distanceX = maxX - minX;
+
+            if (_distanceX < _distanceZ)
+            {
+                _minicam.orthographicSize = 0.5f * _distanceZ;
+            }
+            else
+            {
+                var unitsPerPixel = _distanceX / _rectTransform.rect.width;
+                var desiredHalfHeight = 0.5f * unitsPerPixel * _rectTransform.rect.height;
+                _minicam.orthographicSize = 10;
+            }
+        }
+
+        void Update()
+        {
+            _minicam.transform.rotation = _originalRotation;
+        }
     }
 }

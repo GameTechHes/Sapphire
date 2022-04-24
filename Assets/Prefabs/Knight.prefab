@@ -1276,7 +1276,6 @@ GameObject:
   - component: {fileID: 5480778682553622244}
   - component: {fileID: 920942734676321527}
   - component: {fileID: 2304757532992707238}
-  - component: {fileID: 4863763086141173408}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1370,35 +1369,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &4863763086141173408
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3165213074492240312}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 7
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 2823939576887661695}
-          m_TargetAssemblyTypeName: MapControllerScript, Assembly-CSharp
-          m_MethodName: OnScrollWheel
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!1 &3244042748964367269
 GameObject:
   m_ObjectHideFlags: 0
@@ -2364,7 +2334,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2604909930765488085}
   - component: {fileID: 2823939576887661695}
-  - component: {fileID: 5636952731708247851}
   m_Layer: 0
   m_Name: MapController
   m_TagString: Untagged
@@ -2379,8 +2348,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5813024366959105168}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.000061035156, y: -0.000030517578, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7316417065234386541}
@@ -2401,35 +2370,7 @@ MonoBehaviour:
   minicam: {fileID: 4964867732205625907}
   starterAssetsInputs: {fileID: 5749675697393819957}
   playerInput: {fileID: 5749675697393819959}
---- !u!114 &5636952731708247851
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5813024366959105168}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 7
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 2823939576887661695}
-          m_TargetAssemblyTypeName: MapControllerScript, Assembly-CSharp
-          m_MethodName: OnScrollWheel
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+  minicamUI: {fileID: 6690430857416374282}
 --- !u!1 &5858321593146311178
 GameObject:
   m_ObjectHideFlags: 0
