@@ -76,7 +76,7 @@ namespace AI
             switch (state)
             {
                 case BotState.Idle:
-                    bot.setAgentSpeed(2);
+                    bot.SetAgentSpeed(2);
                     animator.SetBool("attack", false);
                     animator.SetBool("playerDetected", false);
 
@@ -86,16 +86,13 @@ namespace AI
                         {
                             playerOnFocus = hitCollider.gameObject;
                             Vector3 directionIdle = playerOnFocus.transform.position - transform.position;
-                            if (IsInViewAngle(directionIdle))
+                            if (IsInViewAngle(directionIdle) && IsInRaycast(directionIdle))
                             {
-                                if (IsInRaycast(directionIdle))
-                                {
-                                    animator.SetBool("playerDetected", true);
-                                    bot.resetCurrentPath(); //just in case something is going wrong
-                                    bot.setNewDestination(playerOnFocus.transform.position);
-                                    time = 0;
-                                    state = BotState.Focus;
-                                }
+                                animator.SetBool("playerDetected", true);
+                                bot.ResetCurrentPath(); // Just in case something is going wrong
+                                bot.SetNewDestination(playerOnFocus.transform.position);
+                                time = 0;
+                                state = BotState.Focus;
                             }
                         }
                     }
@@ -106,10 +103,10 @@ namespace AI
                     Vector3 direction = playerOnFocus.transform.position - transform.position;
                     animator.SetBool("walking", false);
                     animator.SetBool("playerDetected", true);
-                    bot.setAgentSpeed(4);
+                    bot.SetAgentSpeed(4);
                     if (direction.magnitude <= playerRange)
                     {
-                        bot.resetCurrentPath();
+                        bot.ResetCurrentPath();
                         state = BotState.Attacking;
                         break;
                     }
@@ -118,8 +115,8 @@ namespace AI
                     {
                         if (time > minTimeBeforeUpdateTarget)
                         {
-                            bot.resetCurrentPath(); // Because you can't set a path during another path
-                            bot.setNewDestination(playerOnFocus.transform.position);
+                            bot.ResetCurrentPath(); // Because you can't set a path during another path
+                            bot.SetNewDestination(playerOnFocus.transform.position);
                             time = 0;
                         }
                     }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using AI;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -24,7 +25,7 @@ public class DungeonGenerator : MonoBehaviour
     void Start()
     {
         InstantiateRoom(centralRoomPrefab, 0, 0);
-        var bake = GetComponent<BakeBaby>();
+        var bake = GetComponent<RuntimeBaker>();
         /* 
             We can do this because the BakeBaby script is executed before
             So we are sure that bake is initialized
