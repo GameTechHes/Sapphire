@@ -10,7 +10,7 @@ public class FieldOfView : MonoBehaviour
     public float timeBeforeUnfocusPlayer = 10;
     public float playerRange = 3;
     private float time = 0;
-    private int layerMask = ~(1 << 3 | 1 << 7);
+    public LayerMask layerMask;
     private Bot bot;
     private Animator animator;
     private GameObject playerOnFocus;
@@ -38,7 +38,7 @@ public class FieldOfView : MonoBehaviour
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawSphere(this.transform.position, detectionRadius);
+        Gizmos.DrawSphere(transform.position, detectionRadius);
     }
     bool isInRaycast(Vector3 direction, string tag = "")
     {
@@ -47,11 +47,9 @@ public class FieldOfView : MonoBehaviour
         if (!Physics.Raycast(ray_src, direction, out hit, direction.magnitude + 1, layerMask))
         {
             Debug.DrawRay(ray_src, direction, Color.green);
-            Debug.Log(tag + " Did Hit");
             return true;
         }
         Debug.DrawRay(ray_src, direction, Color.red);
-        Debug.Log(tag + " Did Not Hit");
         return false;
     }
     bool isInViewAngle(Vector3 direction)
@@ -75,7 +73,7 @@ public class FieldOfView : MonoBehaviour
 
                 foreach (var hitCollider in hitColliders)
                 {
-                    if (hitCollider.gameObject.tag == "Player")
+                    if (hitCollider.gameObject.CompareTag("Player"))
                     {
                         playerOnFocus = hitCollider.gameObject;
                         Vector3 direction_idle = playerOnFocus.transform.position - transform.position;

@@ -49,7 +49,6 @@ public class Bot : MonoBehaviour
             agent.SetDestination(newPos);
             timer = 0;
             wanderTimer = Random.Range(minWanderTimer, maxWanderTimer);
-            print("New target");
         }
     }
     public void resetCurrentPath(){

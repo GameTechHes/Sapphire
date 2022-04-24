@@ -10,6 +10,8 @@ public class DungeonGenerator : MonoBehaviour
 
     public Corridor corridorPrefab;
 
+    public GameObject playerPrefab;
+
     [FormerlySerializedAs("totalRoomCount")] public int maxRooms;
 
     private int _roomCount;
@@ -29,6 +31,7 @@ public class DungeonGenerator : MonoBehaviour
         */
         bake.BakeAll();
 
+        Instantiate(playerPrefab, new Vector3(0, 0.9f, 0), Quaternion.identity);
     }
 
     private void InstantiateRoom(Room roomPrefab, int x, int y)
