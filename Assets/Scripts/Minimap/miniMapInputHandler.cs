@@ -33,7 +33,6 @@ namespace Minimap
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            print("Clicked");
             if (RectTransformUtility.ScreenPointToLocalPointInRectangle(GetComponent<RawImage>().rectTransform,
                     eventData.pressPosition, eventData.pressEventCamera, out var cursor))
             {
