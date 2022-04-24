@@ -1,7 +1,10 @@
 using UnityEngine;
 
-public class Corridor : MonoBehaviour
+namespace Generation
 {
-    public Transform start;
-    public Transform end;
+    public class Corridor : MonoBehaviour
+    {
+        public Transform start;
+        public Transform end;
+    }
 }
