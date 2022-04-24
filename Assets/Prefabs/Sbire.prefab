@@ -1395,7 +1395,7 @@ GameObject:
   - component: {fileID: 4382585901459117713}
   - component: {fileID: 4382585901459117716}
   m_Layer: 0
-  m_Name: PolyArtWizardStandardMat (1)
+  m_Name: Sbire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1487,8 +1487,6 @@ MonoBehaviour:
   wanderRadius: 15
   maxWanderTimer: 10
   minWanderTimer: 2
-  angleMax: 180
-  isActive: 1
 --- !u!114 &4382585901459117716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1508,7 +1506,7 @@ MonoBehaviour:
   playerRange: 3
   layerMask:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 256
 --- !u!1 &4382585901471696982
 GameObject:
   m_ObjectHideFlags: 0

@@ -1816,6 +1816,7 @@ GameObject:
   - component: {fileID: 5749675697393819957}
   - component: {fileID: 658308784}
   - component: {fileID: 564951037}
+  - component: {fileID: 2219702348305879888}
   m_Layer: 7
   m_Name: KnightCharacter
   m_TagString: Player
@@ -2000,6 +2001,20 @@ MonoBehaviour:
   projectileLifetime: 5
   ammoText: {fileID: 426084967400333619}
   crosshair: {fileID: 2288462237107005102}
+--- !u!114 &2219702348305879888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4831124644429290595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27dffa7ecfcfdfa98b457b2b8ed0b17f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  totalSapphire: 0
+  sapphireText: {fileID: 6314115075652067542}
 --- !u!1 &4908811119088813876
 GameObject:
   m_ObjectHideFlags: 0
