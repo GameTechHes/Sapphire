@@ -1,34 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class TitleScreen : MonoBehaviour
+namespace UI
 {
-    /*// Start is called before the first frame update
-    void Start()
+    public class TitleScreen : MonoBehaviour
     {
-        
-    }
+        public void Create()
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }*/
+        public void Join()
+        {
 
-    public void Create()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-    }
+        }
 
-    public void Join()
-    {
-
-    }
-
-    public void Quit()
-    {
-        Application.Quit();
+        public void Quit()
+        {
+            Application.Quit();
+        }
     }
 }

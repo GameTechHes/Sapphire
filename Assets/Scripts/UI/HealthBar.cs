@@ -2,29 +2,32 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthBar : MonoBehaviour
+namespace UI
 {
-    private Slider _slider;
-    public TextMeshProUGUI healthCount;
-
-    private int _maxHealth;
-
-    public void Start()
+    public class HealthBar : MonoBehaviour
     {
-        _slider = GetComponent<Slider>();
-    }
+        public TextMeshProUGUI healthCount;
 
-    public void SetMaxHealth(int maxHealth)
-    {
-        _maxHealth = maxHealth;
-    }
+        private Slider _slider;
+        private int _maxHealth;
 
-    public void SetProgress(int health)
-    {
-        if (health >= 0 && _slider != null)
+        public void Start()
         {
-            _slider.value = health / (float)_maxHealth;
-            healthCount.text = health.ToString();
+            _slider = GetComponent<Slider>();
+        }
+
+        public void SetMaxHealth(int maxHealth)
+        {
+            _maxHealth = maxHealth;
+        }
+
+        public void SetProgress(int health)
+        {
+            if (health >= 0 && _slider != null)
+            {
+                _slider.value = health / (float)_maxHealth;
+                healthCount.text = health.ToString();
+            }
         }
     }
 }
