@@ -1,6 +1,6 @@
 using Cinemachine;
+using Sapphire.UI;
 using StarterAssets;
-using UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 

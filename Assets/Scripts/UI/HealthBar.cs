@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace Sapphire.UI
 {
     public class HealthBar : MonoBehaviour
     {
