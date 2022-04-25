@@ -16,16 +16,16 @@ namespace Player
         public float projectileLifetime = 5;
         public Text ammoText;
         public Transform crosshair;
-    
+
         private bool _canShoot = true;
         private Camera _mainCamera;
         private StarterAssetsInputs _inputs;
-        
+
         void Start()
         {
             ammoText.text = ammoCount.ToString();
             _mainCamera = Camera.main;
-            _inputs = GetComponent<StarterAssetsInputs>();
+            _inputs = GameObject.Find("InputManager").GetComponent<StarterAssetsInputs>();
             crosshair.gameObject.SetActive(false);
         }
 
@@ -64,7 +64,7 @@ namespace Player
         public void Update()
         {
             var worldPos = _mainCamera.ScreenToWorldPoint(crosshair.position);
-            
+
             if (Physics.Raycast(worldPos, _mainCamera.transform.forward, out var hit, 100.0f))
             {
                 var target = hit.point;
