@@ -8,7 +8,7 @@ namespace Minimap
     public class MapControllerScript : MonoBehaviour
     {
         public Camera minicam;
-        public StarterAssetsInputs starterAssetsInputs;
+        private StarterAssetsInputs starterAssetsInputs;
         public PlayerInput playerInput;
         public GameObject minicamUI;
 
@@ -21,6 +21,7 @@ namespace Minimap
         void Start()
         {
             minicamUI.SetActive(_displayMap);
+            starterAssetsInputs = GameObject.Find("InputManager").GetComponent<StarterAssetsInputs>();
             ResumeGame();
         }
 

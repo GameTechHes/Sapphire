@@ -14,8 +14,8 @@ namespace Player
         public float aimSpeed = 4.0f;
         public HealthBar healthBar;
         public CinemachineVirtualCamera followCamera;
-        private StarterAssetsInputs _inputs;
 
+        private StarterAssetsInputs _inputs;
         private int _health;
         private Animator _controller;
         private float _cameraDistance = 4.0f;
@@ -59,8 +59,16 @@ namespace Player
         {
             if (GetInput(out NetworkInputData data))
             {
-                data.direction.Normalize();
-                _cc.Move(0.05f * data.direction * Runner.DeltaTime);
+                if (data.jump)
+                {
+                    _cc.Jump();
+                }
+
+                var inputDirection = new Vector3(data.move.x, 0.0f, data.move.y).normalized;
+                if (inputDirection != Vector3.zero)
+                {
+                    _cc.Move(0.05f * inputDirection * Runner.DeltaTime);
+                }
             }
         }
 

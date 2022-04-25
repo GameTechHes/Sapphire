@@ -4,7 +4,6 @@ using Fusion;
 using Fusion.Sockets;
 using StarterAssets;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 {
@@ -12,24 +11,31 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     private NetworkRunner _runner;
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
-    private InputManager _inputManager;
     private StarterAssetsInputs _inputs;
 
-    public void StartGame()
+    public void HostGame()
     {
-        SceneManager.LoadScene("Dungeon");
+        StartGameWithMode(GameMode.Host);
+    }
+
+    public void JoinGame()
+    {
+        StartGameWithMode(GameMode.Client);
+    }
+
+    private async void StartGameWithMode(GameMode mode)
+    {
         _inputs.cursorLocked = true;
-        _inputs.SetCursorState(true);
 
         _runner = gameObject.AddComponent<NetworkRunner>();
         _runner.ProvideInput = true;
 
-        _runner.StartGame(new StartGameArgs()
+        await _runner.StartGame(new StartGameArgs()
         {
-            GameMode = GameMode.Host,
+            GameMode = mode,
             SessionName = "TestRoom",
-            Scene = SceneManager.GetSceneByName("Dungeon").buildIndex,
-            SceneObjectProvider = gameObject.AddComponent<NetworkSceneManagerDefault>()
+            Scene = 1,
+            SceneObjectProvider = GetComponent<NetworkSceneManagerDefault>()
         });
     }
 
@@ -37,7 +43,6 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     {
         DontDestroyOnLoad(this);
         var inputManager = GameObject.Find("InputManager").GetComponent<InputManager>();
-        _inputManager = inputManager;
         if (inputManager != null)
         {
             _inputs = inputManager.GetComponent<StarterAssetsInputs>();
@@ -50,6 +55,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         {
             print("Player join !");
             var networkObj = runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, player);
+            
             _spawnedCharacters.Add(player, networkObj);
         }
     }
@@ -61,9 +67,12 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-        var data = new NetworkInputData();
-        data.direction = new Vector3(_inputs.move.x, 0.0f, _inputs.move.y);
-        print(data.direction);
+        var data = new NetworkInputData
+        {
+            move = _inputs.move,
+            look = _inputs.look,
+            jump = _inputs.jump
+        };
         input.Set(data);
     }
 
