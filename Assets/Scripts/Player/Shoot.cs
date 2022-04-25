@@ -40,15 +40,15 @@ namespace Player
             _canShoot = true;
         }
 
-        public void OnShoot()
-        {
-            if (_canShoot && ammoCount > 0 && _inputs.aim)
-            {
-                _canShoot = false;
-                AddAmmo(-1);
-                StartCoroutine(Fire());
-            }
-        }
+        // public void OnShoot()
+        // {
+        //     if (_canShoot && ammoCount > 0 && _inputs.aim)
+        //     {
+        //         _canShoot = false;
+        //         AddAmmo(-1);
+        //         StartCoroutine(Fire());
+        //     }
+        // }
 
         public void AddAmmo(int amount)
         {

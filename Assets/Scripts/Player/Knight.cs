@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 
 namespace Player
 {
-    public class Knight : NetworkBehaviour
+    public class Knight : MonoBehaviour
     {
         public int maxHealth = 100;
         public float aimSpeed = 4.0f;
@@ -20,12 +20,6 @@ namespace Player
         private Animator _controller;
         private float _cameraDistance = 4.0f;
         private Cinemachine3rdPersonFollow _cinemachine3RdPersonFollow;
-        private NetworkCharacterControllerPrototype _cc;
-
-        private void Awake()
-        {
-            _cc = GetComponent<NetworkCharacterControllerPrototype>();
-        }
 
         void Start()
         {
@@ -55,22 +49,7 @@ namespace Player
             }
         }
 
-        public override void FixedUpdateNetwork()
-        {
-            if (GetInput(out NetworkInputData data))
-            {
-                if (data.jump)
-                {
-                    _cc.Jump();
-                }
-
-                var inputDirection = new Vector3(data.move.x, 0.0f, data.move.y).normalized;
-                if (inputDirection != Vector3.zero)
-                {
-                    _cc.Move(0.05f * inputDirection * Runner.DeltaTime);
-                }
-            }
-        }
+        
 
         void OnAim(InputValue value)
         {

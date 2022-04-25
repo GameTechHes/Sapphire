@@ -3,62 +3,59 @@ using System.Collections.Generic;
 using Fusion;
 using Fusion.Sockets;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
+namespace Network
 {
-    [SerializeField] private NetworkPrefabRef _playerPrefab;
+    public class InputController : NetworkBehaviour, INetworkRunnerCallbacks
+{
+    public static bool fetchInput = true;
+    
+    private Player _player;
+    private NetworkInputData _frameworkInput;
+    private Vector2 _moveDelta;
 
-    private NetworkRunner _runner;
-    private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
-
-    public void HostGame()
+    public void OnMove(InputValue value)
     {
-        StartGameWithMode(GameMode.Host);
+        _moveDelta = value.Get<Vector2>();
     }
 
-    public void JoinGame()
+    public override void FixedUpdateNetwork()
     {
-        StartGameWithMode(GameMode.Client);
-    }
-
-    private async void StartGameWithMode(GameMode mode)
-    {
-        _runner = gameObject.AddComponent<NetworkRunner>();
-        _runner.ProvideInput = true;
-        // _runner.AddCallbacks(this);
-
-        await _runner.StartGame(new StartGameArgs()
+        if (GetInput(out NetworkInputData input))
         {
-            GameMode = mode,
-            SessionName = "TestRoom",
-            Scene = 1,
-            SceneObjectProvider = GetComponent<NetworkSceneManagerDefault>()
-        });
-    }
-
-    void Awake()
-    {
-        DontDestroyOnLoad(this);
-    }
-
-
-    public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
-    {
-        if (runner.IsServer)
-        {
-            print("Player join !");
-            var networkObj = runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, player);
-
-            _spawnedCharacters.Add(player, networkObj);
+            _player.SetDirection(input.moveDirection.normalized);
         }
+        _player.Move();
     }
 
-    public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
+    public override void Spawned()
     {
-        print("Player left !");
+        _player = GetComponent<Player>();
+        if (Object.HasInputAuthority)
+        {
+            Runner.AddCallbacks(this);
+            GetComponent<PlayerInput>().enabled = true;
+        }
+
+        Debug.Log("Spawned [" + this + "] IsClient=" + Runner.IsClient + " IsServer=" + Runner.IsServer + " HasInputAuth=" + Object.HasInputAuthority + " HasStateAuth=" + Object.HasStateAuthority);
     }
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
+    {
+        if (_player != null && _player.Object != null && fetchInput)
+        {
+            _frameworkInput.moveDirection = _moveDelta.normalized;
+        }
+        
+        input.Set(_frameworkInput);
+    }
+
+    public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
+    {
+    }
+
+    public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
     }
 
@@ -113,4 +110,10 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     public void OnSceneLoadStart(NetworkRunner runner)
     {
     }
+}
+
+public struct NetworkInputData : INetworkInput
+{
+    public Vector2 moveDirection;
+}
 }
