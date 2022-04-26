@@ -13,8 +13,6 @@ namespace Generation
 
         public Corridor corridorPrefab;
 
-        public GameObject playerPrefab;
-
         [FormerlySerializedAs("totalRoomCount")]
         public int maxRooms;
 
@@ -28,17 +26,12 @@ namespace Generation
         {
             InstantiateRoom(centralRoomPrefab, 0, 0);
             var bake = GetComponent<RuntimeBaker>();
-            
+
             /***
             * We can do this because the RuntimeBaker script is executed before
             * So we are sure that bake is initialized
             */
             bake.BakeAll();
-
-            /***
-             * Instantiating the player after baking
-             */
-            Instantiate(playerPrefab, new Vector3(0, 0.9f, 0), Quaternion.identity);
         }
 
         private void InstantiateRoom(Room roomPrefab, int x, int y)
