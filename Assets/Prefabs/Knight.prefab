@@ -837,10 +837,9 @@ MonoBehaviour:
     RawGuidValue: e42f7a335ef318c42a5f80fbcfa0ce76
   NestedObjects: []
   NetworkedBehaviours:
-  - {fileID: 5749675697393819952}
   - {fileID: 5749675697393819957}
+  - {fileID: 5749675697393819952}
   - {fileID: 9107779666168407522}
-  - {fileID: 6156877743819836566}
   SimulationBehaviours: []
 --- !u!1 &1722389126084337440
 GameObject:
@@ -1808,14 +1807,13 @@ GameObject:
   - component: {fileID: 5206243529841936089}
   - component: {fileID: 2206876227830701219}
   - component: {fileID: 5749675697393819959}
-  - component: {fileID: 5749675697393819952}
   - component: {fileID: 5749675697393819957}
   - component: {fileID: 658308784}
   - component: {fileID: 564951037}
   - component: {fileID: 2219702348305879888}
   - component: {fileID: 5749675697393819958}
+  - component: {fileID: 5749675697393819952}
   - component: {fileID: 9107779666168407522}
-  - component: {fileID: 6156877743819836566}
   m_Layer: 7
   m_Name: KnightCharacter
   m_TagString: Player
@@ -1891,39 +1889,6 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &5749675697393819952
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4831124644429290595}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26e54e5a728a9234ab24fcf1460ed8a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _interpolationDataSource: 0
-  MoveSpeed: 2
-  SprintSpeed: 5.335
-  RotationSmoothTime: 0.12
-  SpeedChangeRate: 10
-  JumpHeight: 1.2
-  Gravity: -15
-  JumpTimeout: 0.3
-  FallTimeout: 0.15
-  Grounded: 1
-  GroundedOffset: -0.05
-  GroundedRadius: 0.28
-  GroundLayers:
-    serializedVersion: 2
-    m_Bits: 1
-  CinemachineCameraTarget: {fileID: 5858321593146311178}
-  TopClamp: 70
-  BottomClamp: -30
-  CameraAngleOverride: 0
-  LockCameraPosition: 0
-  _mainCamera: {fileID: 3749913773585745855}
 --- !u!114 &5749675697393819957
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2013,6 +1978,52 @@ CharacterController:
   m_SkinWidth: 0.02
   m_MinMoveDistance: 0
   m_Center: {x: 0, y: 0.87, z: 0}
+--- !u!114 &5749675697393819952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4831124644429290595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26e54e5a728a9234ab24fcf1460ed8a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  InterpolationSpace: 0
+  InterpolationTarget: {fileID: 443021915071620633}
+  InterpolateErrorCorrection: 1
+  InterpolatedErrorCorrectionSettings:
+    MinRate: 3.3
+    MaxRate: 10
+    PosBlendStart: 0.25
+    PosBlendEnd: 1
+    PosMinCorrection: 0.025
+    PosTeleportDistance: 2
+    RotBlendStart: 0.1
+    RotBlendEnd: 0.5
+    RotTeleportRadians: 1.5
+  MoveSpeed: 2
+  SprintSpeed: 5.335
+  RotationSmoothTime: 0.12
+  SpeedChangeRate: 10
+  JumpHeight: 1.2
+  Gravity: -15
+  JumpTimeout: 0.3
+  FallTimeout: 0.15
+  Grounded: 1
+  GroundedOffset: -0.05
+  GroundedRadius: 0.28
+  GroundLayers:
+    serializedVersion: 2
+    m_Bits: 1
+  CinemachineCameraTarget: {fileID: 5858321593146311178}
+  TopClamp: 70
+  BottomClamp: -30
+  CameraAngleOverride: 0
+  LockCameraPosition: 0
+  _mainCamera: {fileID: 3749913773585745855}
 --- !u!114 &9107779666168407522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2033,32 +2044,6 @@ MonoBehaviour:
   - {fileID: 7328484934481800214}
   - {fileID: 3165213074492240312}
   - {fileID: 5813024366959105168}
---- !u!114 &6156877743819836566
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4831124644429290595}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _interpolationDataSource: 0
-  InterpolationSpace: 0
-  InterpolationTarget: {fileID: 443021915071620633}
-  InterpolateErrorCorrection: 1
-  InterpolatedErrorCorrectionSettings:
-    MinRate: 3.3
-    MaxRate: 10
-    PosBlendStart: 0.25
-    PosBlendEnd: 1
-    PosMinCorrection: 0.025
-    PosTeleportDistance: 2
-    RotBlendStart: 0.1
-    RotBlendEnd: 0.5
-    RotTeleportRadians: 1.5
 --- !u!1 &5057451808294959618
 GameObject:
   m_ObjectHideFlags: 0

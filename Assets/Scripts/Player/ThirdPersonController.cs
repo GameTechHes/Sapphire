@@ -10,7 +10,9 @@ namespace Player
 {
     [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(PlayerInput))]
-    public class ThirdPersonController : NetworkBehaviour
+    [OrderBefore(typeof(NetworkTransform))]
+    [DisallowMultipleComponent]
+    public class ThirdPersonController : NetworkTransform
     {
         [Header("Player")] [Tooltip("Move speed of the character in m/s")]
         public float MoveSpeed = 2.0f;
@@ -18,7 +20,7 @@ namespace Player
         [Tooltip("Sprint speed of the character in m/s")]
         public float SprintSpeed = 5.335f;
 
-        [Tooltip("How fast the character turns to face movement direction")] [Range(0.0f, 0.3f)]
+        [Tooltip("How fast the character turns to face movement direction")]
         public float RotationSmoothTime = 0.12f;
 
         [Tooltip("Acceleration and deceleration")]
@@ -72,7 +74,7 @@ namespace Player
         // player
         private float _speed;
         private float _animationBlend;
-        private float _targetRotation = 0.0f;
+        private float _targetRotation;
         private float _rotationVelocity;
         private float _verticalVelocity;
         private float _terminalVelocity = 53.0f;
@@ -90,7 +92,7 @@ namespace Player
 
         private PlayerInput _playerInput;
         private Animator _animator;
-        private CharacterController _controller;
+        public CharacterController Controller { get; private set; }
         private StarterAssetsInputs _input;
         [SerializeField] private GameObject _mainCamera;
 
@@ -102,10 +104,17 @@ namespace Player
 
         private NetworkInputData _networkInputs;
 
+        protected override void Awake()
+        {
+            base.Awake();
+            CacheController();
+        }
+
         public override void Spawned()
         {
-            _hasAnimator = TryGetComponent(out _animator);
-            _controller = GetComponent<CharacterController>();
+            base.Spawned();
+            CacheController();
+            _hasAnimator = GetComponent<Animation>();
             _input = GetComponent<StarterAssetsInputs>();
             _playerInput = GetComponent<PlayerInput>();
 
@@ -114,6 +123,23 @@ namespace Player
             // reset our timeouts on start
             _jumpTimeoutDelta = JumpTimeout;
             _fallTimeoutDelta = FallTimeout;
+        }
+
+        private void CacheController()
+        {
+            if (Controller == null)
+            {
+                Controller = GetComponent<CharacterController>();
+                Assert.Check(Controller != null,
+                    $"An object with {nameof(ThirdPersonController)} must also have a {nameof(CharacterController)} component.");
+            }
+        }
+
+        protected override void CopyFromBufferToEngine()
+        {
+            Controller.enabled = false;
+            base.CopyFromBufferToEngine();
+            Controller.enabled = true;
         }
 
         private void LateUpdate()
@@ -150,11 +176,8 @@ namespace Player
             // if there is an input and camera position is not fixed
             if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
             {
-                //Don't multiply mouse input by Time.deltaTime;
-                float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
-
-                _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
-                _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
+                _cinemachineTargetYaw += _input.look.x;
+                _cinemachineTargetPitch += _input.look.y;
             }
 
             // clamp our rotations so our values are limited 360 degrees
@@ -169,7 +192,6 @@ namespace Player
 
         public void Move()
         {
-            print(_networkInputs.move);
             // set target speed based on move speed, sprint speed and if sprint is pressed
             float targetSpeed = _networkInputs.sprint ? SprintSpeed : MoveSpeed;
 
@@ -178,46 +200,15 @@ namespace Player
                 targetSpeed = 0;
             }
 
-            // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
-
-            // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
-            // if there is no input, set the target speed to 0
             if (_networkInputs.move == Vector2.zero) targetSpeed = 0.0f;
 
-            // a reference to the players current horizontal velocity
-            if (_controller != null)
-            {
-                float currentHorizontalSpeed =
-                    new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
-                float speedOffset = 0.1f;
-                float inputMagnitude = 1f;
+            _speed = targetSpeed;
 
-                // accelerate or decelerate to target speed
-                if (currentHorizontalSpeed < targetSpeed - speedOffset ||
-                    currentHorizontalSpeed > targetSpeed + speedOffset)
-                {
-                    // creates curved result rather than a linear one giving a more organic speed change
-                    // note T in Lerp is clamped, so we don't need to clamp our speed
-                    _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude,
-                        Time.deltaTime * SpeedChangeRate);
+            _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Runner.DeltaTime * SpeedChangeRate);
 
-                    // round speed to 3 decimal places
-                    _speed = Mathf.Round(_speed * 1000f) / 1000f;
-                }
-                else
-                {
-                    _speed = targetSpeed;
-                }
-            }
-
-
-            _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * SpeedChangeRate);
-
-            // normalise input direction
             Vector3 inputDirection = new Vector3(_networkInputs.move.x, 0.0f, _networkInputs.move.y).normalized;
 
-            // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
-            // if there is a move input rotate player when the player is moving
+
             if (_networkInputs.move != Vector2.zero && !_networkInputs.aim)
             {
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
@@ -234,25 +225,22 @@ namespace Player
                 _targetRotation = _mainCamera.transform.eulerAngles.y;
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
                     RotationSmoothTime);
-
+            
                 // rotate to face input direction relative to camera position
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             }
-            
-            MoveController();
+
+
+            Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
+
+
+            // move the player
+            Controller.Move(targetDirection.normalized * (_speed * Runner.DeltaTime) +
+                            new Vector3(0.0f, _verticalVelocity, 0.0f) * Runner.DeltaTime);
 
             // update animator if using character
             _animator.SetFloat(_animIDSpeed, _animationBlend);
             _animator.SetFloat(_animIDMotionSpeed, 1.0f);
-        }
-
-        public void MoveController()
-        {
-            Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
-
-            // move the player
-            _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
-                             new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
         }
 
         public void JumpAndGravity()
@@ -297,7 +285,7 @@ namespace Player
                 // jump timeout
                 if (_jumpTimeoutDelta >= 0.0f)
                 {
-                    _jumpTimeoutDelta -= Time.deltaTime;
+                    _jumpTimeoutDelta -= Runner.DeltaTime;
                 }
             }
             else
@@ -308,7 +296,7 @@ namespace Player
                 // fall timeout
                 if (_fallTimeoutDelta >= 0.0f)
                 {
-                    _fallTimeoutDelta -= Time.deltaTime;
+                    _fallTimeoutDelta -= Runner.DeltaTime;
                 }
                 else
                 {
@@ -326,16 +314,15 @@ namespace Player
             // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
             if (_verticalVelocity < _terminalVelocity)
             {
-                _verticalVelocity += Gravity * Time.deltaTime;
+                _verticalVelocity += Gravity * Runner.DeltaTime;
             }
         }
 
-        public override void Render()
-        {
-            JumpAndGravity();
-            GroundedCheck();
-            Move();
-        }
+        // public override void Render()
+        // {
+        //     
+        //     // Move();
+        // }
 
         private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
         {

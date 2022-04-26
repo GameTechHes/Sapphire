@@ -77,6 +77,9 @@ namespace StarterAssets
             {
                 _tpc.SetNetworkInputs(input);
             }
+            _tpc.JumpAndGravity();
+            _tpc.GroundedCheck();
+            _tpc.Move();
         }
 
         public void OnMove(InputValue value)
