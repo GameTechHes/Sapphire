@@ -71,6 +71,14 @@ namespace StarterAssets
 		{
 			aim = value.isPressed;
 		}
+
+		public void OnEscape(InputValue value)
+		{
+			if (value.isPressed)
+			{
+				SetCursorState(false);
+			}
+		}
 #else
 	// old input sys if we do decide to have it (most likely wont)...
 #endif

@@ -12,7 +12,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     private void OnGUI()
     {
-        if (_runner == null)
+        if (!_runner.IsConnectedToServer)
         {
             if (GUI.Button(new Rect(0, 0, 200, 40), "Host"))
             {
@@ -29,12 +29,15 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     private void Awake()
     {
         DontDestroyOnLoad(this);
+        if (_runner == null)
+        {
+            _runner = gameObject.AddComponent<NetworkRunner>();
+            _runner.ProvideInput = true;
+        }
     }
 
     public async void StartGame(GameMode mode)
     {
-        _runner = gameObject.AddComponent<NetworkRunner>();
-        _runner.ProvideInput = true;
         await _runner.StartGame(new StartGameArgs()
         {
             GameMode = mode,
@@ -46,7 +49,6 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-        print("Player join !");
         runner.Spawn(_playerPrefab, new Vector3(0, 1, 0), Quaternion.identity, player);
     }
 
