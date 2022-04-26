@@ -64,6 +64,11 @@ namespace StarterAssets
                 _frameworkInput.aim = aim;
                 input.Set(_frameworkInput);
             }
+
+            _frameworkInput.jump = false;
+            _frameworkInput.aim = false;
+            _frameworkInput.sprint = false;
+            _frameworkInput.shoot = false;
         }
 
         public override void FixedUpdateNetwork()
@@ -80,6 +85,11 @@ namespace StarterAssets
                 _tpc.GroundedCheck();
                 _tpc.Move();
             }
+        }
+
+        public override void Render()
+        {
+            print(jump);
         }
 
         public void OnMove(InputValue value)
