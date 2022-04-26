@@ -75,21 +75,8 @@ namespace StarterAssets
         {
             if (GetInput(out NetworkInputData input))
             {
-                _tpc.JumpAndGravity(input);
-                _tpc.GroundedCheck();
-                _tpc.Move(input);
+                _tpc.SetNetworkInputs(input);
             }
-            else
-            {
-                _tpc.JumpAndGravity();
-                _tpc.GroundedCheck();
-                _tpc.Move();
-            }
-        }
-
-        public override void Render()
-        {
-            print(jump);
         }
 
         public void OnMove(InputValue value)

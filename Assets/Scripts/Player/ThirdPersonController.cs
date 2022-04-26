@@ -100,6 +100,8 @@ namespace Player
 
         private bool IsCurrentDeviceMouse => _playerInput.currentControlScheme == "KeyboardMouse";
 
+        private NetworkInputData _networkInputs;
+        
         private void Awake()
         {
             // get a reference to our main camera
@@ -174,12 +176,13 @@ namespace Player
         }
 
 
-        public void Move(NetworkInputData input = default)
+        public void Move()
         {
+            print(_networkInputs.move);
             // set target speed based on move speed, sprint speed and if sprint is pressed
-            float targetSpeed = input.sprint ? SprintSpeed : MoveSpeed;
+            float targetSpeed = _networkInputs.sprint ? SprintSpeed : MoveSpeed;
 
-            if (input.aim)
+            if (_networkInputs.aim)
             {
                 targetSpeed = 0;
             }
@@ -188,7 +191,7 @@ namespace Player
 
             // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is no input, set the target speed to 0
-            if (input.move == Vector2.zero) targetSpeed = 0.0f;
+            if (_networkInputs.move == Vector2.zero) targetSpeed = 0.0f;
 
             // a reference to the players current horizontal velocity
             if (_controller != null)
@@ -220,11 +223,11 @@ namespace Player
             _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * SpeedChangeRate);
 
             // normalise input direction
-            Vector3 inputDirection = new Vector3(input.move.x, 0.0f, input.move.y).normalized;
+            Vector3 inputDirection = new Vector3(_networkInputs.move.x, 0.0f, _networkInputs.move.y).normalized;
 
             // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is a move input rotate player when the player is moving
-            if (input.move != Vector2.zero && !input.aim)
+            if (_networkInputs.move != Vector2.zero && !_networkInputs.aim)
             {
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
                                   _mainCamera.transform.eulerAngles.y;
@@ -235,7 +238,7 @@ namespace Player
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             }
 
-            if (input.aim)
+            if (_networkInputs.aim)
             {
                 _targetRotation = _mainCamera.transform.eulerAngles.y;
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
@@ -244,23 +247,24 @@ namespace Player
                 // rotate to face input direction relative to camera position
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             }
+            
+            MoveController();
 
+            // update animator if using character
+            _animator.SetFloat(_animIDSpeed, _animationBlend);
+            _animator.SetFloat(_animIDMotionSpeed, 1.0f);
+        }
 
+        public void MoveController()
+        {
             Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 
             // move the player
             _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
                              new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
-
-            // update animator if using character
-            if (_hasAnimator)
-            {
-                _animator.SetFloat(_animIDSpeed, _animationBlend);
-                _animator.SetFloat(_animIDMotionSpeed, 1.0f);
-            }
         }
 
-        public void JumpAndGravity(NetworkInputData input = default)
+        public void JumpAndGravity()
         {
             if (Grounded)
             {
@@ -281,13 +285,13 @@ namespace Player
                 }
 
 
-                // if (input.aim)
-                // {
-                //     input.jump = false;
-                // }
+                if (_networkInputs.aim)
+                {
+                    _networkInputs.jump = false;
+                }
 
                 // Jump
-                if (input.jump && _jumpTimeoutDelta <= 0.0f)
+                if (_networkInputs.jump && _jumpTimeoutDelta <= 0.0f)
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
@@ -361,6 +365,11 @@ namespace Player
             Gizmos.DrawSphere(
                 new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z),
                 GroundedRadius);
+        }
+
+        public void SetNetworkInputs(NetworkInputData input)
+        {
+            _networkInputs = input;
         }
     }
 }
