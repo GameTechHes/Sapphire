@@ -72,8 +72,8 @@ namespace Player
         private float _cinemachineTargetPitch;
 
         // player
-        private float _speed;
-        private float _animationBlend;
+        [Networked] private float _speed { get; set; }
+        [Networked] private float _animationBlend { get; set; }
         private float _targetRotation;
         private float _rotationVelocity;
         private float _verticalVelocity;
@@ -114,7 +114,7 @@ namespace Player
         {
             base.Spawned();
             CacheController();
-            _hasAnimator = GetComponent<Animation>();
+            _animator = GetComponent<Animator>();
             _input = GetComponent<StarterAssetsInputs>();
             _playerInput = GetComponent<PlayerInput>();
 
@@ -225,7 +225,7 @@ namespace Player
                 _targetRotation = _mainCamera.transform.eulerAngles.y;
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
                     RotationSmoothTime);
-            
+
                 // rotate to face input direction relative to camera position
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             }
