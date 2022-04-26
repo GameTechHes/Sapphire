@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 
 namespace Player
 {
-    [RequireComponent(typeof(NetworkCharacterControllerPrototype))]
+    [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(PlayerInput))]
     public class ThirdPersonController : NetworkBehaviour
     {
@@ -92,7 +92,7 @@ namespace Player
         private Animator _animator;
         private CharacterController _controller;
         private StarterAssetsInputs _input;
-        private GameObject _mainCamera;
+        [SerializeField] private GameObject _mainCamera;
 
         private const float _threshold = 0.01f;
 
@@ -101,15 +101,6 @@ namespace Player
         private bool IsCurrentDeviceMouse => _playerInput.currentControlScheme == "KeyboardMouse";
 
         private NetworkInputData _networkInputs;
-        
-        private void Awake()
-        {
-            // get a reference to our main camera
-            if (_mainCamera == null)
-            {
-                _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-            }
-        }
 
         public override void Spawned()
         {
