@@ -11,7 +11,7 @@ namespace UserInterface
         private Slider _slider;
         private int _maxHealth;
 
-        public void Start()
+        public void Awake()
         {
             _slider = GetComponent<Slider>();
         }

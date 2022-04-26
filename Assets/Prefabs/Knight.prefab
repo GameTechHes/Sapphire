@@ -788,6 +788,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7316417065234386541}
+  - component: {fileID: 7484103782048124910}
   m_Layer: 0
   m_Name: Knight
   m_TagString: Player
@@ -815,6 +816,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7484103782048124910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1679443176135076696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d068de728d2ef647baab6e86584e473, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthBar: {fileID: 107491292}
 --- !u!1 &1722389126084337440
 GameObject:
   m_ObjectHideFlags: 0
@@ -1946,9 +1960,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2fc808ec0551404ab6fb94c5862c04c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
   aimSpeed: 10
-  healthBar: {fileID: 107491292}
   followCamera: {fileID: 6095503136088812692}
 --- !u!114 &564951037
 MonoBehaviour:

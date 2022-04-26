@@ -1,6 +1,5 @@
 using Cinemachine;
 using StarterAssets;
-using UserInterface;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,22 +7,16 @@ namespace Player
 {
     public class Knight : MonoBehaviour
     {
-        public int maxHealth = 100;
         public float aimSpeed = 4.0f;
-        public HealthBar healthBar;
         public CinemachineVirtualCamera followCamera;
+        
         private StarterAssetsInputs _inputs;
-
-        private int _health;
         private Animator _controller;
         private float _cameraDistance = 4.0f;
         private Cinemachine3rdPersonFollow _cinemachine3RdPersonFollow;
 
         void Start()
         {
-            _health = maxHealth;
-            healthBar.SetMaxHealth(maxHealth);
-            healthBar.SetProgress(_health);
             _controller = GetComponent<Animator>();
             _inputs = GetComponent<StarterAssetsInputs>();
             _cinemachine3RdPersonFollow = followCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
