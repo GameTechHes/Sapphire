@@ -1,4 +1,3 @@
-using Cinemachine;
 using Fusion;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -9,7 +8,9 @@ namespace Network
     public class Player : NetworkBehaviour
     {
         public const byte MAX_HEALTH = 100;
+        
         [SerializeField] private HealthBar healthBar;
+        [SerializeField] private GameObject[] objectsToDisable;
 
         [Networked] private int _health { get; set; }
 
@@ -20,26 +21,14 @@ namespace Network
             healthBar.SetProgress(_health);
             if (!Object.HasInputAuthority)
             {
-                var cams = GetComponentsInChildren<Camera>();
-                foreach (var cam in cams)
+                foreach (var obj in objectsToDisable)
                 {
-                    cam.gameObject.SetActive(false);
-                }
-
-                var virtCam = GetComponentInChildren<CinemachineVirtualCamera>();
-                if (virtCam != null)
-                {
-                    virtCam.gameObject.SetActive(false);
-                }
-                var canvas = GetComponentInChildren<Canvas>();
-                if (canvas != null)
-                {
-                    canvas.gameObject.SetActive(false);
+                    obj.SetActive(false);
                 }
             }
             else
             {
-                var playerInput = GetComponentInChildren<PlayerInput>();
+                var playerInput = GetComponent<PlayerInput>();
                 if (playerInput != null)
                 {
                     playerInput.enabled = true;
