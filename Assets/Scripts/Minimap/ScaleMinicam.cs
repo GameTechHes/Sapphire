@@ -27,6 +27,7 @@ namespace Minimap
             var maxZ = -10000f;
             foreach (var refPoint in GameObject.FindGameObjectsWithTag("ReferencePoint"))
             {
+                Debug.Log("A");
                 minX = refPoint.transform.position.x < minX ? refPoint.transform.position.x : minX;
                 minZ = refPoint.transform.position.z < minZ ? refPoint.transform.position.z : minZ;
                 maxX = refPoint.transform.position.x > maxX ? refPoint.transform.position.x : maxX;
