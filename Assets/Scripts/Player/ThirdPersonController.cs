@@ -213,16 +213,16 @@ namespace Player
                 // rotate to face input direction relative to camera position
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             }
-
-            if (_networkInputs.aim)
-            {
-                _targetRotation = _mainCamera.transform.eulerAngles.y;
-                float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
-                    RotationSmoothTime);
-
-                // rotate to face input direction relative to camera position
-                transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
-            }
+            //
+            // if (_networkInputs.aim)
+            // {
+            //     _targetRotation = _mainCamera.transform.eulerAngles.y;
+            //     float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
+            //         RotationSmoothTime);
+            //
+            //     // rotate to face input direction relative to camera position
+            //     transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+            // }
 
 
             Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;

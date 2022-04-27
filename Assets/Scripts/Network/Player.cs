@@ -8,7 +8,7 @@ namespace Network
     public class Player : NetworkBehaviour
     {
         public const byte MAX_HEALTH = 100;
-        
+
         [SerializeField] private HealthBar healthBar;
         [SerializeField] private GameObject[] objectsToDisable;
 
@@ -23,7 +23,14 @@ namespace Network
             {
                 foreach (var obj in objectsToDisable)
                 {
-                    obj.SetActive(false);
+                    if (obj.TryGetComponent<Camera>(out var camera))
+                    {
+                        camera.enabled = false;
+                    }
+                    else
+                    {
+                        obj.SetActive(false);
+                    }
                 }
             }
             else
