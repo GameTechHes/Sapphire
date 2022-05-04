@@ -3,13 +3,9 @@ using StarterAssets;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-/* Note: animations are called via the controller for both the character and capsule using animator null checks
- */
-
 namespace Player
 {
     [RequireComponent(typeof(CharacterController))]
-    [RequireComponent(typeof(PlayerInput))]
     [OrderBefore(typeof(NetworkTransform))]
     [DisallowMultipleComponent]
     public class ThirdPersonController : NetworkTransform
@@ -68,20 +64,19 @@ namespace Player
         public bool LockCameraPosition = false;
 
         // cinemachine
-        private float _cinemachineTargetYaw;
-        private float _cinemachineTargetPitch;
+        [Networked] private float _cinemachineTargetYaw { get; set; }
+        [Networked] private float _cinemachineTargetPitch { get; set; }
 
         // player
-        [Networked] private float _speed { get; set; }
         [Networked] private float _animationBlend { get; set; }
-        private float _targetRotation;
-        private float _rotationVelocity;
-        private float _verticalVelocity;
+        [Networked] private float _targetRotation {get; set;}
+        [Networked] private float _rotationVelocity {get; set;}
+        [Networked] private float _verticalVelocity {get; set;}
         private float _terminalVelocity = 53.0f;
 
         // timeout deltatime
-        private float _jumpTimeoutDelta;
-        private float _fallTimeoutDelta;
+        [Networked] private float _jumpTimeoutDelta { get; set; }
+        [Networked] private float _fallTimeoutDelta { get; set; }
 
         // animation IDs
         private int _animIDSpeed;
@@ -92,15 +87,13 @@ namespace Player
 
         private PlayerInput _playerInput;
         private Animator _animator;
-        public CharacterController Controller { get; private set; }
-        private StarterAssetsInputs _input;
-        [SerializeField] private GameObject _mainCamera;
+        private CharacterController _controller;
+        private StarterAssetsInputs _localInput;
+        private NetworkInputData _networkInput;
+        [Networked] private float _camRotation { get; set; }
 
         private const float _threshold = 0.01f;
-
-        private bool IsCurrentDeviceMouse => _playerInput.currentControlScheme == "KeyboardMouse";
-
-        private NetworkInputData _networkInputs;
+        private bool _hasAnimator;
 
         protected override void Awake()
         {
@@ -112,46 +105,63 @@ namespace Player
         {
             base.Spawned();
             CacheController();
-            _animator = GetComponent<Animator>();
-            _input = GetComponent<StarterAssetsInputs>();
-            _playerInput = GetComponent<PlayerInput>();
+
+            _hasAnimator = TryGetComponent(out _animator);
+            if (Object.HasInputAuthority)
+            {
+                _localInput = FindObjectOfType<StarterAssetsInputs>();
+                _playerInput = FindObjectOfType<PlayerInput>();
+                _localInput.cursorLocked = true;
+            }
 
             AssignAnimationIDs();
 
-            // reset our timeouts on start
             _jumpTimeoutDelta = JumpTimeout;
             _fallTimeoutDelta = FallTimeout;
+
+            // Caveat: this is needed to initialize the Controller's state and avoid unwanted spikes in its perceived velocity
+            _controller.Move(transform.position);
         }
 
         private void CacheController()
         {
-            if (Controller == null)
+            if (_controller == null)
             {
-                Controller = GetComponent<CharacterController>();
-                Assert.Check(Controller != null,
+                _controller = GetComponent<CharacterController>();
+                Assert.Check(_controller != null,
                     $"An object with {nameof(ThirdPersonController)} must also have a {nameof(CharacterController)} component.");
             }
         }
 
         protected override void CopyFromBufferToEngine()
         {
-            Controller.enabled = false;
+            // Trick: CC must be disabled before resetting the transform state
+            _controller.enabled = false;
+
+            // Pull base (NetworkTransform) state from networked data buffer
             base.CopyFromBufferToEngine();
-            Controller.enabled = true;
+
+            // Re-enable CC
+            _controller.enabled = true;
         }
 
-        private void LateUpdate()
+        public override void Render()
         {
-            CameraRotation();
+            base.Render();
+            _hasAnimator = TryGetComponent(out _animator);
         }
-
-        private void AssignAnimationIDs()
+        
+        public override void FixedUpdateNetwork()
         {
-            _animIDSpeed = Animator.StringToHash("Speed");
-            _animIDGrounded = Animator.StringToHash("Grounded");
-            _animIDJump = Animator.StringToHash("Jump");
-            _animIDFreeFall = Animator.StringToHash("FreeFall");
-            _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
+            if (GetInput(out NetworkInputData newNetworkInput))
+            {
+                _networkInput = newNetworkInput;
+                CameraRotation();
+            }
+
+            JumpAndGravity();
+            GroundedCheck();
+            Move();
         }
 
         public void GroundedCheck()
@@ -162,21 +172,25 @@ namespace Player
             Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
                 QueryTriggerInteraction.Ignore);
 
-            _animator.SetBool(_animIDGrounded, Grounded);
+            if (_hasAnimator)
+            {
+                _animator.SetBool(_animIDGrounded, Grounded);
+            }
         }
 
         private void CameraRotation()
         {
             // if there is an input and camera position is not fixed
-            if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
+            if (_networkInput.look.sqrMagnitude >= _threshold && !LockCameraPosition)
             {
-                _cinemachineTargetYaw += _input.look.x;
-                _cinemachineTargetPitch += _input.look.y;
+                _cinemachineTargetYaw += _networkInput.look.x;
+                _cinemachineTargetPitch += _networkInput.look.y;
             }
 
             // clamp our rotations so our values are limited 360 degrees
             _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
             _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
+            _camRotation = _cinemachineTargetYaw;
 
             // Cinemachine will follow this target
             CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
@@ -187,54 +201,50 @@ namespace Player
         public void Move()
         {
             // set target speed based on move speed, sprint speed and if sprint is pressed
-            float targetSpeed = _networkInputs.sprint ? SprintSpeed : MoveSpeed;
+            float targetSpeed = _networkInput.sprint ? SprintSpeed : MoveSpeed;
 
-            if (_networkInputs.aim)
-            {
-                targetSpeed = 0;
-            }
-
-            if (_networkInputs.move == Vector2.zero) targetSpeed = 0.0f;
-
-            _speed = targetSpeed;
+            if (_networkInput.move == Vector2.zero || _networkInput.aim) targetSpeed = 0.0f;
 
             _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Runner.DeltaTime * SpeedChangeRate);
 
-            Vector3 inputDirection = new Vector3(_networkInputs.move.x, 0.0f, _networkInputs.move.y).normalized;
-
-
-            if (_networkInputs.move != Vector2.zero && !_networkInputs.aim)
+            Vector3 inputDirection = new Vector3(_networkInput.move.x, 0.0f, _networkInput.move.y).normalized;
+            
+            if (_networkInput.move != Vector2.zero && !_networkInput.aim)
             {
-                _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
-                                  _mainCamera.transform.eulerAngles.y;
-                float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
-                    RotationSmoothTime);
+                _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _camRotation;
+                var tempRot = _rotationVelocity;
+                float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref tempRot,
+                    RotationSmoothTime, Mathf.Infinity, Runner.DeltaTime);
+                _rotationVelocity = tempRot;
 
                 // rotate to face input direction relative to camera position
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             }
-            //
-            // if (_networkInputs.aim)
-            // {
-            //     _targetRotation = _mainCamera.transform.eulerAngles.y;
-            //     float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
-            //         RotationSmoothTime);
-            //
-            //     // rotate to face input direction relative to camera position
-            //     transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
-            // }
-
-
+            
+            if (_networkInput.aim)
+            {
+                _targetRotation = _camRotation;
+                var tempRot = _rotationVelocity;
+                float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref tempRot,
+                    RotationSmoothTime, Mathf.Infinity, Runner.DeltaTime);
+                _rotationVelocity = tempRot;
+            
+                // rotate to face input direction relative to camera position
+                transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+            }
+            
             Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 
-
             // move the player
-            Controller.Move(targetDirection.normalized * (_speed * Runner.DeltaTime) +
+            _controller.Move(targetDirection.normalized * (targetSpeed * Runner.DeltaTime) +
                             new Vector3(0.0f, _verticalVelocity, 0.0f) * Runner.DeltaTime);
 
             // update animator if using character
-            _animator.SetFloat(_animIDSpeed, _animationBlend);
-            _animator.SetFloat(_animIDMotionSpeed, 1.0f);
+            if (_hasAnimator)
+            {
+                _animator.SetFloat(_animIDSpeed, _animationBlend);
+                _animator.SetFloat(_animIDMotionSpeed, 1.0f);
+            }
         }
 
         public void JumpAndGravity()
@@ -245,8 +255,11 @@ namespace Player
                 _fallTimeoutDelta = FallTimeout;
 
                 // update animator if using character
-                _animator.SetBool(_animIDJump, false);
-                _animator.SetBool(_animIDFreeFall, false);
+                if (_hasAnimator)
+                {
+                    _animator.SetBool(_animIDJump, false);
+                    _animator.SetBool(_animIDFreeFall, false);
+                }
 
                 // stop our velocity dropping infinitely when grounded
                 if (_verticalVelocity < 0.0f)
@@ -255,19 +268,22 @@ namespace Player
                 }
 
 
-                if (_networkInputs.aim)
+                if (_networkInput.aim)
                 {
-                    _networkInputs.jump = false;
+                    _networkInput.jump = false;
                 }
 
                 // Jump
-                if (_networkInputs.jump && _jumpTimeoutDelta <= 0.0f)
+                if (_networkInput.jump && _jumpTimeoutDelta <= 0.0f)
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
 
                     // update animator if using character
-                    _animator.SetBool(_animIDJump, true);
+                    if (_hasAnimator)
+                    {
+                        _animator.SetBool(_animIDJump, true);
+                    }
                 }
 
                 // jump timeout
@@ -289,7 +305,10 @@ namespace Player
                 else
                 {
                     // update animator if using character
-                    _animator.SetBool(_animIDFreeFall, true);
+                    if (_hasAnimator)
+                    {
+                        _animator.SetBool(_animIDFreeFall, true);
+                    }
                 }
 
                 // if we are not grounded, do not jump
@@ -303,11 +322,14 @@ namespace Player
             }
         }
 
-        // public override void Render()
-        // {
-        //     
-        //     // Move();
-        // }
+        private void AssignAnimationIDs()
+        {
+            _animIDSpeed = Animator.StringToHash("Speed");
+            _animIDGrounded = Animator.StringToHash("Grounded");
+            _animIDJump = Animator.StringToHash("Jump");
+            _animIDFreeFall = Animator.StringToHash("FreeFall");
+            _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
+        }
 
         private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
         {
@@ -328,11 +350,6 @@ namespace Player
             Gizmos.DrawSphere(
                 new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z),
                 GroundedRadius);
-        }
-
-        public void SetNetworkInputs(NetworkInputData input)
-        {
-            _networkInputs = input;
         }
     }
 }

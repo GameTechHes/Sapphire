@@ -2,17 +2,20 @@ using System;
 using System.Collections.Generic;
 using Fusion;
 using Fusion.Sockets;
+using StarterAssets;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 {
     private NetworkRunner _runner;
+    private StarterAssetsInputs _starterAssetsInputs;
+
     [SerializeField] private NetworkPrefabRef _playerPrefab;
 
     private void OnGUI()
     {
-        if (!_runner.IsConnectedToServer)
+        if (_runner == null)
         {
             if (GUI.Button(new Rect(0, 0, 200, 40), "Host"))
             {
@@ -28,17 +31,15 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     private void Awake()
     {
-        DontDestroyOnLoad(this);
-        if (_runner == null)
-        {
-            _runner = gameObject.AddComponent<NetworkRunner>();
-            _runner.ProvideInput = true;
-        }
+        _starterAssetsInputs = GetComponent<StarterAssetsInputs>();
+        _starterAssetsInputs.cursorLocked = false;
     }
 
-    public async void StartGame(GameMode mode)
+    private async void StartGame(GameMode mode)
     {
-        await _runner.StartGame(new StartGameArgs()
+        _runner = gameObject.AddComponent<NetworkRunner>();
+        _runner.ProvideInput = true;
+        await _runner.StartGame(new StartGameArgs
         {
             GameMode = mode,
             SessionName = "TestRoom",
@@ -49,7 +50,10 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-        runner.Spawn(_playerPrefab, new Vector3(0, 1, 0), Quaternion.identity, player);
+        if (runner.IsServer)
+        {
+            runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, player);
+        }
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
@@ -58,6 +62,18 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
+        var inputData = new NetworkInputData
+        {
+            move = _starterAssetsInputs.move,
+            look = _starterAssetsInputs.look,
+            sprint = _starterAssetsInputs.sprint
+        };
+        if (_starterAssetsInputs.jump)
+        {
+            inputData.jump = true;
+            _starterAssetsInputs.jump = false;
+        }
+        input.Set(inputData);
     }
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)
@@ -111,4 +127,14 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     public void OnSceneLoadStart(NetworkRunner runner)
     {
     }
+}
+
+public struct NetworkInputData : INetworkInput
+{
+    public Vector2 move;
+    public Vector2 look;
+    public NetworkBool jump;
+    public NetworkBool sprint;
+    public NetworkBool analogMovement;
+    public NetworkBool aim;
 }
