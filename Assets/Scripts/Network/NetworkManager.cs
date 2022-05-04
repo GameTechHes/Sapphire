@@ -66,13 +66,15 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         {
             move = _starterAssetsInputs.move,
             look = _starterAssetsInputs.look,
-            sprint = _starterAssetsInputs.sprint
+            sprint = _starterAssetsInputs.sprint,
+            aim = _starterAssetsInputs.aim
         };
         if (_starterAssetsInputs.jump)
         {
             inputData.jump = true;
             _starterAssetsInputs.jump = false;
         }
+
         input.Set(inputData);
     }
 

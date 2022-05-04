@@ -1,6 +1,5 @@
 using Fusion;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UserInterface;
 
 namespace Network
@@ -35,12 +34,7 @@ namespace Network
             }
             else
             {
-                var playerInput = GetComponent<PlayerInput>();
-                if (playerInput != null)
-                {
-                    playerInput.enabled = true;
-                    Cursor.lockState = CursorLockMode.Locked;
-                }
+                Cursor.lockState = CursorLockMode.Locked;
             }
         }
     }

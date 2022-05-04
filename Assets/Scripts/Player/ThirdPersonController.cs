@@ -85,7 +85,6 @@ namespace Player
         private int _animIDFreeFall;
         private int _animIDMotionSpeed;
 
-        private PlayerInput _playerInput;
         private Animator _animator;
         private CharacterController _controller;
         private StarterAssetsInputs _localInput;
@@ -110,7 +109,6 @@ namespace Player
             if (Object.HasInputAuthority)
             {
                 _localInput = FindObjectOfType<StarterAssetsInputs>();
-                _playerInput = FindObjectOfType<PlayerInput>();
                 _localInput.cursorLocked = true;
             }
 

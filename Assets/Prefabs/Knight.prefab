@@ -871,6 +871,7 @@ MonoBehaviour:
   - {fileID: 4820070503751422322}
   - {fileID: 5749675697393819952}
   - {fileID: 9107779666168407522}
+  - {fileID: 173442852932354374}
   SimulationBehaviours: []
 --- !u!1 &1722389126084337440
 GameObject:
@@ -1864,12 +1865,12 @@ GameObject:
   m_Component:
   - component: {fileID: 5206243529841936089}
   - component: {fileID: 2206876227830701219}
-  - component: {fileID: 658308784}
   - component: {fileID: 564951037}
   - component: {fileID: 2219702348305879888}
   - component: {fileID: 5749675697393819958}
   - component: {fileID: 5749675697393819952}
   - component: {fileID: 9107779666168407522}
+  - component: {fileID: 173442852932354374}
   m_Layer: 7
   m_Name: KnightCharacter
   m_TagString: Player
@@ -1915,20 +1916,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &658308784
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4831124644429290595}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2fc808ec0551404ab6fb94c5862c04c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  aimSpeed: 10
-  followCamera: {fileID: 6095503136088812692}
 --- !u!114 &564951037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2045,6 +2032,21 @@ MonoBehaviour:
   - {fileID: 7328484934481800214}
   - {fileID: 3165213074492240312}
   - {fileID: 5813024366959105168}
+--- !u!114 &173442852932354374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4831124644429290595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2fc808ec0551404ab6fb94c5862c04c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  aimSpeed: 4
+  followCamera: {fileID: 6095503136088812692}
 --- !u!1 &5057451808294959618
 GameObject:
   m_ObjectHideFlags: 0

@@ -1388,6 +1388,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2fc808ec0551404ab6fb94c5862c04c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
   aimSpeed: 10
   followCamera: {fileID: 8287354504899065411}
 --- !u!114 &2852197815135497514
@@ -1525,6 +1526,7 @@ MonoBehaviour:
     RawGuidValue: c93b01bec7edfda4cb80f46222bb9d02
   NestedObjects: []
   NetworkedBehaviours:
+  - {fileID: 2852197815245562983}
   - {fileID: 7521004060917201895}
   - {fileID: 6480784957065789237}
   SimulationBehaviours: []
