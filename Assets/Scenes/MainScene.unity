@@ -360,3 +360,151 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &1750906391
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1750906393}
+  - component: {fileID: 1750906392}
+  - component: {fileID: 1750906394}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1750906392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1750906391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 935f601a3d91fad4a994efe2a99e6671, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: AimingBow
+    clip: {fileID: 8300000, guid: fc71194c22b69294d80026b90ba748fe, type: 3}
+    volume: 1
+    pitch: 1.84
+    source: {fileID: 0}
+  - name: ShootingBow
+    clip: {fileID: 8300000, guid: 3c9ab66a7405b284a972a9fcfaeb70a1, type: 3}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+  - name: CollectingSapphire
+    clip: {fileID: 8300000, guid: 37199f7fb9e84554ea6d790122282ac4, type: 3}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+  - name: CollectingAmmo
+    clip: {fileID: 8300000, guid: 2fd26486344a7474c9c4ae0e22b27a96, type: 3}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+  - name: Walking_2
+    clip: {fileID: 8300000, guid: 645150f5b56a8d84b88563fb14299480, type: 3}
+    volume: 0.498
+    pitch: 1
+    source: {fileID: 0}
+  - name: Walking_1
+    clip: {fileID: 8300000, guid: 47818454f113de247a5c4755fdd555d0, type: 3}
+    volume: 0.498
+    pitch: 1
+    source: {fileID: 0}
+  - name: Walking_3
+    clip: {fileID: 8300000, guid: 9873b7766ab92cb42bce6c1d897455e3, type: 3}
+    volume: 0.519
+    pitch: 1
+    source: {fileID: 0}
+  - name: Walking_4
+    clip: {fileID: 8300000, guid: 11294649ab8f3e04795db6f7109633d9, type: 3}
+    volume: 0.485
+    pitch: 1
+    source: {fileID: 0}
+  - name: Walking_5
+    clip: {fileID: 8300000, guid: 5bfbea1fc50f2784dbecc8cf07d02b70, type: 3}
+    volume: 0.434
+    pitch: 1
+    source: {fileID: 0}
+  - name: Running_1
+    clip: {fileID: 8300000, guid: 5de039ee990c61f48842e921a203302b, type: 3}
+    volume: 0.548
+    pitch: 1
+    source: {fileID: 0}
+  - name: Running_2
+    clip: {fileID: 8300000, guid: ee649d61f1cb9174fafdb080eb15bbac, type: 3}
+    volume: 0.498
+    pitch: 1
+    source: {fileID: 0}
+  - name: Running_3
+    clip: {fileID: 8300000, guid: 3caa045dc057fc54bb09c09b359e9939, type: 3}
+    volume: 0.481
+    pitch: 1
+    source: {fileID: 0}
+  - name: Running_4
+    clip: {fileID: 8300000, guid: da7d62ce5956f164f825aff2d6aa982a, type: 3}
+    volume: 0.5
+    pitch: 1
+    source: {fileID: 0}
+  - name: Running_5
+    clip: {fileID: 8300000, guid: c64aa23f178eb28489f2e264c5c79d58, type: 3}
+    volume: 0.557
+    pitch: 1
+    source: {fileID: 0}
+  - name: Fireball
+    clip: {fileID: 8300000, guid: ce651b8bdf4d9c748a6ad90cbcfc3fdd, type: 3}
+    volume: 0.557
+    pitch: 1
+    source: {fileID: 0}
+  - name: Hurt_1
+    clip: {fileID: 8300000, guid: 5a5656e067b305940a83b9acd2c76e30, type: 3}
+    volume: 0.557
+    pitch: 1
+    source: {fileID: 0}
+  - name: Hurt_2
+    clip: {fileID: 8300000, guid: a99502a6428957445a6df8a4dc4811e9, type: 3}
+    volume: 0.557
+    pitch: 1
+    source: {fileID: 0}
+  - name: Hurt_3
+    clip: {fileID: 8300000, guid: 655467920a9c10243951e9138c34f8f4, type: 3}
+    volume: 0.557
+    pitch: 1
+    source: {fileID: 0}
+  - name: Hurt_4
+    clip: {fileID: 8300000, guid: 271bf616ce74968408fe53966aab29a1, type: 3}
+    volume: 0.557
+    pitch: 1
+    source: {fileID: 0}
+--- !u!4 &1750906393
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1750906391}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!81 &1750906394
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1750906391}
+  m_Enabled: 1

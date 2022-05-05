@@ -14,6 +14,7 @@ namespace UI
         public void Start()
         {
             _slider = GetComponent<Slider>();
+            FindObjectOfType<AudioCharacter>().PlayHurtSFX();
         }
 
         public void SetMaxHealth(int maxHealth)
@@ -29,5 +30,7 @@ namespace UI
                 healthCount.text = health.ToString();
             }
         }
+
+        
     }
 }

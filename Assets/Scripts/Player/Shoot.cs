@@ -44,6 +44,7 @@ namespace Player
         {
             if (_canShoot && ammoCount > 0 && _inputs.aim)
             {
+                FindObjectOfType<AudioManager>().Play("ShootingBow");
                 _canShoot = false;
                 AddAmmo(-1);
                 StartCoroutine(Fire());

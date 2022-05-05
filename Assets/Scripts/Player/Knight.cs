@@ -48,6 +48,10 @@ namespace Player
         void OnAim(InputValue value)
         {
             _controller.SetBool("Aim", value.isPressed);
+            if(value.isPressed){
+                FindObjectOfType<AudioManager>().Play("AimingBow");
+            }
+
         }
     }
 }
