@@ -3,22 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioCharacter : MonoBehaviour
-{ 
+{
+    private bool isLeftFoot;
+
+    void Start(){
+        isLeftFoot = true;
+    }
     public void PlayWalkSFX(AnimationEvent animationEvent){
-        int numberOfSound = 5;
+
         if(animationEvent.animatorClipInfo.weight > 0.5) {
-            int randomSoundID = Random.Range(1, numberOfSound);
-            string soundName = "Walking_" +  randomSoundID.ToString();
+            int numberOfSound = isLeftFoot ? 3 : 4;
+            isLeftFoot = !isLeftFoot;            
+            string soundName = "Walking_" +  numberOfSound.ToString();
             Debug.Log(soundName);
             FindObjectOfType<AudioManager>().Play(soundName);
         }
     }
 
     public void PlayRunningSFX(AnimationEvent animationEvent){
-        int numberOfSound = 5;
         if(animationEvent.animatorClipInfo.weight > 0.5) {
-            int randomSoundID = Random.Range(1, numberOfSound);
-            string soundName = "Running_" +  randomSoundID.ToString();
+            int numberOfSound = isLeftFoot ? 2 : 3;
+            isLeftFoot = !isLeftFoot;            
+            string soundName = "Running_" +  numberOfSound.ToString();
+            Debug.Log(soundName);
+
             FindObjectOfType<AudioManager>().Play(soundName);
         }
     }
