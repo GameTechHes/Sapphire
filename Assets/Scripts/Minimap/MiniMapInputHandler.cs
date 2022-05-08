@@ -8,6 +8,7 @@ namespace Minimap
     {
         public Camera minicam;
         public GameObject myPrefab;
+        public LayerMask layerMask;
 
         public void OnScroll(PointerEventData eventData)
         {
@@ -57,9 +58,11 @@ namespace Minimap
             var mapRay = minicam.ScreenPointToRay(new Vector2(vec.x * minicam.pixelWidth,
                 vec.y * minicam.pixelHeight));
 
-            if (Physics.Raycast(mapRay, out var miniMapHit, Mathf.Infinity))
+            LayerMask layerMask = ~(1 << LayerMask.NameToLayer("Ignore Raycast")); // ignore collisions with layerX
+            if (Physics.Raycast(mapRay, out var miniMapHit, Mathf.Infinity, layerMask))
             {
                 Debug.DrawRay(mapRay.origin, mapRay.direction * 1000, Color.green, 5);
+                Debug.Log(miniMapHit.collider.name);
 
                 if (miniMapHit.collider.GetComponent<SpawnArea>() != null)
                 {
