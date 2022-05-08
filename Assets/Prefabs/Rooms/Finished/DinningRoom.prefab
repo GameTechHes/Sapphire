@@ -534,7 +534,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6379204306452982095
 Transform:
   m_ObjectHideFlags: 0
@@ -736,7 +736,6 @@ MonoBehaviour:
   - {fileID: 4011145286088668600}
   - {fileID: 4011145286751261965}
   isDoorActive: 01000000
-  rotation: 0
 --- !u!1 &6379204307052934974
 GameObject:
   m_ObjectHideFlags: 0
