@@ -13,7 +13,7 @@ namespace Player
         public int ammoCount = 10;
         public int timeBetweenShots = 1;
         public float launchVelocity = 100f;
-        public float projectileLifetime = 5;
+        public float projectileLifetime = 1000000000;
         public Text ammoText;
         public Transform crosshair;
     
@@ -33,14 +33,14 @@ namespace Player
         {
             var ball = Instantiate(projectile, launchStart.transform.position,
                 launchStart.transform.rotation * projectile.transform.rotation);
-            ball.GetComponent<Rigidbody>()
-                .AddForce(launchStart.transform.forward * launchVelocity + launchStart.transform.up * 10.0f);
+            Rigidbody arrow_rb = ball.GetComponent<Rigidbody>();
+            arrow_rb.AddForce(launchStart.transform.forward * launchVelocity + launchStart.transform.up * 10.0f);
             Destroy(ball, projectileLifetime);
             yield return new WaitForSeconds(timeBetweenShots);
             _canShoot = true;
         }
 
-        public void OnShoot()
+        public void OnShoot() //called by player
         {
             if (_canShoot && ammoCount > 0 && _inputs.aim)
             {

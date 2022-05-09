@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
 namespace Items
 {
     public class BonusSpawner : MonoBehaviour
@@ -9,13 +8,16 @@ namespace Items
         public List<PowerUpBase> powerupPrefabs;
         public PowerUpSapphire sapphire;
         public int threshold;
-
+        private const int MAX_SPAWNPOINT = 3;
         void Start()
         {
             var spawnPoints = GameObject.FindGameObjectsWithTag("SpawningPoint");
             var spawnPointsList = spawnPoints.ToList();
-
-            for (int i = 0; i < 3; ++i)
+            int toSpawnItems = MAX_SPAWNPOINT;
+            if (spawnPointsList.Count <= MAX_SPAWNPOINT){
+                toSpawnItems = spawnPointsList.Count;
+            }
+            for (int i = 0; i < toSpawnItems; ++i)
             {
                 int currentIndex = Random.Range(0, spawnPointsList.Count);
                 GameObject currentSpawnPoint = spawnPointsList[currentIndex];
