@@ -4,9 +4,9 @@ namespace Items
 {
     public class Arrow : MonoBehaviour
     {
-        public const float v0 = 10;
+        public const float v0 = 25;
 
-        const float G = 2f;
+        const float G = 9.81f;
         private Vector3 velocity;
 
 
@@ -35,7 +35,7 @@ namespace Items
         }
         private void OnTriggerEnter(Collider other)
         {
-            //Destroy(gameObject);
+            Destroy(gameObject);
         }
     }
 }
