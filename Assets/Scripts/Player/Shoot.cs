@@ -31,10 +31,11 @@ namespace Player
 
         IEnumerator Fire()
         {
+            Quaternion rotation = launchStart.transform.rotation * Quaternion.Euler(new Vector3(0,180,0));
             var ball = Instantiate(projectile, launchStart.transform.position,
-                launchStart.transform.rotation * projectile.transform.rotation);
-            Rigidbody arrow_rb = ball.GetComponent<Rigidbody>();
-            arrow_rb.AddForce(launchStart.transform.forward * launchVelocity + launchStart.transform.up * 10.0f);
+                rotation);
+            // Rigidbody arrow_rb = ball.GetComponent<Rigidbody>();
+            // arrow_rb.AddForce(launchStart.transform.forward * launchVelocity + launchStart.transform.up * 10.0f);
             Destroy(ball, projectileLifetime);
             yield return new WaitForSeconds(timeBetweenShots);
             _canShoot = true;

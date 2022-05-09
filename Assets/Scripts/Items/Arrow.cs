@@ -4,30 +4,38 @@ namespace Items
 {
     public class Arrow : MonoBehaviour
     {
-        const float v0 = 2f;
-        const float G = 9.81f;
+        public const float v0 = 10;
+
+        const float G = 2f;
         private Vector3 velocity;
 
-        Rigidbody rb;
 
-        private Vector3 updatePositionY(float time){
-            
-            return new Vector3(0,0,0);
+
+        private void updateVelocity(){
+            // velocity.y = velocity.magnitude * Mathf.Sin(horizontal_angle) - G * Time.deltaTime;
+            velocity.y = velocity.y + G * Time.deltaTime;
         }
-        private void tmpUpdatePosition(float time){
-            transform.position -= velocity*time; 
+        private void updateRotation(){
+            Quaternion fallingEffect = Quaternion.LookRotation(velocity, transform.up);
+            Quaternion rotatingEffect = Quaternion.AngleAxis(20, Vector3.forward);
+            transform.rotation = fallingEffect * rotatingEffect ;// * Quaternion.LookRotation(new Vector3(0,0,30), Vector3.right);
+            // transform.rotation = Quaternion.LookRotation(new Vector3(0,30,0), Vector3.right);
+        }
+        private void updatePosition(){
+            transform.position -= velocity * Time.deltaTime;
         }
         void Start()
         {
-            rb = GetComponent<Rigidbody>();
             velocity = transform.forward * v0;
         }
         private void Update(){
-            tmpUpdatePosition(Time.deltaTime);
+            updateVelocity();
+            updateRotation();
+            updatePosition();
         }
         private void OnTriggerEnter(Collider other)
         {
-            Destroy(gameObject);
+            //Destroy(gameObject);
         }
     }
 }
