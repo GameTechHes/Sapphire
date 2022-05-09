@@ -11,6 +11,7 @@ namespace Minimap
         public StarterAssetsInputs starterAssetsInputs;
         public PlayerInput playerInput;
         public GameObject minicamUI;
+        public GameObject minicamBackground;
 
         private bool _displayMap = false;
         private bool _canToggle = true;
@@ -21,6 +22,7 @@ namespace Minimap
         void Start()
         {
             minicamUI.SetActive(_displayMap);
+            minicamBackground.SetActive(_displayMap);
             ResumeGame();
         }
 
@@ -49,6 +51,7 @@ namespace Minimap
         {
             _displayMap = !_displayMap;
             minicamUI.SetActive(_displayMap);
+            minicamBackground.SetActive(_displayMap);
             if (_displayMap)
             {
                 starterAssetsInputs.StopPlayerMovement();
