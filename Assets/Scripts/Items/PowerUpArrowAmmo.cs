@@ -12,6 +12,7 @@ namespace Items
             if (collider.gameObject.CompareTag("Player"))
             {
                 collider.gameObject.GetComponent<Shoot>().AddAmmo(ammoReward);
+                FindObjectOfType<AudioManager>().Play("CollectingAmmo");
                 Destroy(gameObject);
             }
         }

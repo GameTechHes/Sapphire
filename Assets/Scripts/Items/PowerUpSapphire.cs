@@ -10,6 +10,7 @@ namespace Items
             if (collider.gameObject.CompareTag("Player"))
             {
                 collider.gameObject.GetComponent<SapphireController>().AddSapphire();
+                FindObjectOfType<AudioManager>().Play("CollectingSapphire");
                 Destroy(gameObject);
             }
         }
