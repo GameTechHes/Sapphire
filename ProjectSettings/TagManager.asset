@@ -8,6 +8,8 @@ TagManager:
   - Door
   - SpawningPoint
   - ReferencePoint
+  - Spell
+  - Arrow
   layers:
   - Default
   - TransparentFX

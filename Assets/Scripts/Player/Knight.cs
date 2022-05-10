@@ -31,6 +31,8 @@ namespace Player
 
         private void Update()
         {
+            healthBar.SetProgress(_health);
+
             if (_inputs.aim)
             {
                 _cameraDistance = Mathf.Lerp(_cameraDistance, 2.0f, Time.deltaTime * aimSpeed);
@@ -52,6 +54,25 @@ namespace Player
                 FindObjectOfType<AudioManager>().Play("AimingBow");
             }
 
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.CompareTag("Spell"))
+                _health -= 25;
+        }
+
+        public int getPlayerHealth()
+        {
+            return this._health;
+        }
+
+        public void setPlayerHealth(int newHealth)
+        {
+            if (newHealth > 100)
+                this._health = 100;
+            else
+                this._health = newHealth;
         }
     }
 }
