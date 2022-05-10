@@ -4,56 +4,81 @@ using Fusion;
 using Fusion.Sockets;
 using StarterAssets;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 {
     private NetworkRunner _runner;
     private StarterAssetsInputs _starterAssetsInputs;
+    private ConnectionStatus _status;
 
-    [SerializeField] private NetworkPrefabRef _playerPrefab;
+    private Action<NetworkRunner, ConnectionStatus, string> _connectionStatusChangeCallback;
+    private Action<NetworkRunner> _spawnWorldCallback;
+    private Action<NetworkRunner, PlayerRef> _spawnPlayerCallback;
+    private Action<NetworkRunner, PlayerRef> _despawnPlayerCallback;
 
-    private void OnGUI()
+    public enum ConnectionStatus
     {
-        if (_runner == null)
-        {
-            if (GUI.Button(new Rect(0, 0, 200, 40), "Host"))
-            {
-                StartGame(GameMode.Host);
-            }
-
-            if (GUI.Button(new Rect(0, 40, 200, 40), "Join"))
-            {
-                StartGame(GameMode.Client);
-            }
-        }
+        Disconnected,
+        Connecting,
+        Failed,
+        Connected,
+        Loading,
+        Loaded
     }
 
-    private void Awake()
+    public async void StartGame(GameMode mode,
+        String roomName,
+        INetworkSceneObjectProvider sceneLoader,
+        Action<NetworkRunner, ConnectionStatus, string> onConnectStatusChange,
+        Action<NetworkRunner> onSpawnWorld,
+        Action<NetworkRunner, PlayerRef> onSpawnPlayer,
+        Action<NetworkRunner, PlayerRef> onDespawnPlayer)
     {
-        _starterAssetsInputs = GetComponent<StarterAssetsInputs>();
-        _starterAssetsInputs.cursorLocked = false;
-    }
+        _connectionStatusChangeCallback = onConnectStatusChange;
+        _spawnWorldCallback = onSpawnWorld;
+        _spawnPlayerCallback = onSpawnPlayer;
+        _despawnPlayerCallback = onDespawnPlayer;
 
-    private async void StartGame(GameMode mode)
-    {
+        SetConnectionStatus(ConnectionStatus.Connecting, "");
+
+        DontDestroyOnLoad(gameObject);
+
         _runner = gameObject.AddComponent<NetworkRunner>();
         _runner.ProvideInput = true;
+
         await _runner.StartGame(new StartGameArgs
         {
             GameMode = mode,
-            SessionName = "TestRoom",
-            Scene = SceneManager.GetActiveScene().buildIndex,
-            SceneObjectProvider = gameObject.AddComponent<NetworkSceneManagerDefault>()
+            SessionName = roomName,
+            SceneObjectProvider = sceneLoader,
         });
+    }
+
+    public void SetConnectionStatus(ConnectionStatus status, string message)
+    {
+        _status = status;
+        if (_connectionStatusChangeCallback != null)
+            _connectionStatusChangeCallback(_runner, status, message);
     }
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
         if (runner.IsServer)
         {
-            runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, player);
+            Debug.Log("Spawning Player");
+            InstantiatePlayer(runner, player);
         }
+    }
+
+    private void InstantiatePlayer(NetworkRunner runner, PlayerRef playerref)
+    {
+        if (_spawnWorldCallback != null && runner.IsServer)
+        {
+            _spawnWorldCallback(runner);
+            _spawnWorldCallback = null;
+        }
+
+        _spawnPlayerCallback(runner, playerref);
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
@@ -62,43 +87,53 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-        var inputData = new NetworkInputData
+        if (_starterAssetsInputs != null)
         {
-            move = _starterAssetsInputs.move,
-            look = _starterAssetsInputs.look,
-            sprint = _starterAssetsInputs.sprint,
-            aim = _starterAssetsInputs.aim
-        };
-        if (_starterAssetsInputs.jump)
-        {
-            inputData.jump = true;
-            _starterAssetsInputs.jump = false;
-        }
+            var inputData = new NetworkInputData
+            {
+                move = _starterAssetsInputs.move,
+                look = _starterAssetsInputs.look,
+                sprint = _starterAssetsInputs.sprint,
+                aim = _starterAssetsInputs.aim
+            };
+            if (_starterAssetsInputs.jump)
+            {
+                inputData.jump = true;
+                _starterAssetsInputs.jump = false;
+            }
 
-        input.Set(inputData);
+            input.Set(inputData);
+        }
     }
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)
     {
     }
 
-    public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
-    {
-    }
-
     public void OnConnectedToServer(NetworkRunner runner)
     {
+        Debug.Log("Connected to server");
+        SetConnectionStatus(ConnectionStatus.Connected, "");
     }
 
     public void OnDisconnectedFromServer(NetworkRunner runner)
     {
+        Debug.Log("Disconnected from server");
+        SetConnectionStatus(ConnectionStatus.Disconnected, "");
     }
 
     public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token)
     {
+        request.Accept();
     }
 
     public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason)
+    {
+        Debug.Log($"Connect failed {reason}");
+        SetConnectionStatus(ConnectionStatus.Failed, reason.ToString());
+    }
+
+    public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
     {
     }
 

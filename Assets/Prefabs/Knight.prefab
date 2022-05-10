@@ -819,6 +819,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7316417065234386541}
   - component: {fileID: 6204488890291323043}
+  - component: {fileID: 1146978748254554189}
   m_Layer: 0
   m_Name: Knight
   m_TagString: Player
@@ -868,11 +869,31 @@ MonoBehaviour:
     RawGuidValue: e42f7a335ef318c42a5f80fbcfa0ce76
   NestedObjects: []
   NetworkedBehaviours:
+  - {fileID: 1146978748254554189}
   - {fileID: 4820070503751422322}
   - {fileID: 5749675697393819952}
-  - {fileID: 9107779666168407522}
   - {fileID: 173442852932354374}
   SimulationBehaviours: []
+--- !u!114 &1146978748254554189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1679443176135076696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d068de728d2ef647baab6e86584e473, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  healthBar: {fileID: 107491292}
+  objectsToDisable:
+  - {fileID: 3165213074492240312}
+  - {fileID: 5813024366959105168}
+  - {fileID: 3749913773585745855}
+  - {fileID: 6095503136088812906}
+  - {fileID: 7328484934481800214}
 --- !u!1 &1722389126084337440
 GameObject:
   m_ObjectHideFlags: 0
@@ -1869,7 +1890,6 @@ GameObject:
   - component: {fileID: 2219702348305879888}
   - component: {fileID: 5749675697393819958}
   - component: {fileID: 5749675697393819952}
-  - component: {fileID: 9107779666168407522}
   - component: {fileID: 173442852932354374}
   m_Layer: 7
   m_Name: KnightCharacter
@@ -2012,26 +2032,6 @@ MonoBehaviour:
   BottomClamp: -30
   CameraAngleOverride: 0
   LockCameraPosition: 0
---- !u!114 &9107779666168407522
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4831124644429290595}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d068de728d2ef647baab6e86584e473, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _interpolationDataSource: 0
-  healthBar: {fileID: 107491292}
-  objectsToDisable:
-  - {fileID: 3749913773585745855}
-  - {fileID: 6095503136088812906}
-  - {fileID: 7328484934481800214}
-  - {fileID: 3165213074492240312}
-  - {fileID: 5813024366959105168}
 --- !u!114 &173442852932354374
 MonoBehaviour:
   m_ObjectHideFlags: 0

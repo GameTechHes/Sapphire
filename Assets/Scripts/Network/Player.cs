@@ -13,11 +13,18 @@ namespace Network
 
         [Networked] private int _health { get; set; }
 
-        public override void Spawned()
+        public int playerID { get; private set; }
+
+        public void InitNetworkState()
         {
             _health = MAX_HEALTH;
+        }
+
+        public override void Spawned()
+        {
             healthBar.SetMaxHealth(MAX_HEALTH);
             healthBar.SetProgress(_health);
+            playerID = Object.InputAuthority;
             if (!Object.HasInputAuthority)
             {
                 foreach (var obj in objectsToDisable)
@@ -34,7 +41,28 @@ namespace Network
             }
             else
             {
-                Cursor.lockState = CursorLockMode.Locked;
+                // Cursor.lockState = CursorLockMode.Locked;
+            }
+        }
+
+        public override void Despawned(NetworkRunner runner, bool hasState)
+        {
+            PlayerManager.RemovePlayer(this);
+        }
+
+
+        public async void TriggerDespawn()
+        {
+            PlayerManager.RemovePlayer(this);
+
+            if (Object == null)
+            {
+                return;
+            }
+
+            if (Object.HasStateAuthority)
+            {
+                Runner.Despawn(Object);
             }
         }
     }
