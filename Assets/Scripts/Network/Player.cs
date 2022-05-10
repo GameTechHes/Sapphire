@@ -1,9 +1,11 @@
+using System;
+using System.Collections.Generic;
 using Fusion;
-using Player;
+using Sapphire;
 using UnityEngine;
 using UserInterface;
 
-namespace Network
+namespace Sapphire
 {
     public class Player : NetworkBehaviour
     {
@@ -12,27 +14,41 @@ namespace Network
         [SerializeField] private HealthBar healthBar;
         [SerializeField] private GameObject[] objectsToDisable;
 
-        [Networked] private int _health { get; set; }
+        [Networked] private int Health { get; set; }
+        [Networked] public string Username { get; set; }
 
         private ThirdPersonController _controller;
         private float _respawnInSeconds = -1;
+        
+        public static Action<Player> PlayerJoined;
+        public static Action<Player> PlayerLeft;
 
         public int playerID { get; private set; }
 
+        public static readonly List<Player> Players = new List<Player>();
+        public static Player Local;
+
         public void InitNetworkState()
         {
-            _health = MAX_HEALTH;
+            Health = MAX_HEALTH;
         }
 
         public override void Spawned()
         {
             healthBar.SetMaxHealth(MAX_HEALTH);
-            healthBar.SetProgress(_health);
+            healthBar.SetProgress(Health);
+            
             playerID = Object.InputAuthority;
+            if (Object.HasInputAuthority)
+            {
+                Local = this;
+                RPC_SetPlayerStats(ClientInfo.Username);
+            }
 
             _controller = GetComponentInChildren<ThirdPersonController>();
 
-            PlayerManager.AddPlayer(this);
+            Players.Add(this);
+            PlayerJoined?.Invoke(this);
 
             if (!Object.HasInputAuthority)
             {
@@ -53,10 +69,16 @@ namespace Network
                 // Cursor.lockState = CursorLockMode.Locked;
             }
 
-            // DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject);
 
             Debug.Log("Spawned [" + this + "] IsClient=" + Runner.IsClient + " IsServer=" + Runner.IsServer +
                       " HasInputAuth=" + Object.HasInputAuthority + " HasStateAuth=" + Object.HasStateAuthority);
+        }
+        
+        [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.StateAuthority, InvokeResim = true)]
+        private void RPC_SetPlayerStats(string username)
+        {
+            Username = username;
         }
 
         public override void FixedUpdateNetwork()

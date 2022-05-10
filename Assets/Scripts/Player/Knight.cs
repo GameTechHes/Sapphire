@@ -2,7 +2,7 @@ using Cinemachine;
 using Fusion;
 using UnityEngine;
 
-namespace Player
+namespace Sapphire
 {
     public class Knight : NetworkBehaviour
     {

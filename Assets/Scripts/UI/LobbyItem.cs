@@ -1,3 +1,4 @@
+using Sapphire;
 using TMPro;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ public class LobbyItem : MonoBehaviour
     [SerializeField] private TMP_Text username;
     [SerializeField] private TMP_Text isReady;
 
-    private LobbyPlayer _player;
+    private Player _player;
 
     private void Start()
     {
@@ -20,8 +21,9 @@ public class LobbyItem : MonoBehaviour
             username.text = _player.Username;
         }
     }
-    
-    public void SetPlayer(LobbyPlayer player) {
+
+    public void SetPlayer(Player player)
+    {
         _player = player;
     }
 }

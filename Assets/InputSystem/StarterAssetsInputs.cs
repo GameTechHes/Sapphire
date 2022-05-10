@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -19,6 +20,11 @@ namespace StarterAssets
 
         [Header("Mouse Cursor Settings")] public bool cursorLocked = true;
         public bool cursorInputForLook = true;
+
+        public void Awake()
+        {
+            DontDestroyOnLoad(gameObject);
+        }
 
         public void OnMove(InputValue value)
         {

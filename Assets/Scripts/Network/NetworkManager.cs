@@ -26,6 +26,11 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         Loaded
     }
 
+    private void Awake()
+    {
+        _starterAssetsInputs = FindObjectOfType<StarterAssetsInputs>();
+    }
+
     public async void StartGame(GameMode mode,
         String roomName,
         INetworkSceneObjectProvider sceneLoader,

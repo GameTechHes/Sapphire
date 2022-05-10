@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    private static List<Network.Player> _allPlayers = new List<Network.Player>();
-    public static List<Network.Player> allPlayers => _allPlayers;
-    private static Queue<Network.Player> _playerQueue = new Queue<Network.Player>();
+    private static List<Sapphire.Player> _allPlayers = new List<Sapphire.Player>();
+    public static List<Sapphire.Player> allPlayers => _allPlayers;
+    private static Queue<Sapphire.Player> _playerQueue = new Queue<Sapphire.Player>();
 
-    public static Network.Player Get(PlayerRef playerRef)
+    public static Sapphire.Player Get(PlayerRef playerRef)
     {
         for (int i = _allPlayers.Count - 1; i >= 0; i--)
         {
@@ -24,7 +24,7 @@ public class PlayerManager : MonoBehaviour
         return null;
     }
 
-    public static void AddPlayer(Network.Player player)
+    public static void AddPlayer(Sapphire.Player player)
     {
         Debug.Log("Player Added");
 
@@ -43,7 +43,7 @@ public class PlayerManager : MonoBehaviour
         _playerQueue.Enqueue(player);
     }
 
-    public static void RemovePlayer(Network.Player player)
+    public static void RemovePlayer(Sapphire.Player player)
     {
         if (player == null || !_allPlayers.Contains(player))
             return;

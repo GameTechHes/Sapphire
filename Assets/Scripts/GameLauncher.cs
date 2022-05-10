@@ -1,4 +1,5 @@
 using Fusion;
+using Sapphire;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,8 +12,7 @@ public class GameLauncher : MonoBehaviour
     [SerializeField] private RectTransform _listPanel;
     [SerializeField] private TMP_InputField _room;
     [SerializeField] private TMP_InputField _username;
-    [SerializeField] private Network.Player _playerPrefab;
-    [SerializeField] private LobbyPlayer _lobbyPlayerPrefab;
+    [SerializeField] private Player _playerPrefab;
 
     private GameMode _gameMode;
     private NetworkManager.ConnectionStatus _status = NetworkManager.ConnectionStatus.Disconnected;
@@ -24,7 +24,7 @@ public class GameLauncher : MonoBehaviour
 
     void Update()
     {
-        if (Keyboard.current != null && Keyboard.current.escapeKey.isPressed)
+        if (_roomPanel != null && Keyboard.current != null && Keyboard.current.escapeKey.isPressed)
         {
             if (_roomPanel.gameObject.activeInHierarchy)
             {
@@ -108,19 +108,20 @@ public class GameLauncher : MonoBehaviour
         }
 
         Debug.Log($"Spawning character for player {playerref}");
-        runner.Spawn(_lobbyPlayerPrefab, Vector3.zero, Quaternion.identity, playerref, InitNetworkState);
-
+        runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, playerref, InitNetworkState);
+        
         void InitNetworkState(NetworkRunner runner, NetworkObject networkObject)
         {
-            var player = networkObject.gameObject.GetComponent<LobbyPlayer>();
+            var player = networkObject.gameObject.GetComponent<Player>();
             Debug.Log($"Initializing player {_username.text}");
+            player.InitNetworkState();
         }
     }
 
     private void OnDespawnPlayer(NetworkRunner runner, PlayerRef playerref)
     {
         Debug.Log($"Despawning Player {playerref}");
-        Network.Player player = PlayerManager.Get(playerref);
+        Sapphire.Player player = PlayerManager.Get(playerref);
         player.TriggerDespawn();
     }
 }

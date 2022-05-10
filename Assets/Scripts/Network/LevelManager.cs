@@ -34,6 +34,7 @@ public class LevelManager : NetworkSceneManagerBase
             sceneObjects = FindNetworkObjects(_loadedScene, disable: false);
         }
 
+        Debug.Log($"Switched Scene from {prevScene} to {newScene} - loaded {sceneObjects.Count} scene objects");
         finished(sceneObjects);
 
         // Delay one frame, so we're sure level objects has spawned locally

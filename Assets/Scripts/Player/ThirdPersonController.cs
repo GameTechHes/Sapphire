@@ -3,7 +3,7 @@ using StarterAssets;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Player
+namespace Sapphire
 {
     [RequireComponent(typeof(CharacterController))]
     [OrderBefore(typeof(NetworkTransform))]

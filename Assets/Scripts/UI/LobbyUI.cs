@@ -1,3 +1,4 @@
+using Sapphire;
 using UnityEngine;
 
 public class LobbyUI : MonoBehaviour
@@ -7,10 +8,10 @@ public class LobbyUI : MonoBehaviour
 
     private void Start()
     {
-        LobbyPlayer.PlayerJoined += AddPlayer;
+        Player.PlayerJoined += AddPlayer;
     }
 
-    private void AddPlayer(LobbyPlayer player)
+    private void AddPlayer(Player player)
     {
         var obj = Instantiate(_lobbyItemPrefab, _scrollContent);
         obj.SetPlayer(player);
