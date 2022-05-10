@@ -486,6 +486,11 @@ MonoBehaviour:
     volume: 0.3
     pitch: 0.9
     source: {fileID: 0}
+  - name: Opening_map
+    clip: {fileID: 8300000, guid: 02cdd4e54e7c0f241adb7026010ac97e, type: 3}
+    volume: 0.3
+    pitch: 0.9
+    source: {fileID: 0}
 --- !u!4 &1750906393
 Transform:
   m_ObjectHideFlags: 0
