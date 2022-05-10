@@ -1,4 +1,5 @@
 using Fusion;
+using Player;
 using UnityEngine;
 using UserInterface;
 
@@ -13,6 +14,9 @@ namespace Network
 
         [Networked] private int _health { get; set; }
 
+        private ThirdPersonController _controller;
+        private float _respawnInSeconds = -1;
+
         public int playerID { get; private set; }
 
         public void InitNetworkState()
@@ -25,6 +29,11 @@ namespace Network
             healthBar.SetMaxHealth(MAX_HEALTH);
             healthBar.SetProgress(_health);
             playerID = Object.InputAuthority;
+
+            _controller = GetComponentInChildren<ThirdPersonController>();
+
+            PlayerManager.AddPlayer(this);
+
             if (!Object.HasInputAuthority)
             {
                 foreach (var obj in objectsToDisable)
@@ -43,6 +52,20 @@ namespace Network
             {
                 // Cursor.lockState = CursorLockMode.Locked;
             }
+
+            // DontDestroyOnLoad(gameObject);
+
+            Debug.Log("Spawned [" + this + "] IsClient=" + Runner.IsClient + " IsServer=" + Runner.IsServer +
+                      " HasInputAuth=" + Object.HasInputAuthority + " HasStateAuth=" + Object.HasStateAuthority);
+        }
+
+        public override void FixedUpdateNetwork()
+        {
+            if (Object.HasStateAuthority)
+            {
+                if (_respawnInSeconds >= 0)
+                    CheckRespawn();
+            }
         }
 
         public override void Despawned(NetworkRunner runner, bool hasState)
@@ -50,8 +73,25 @@ namespace Network
             PlayerManager.RemovePlayer(this);
         }
 
+        public void CheckRespawn()
+        {
+            if (_respawnInSeconds > 0)
+                _respawnInSeconds -= Runner.DeltaTime;
+            
+            if (_respawnInSeconds <= 0)
+            {
+                Debug.Log("Player respawned");
+                _controller.GetComponent<NetworkTransform>().transform.position = new Vector3(0.0f, 100.0f, 0.0f);
+                _respawnInSeconds = -1;
+            }
+        }
 
-        public async void TriggerDespawn()
+        public void Respawn(float inSeconds)
+        {
+            _respawnInSeconds = inSeconds;
+        }
+
+        public void TriggerDespawn()
         {
             PlayerManager.RemovePlayer(this);
 
