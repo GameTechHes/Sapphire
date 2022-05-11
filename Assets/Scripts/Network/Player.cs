@@ -102,7 +102,7 @@ namespace Sapphire
 
         public override void Despawned(NetworkRunner runner, bool hasState)
         {
-            PlayerManager.RemovePlayer(this);
+            Players.Remove(this);
         }
 
         public void CheckRespawn()
@@ -125,7 +125,7 @@ namespace Sapphire
 
         public void TriggerDespawn()
         {
-            PlayerManager.RemovePlayer(this);
+            Players.Remove(this);
 
             if (Object == null)
             {
@@ -136,6 +136,19 @@ namespace Sapphire
             {
                 Runner.Despawn(Object);
             }
+        }
+
+        public static Player Get(PlayerRef playerref)
+        {
+            foreach (var player in Players)
+            {
+                if (player.Object.InputAuthority == playerref)
+                {
+                    return player;
+                }
+            }
+
+            return null;
         }
     }
 }

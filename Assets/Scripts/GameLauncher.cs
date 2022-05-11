@@ -124,7 +124,7 @@ public class GameLauncher : MonoBehaviour
     private void OnDespawnPlayer(NetworkRunner runner, PlayerRef playerref)
     {
         Debug.Log($"Despawning Player {playerref}");
-        Player player = PlayerManager.Get(playerref);
+        var player = Player.Get(playerref);
         player.TriggerDespawn();
     }
 }

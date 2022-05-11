@@ -88,6 +88,11 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
+        if (runner.IsServer)
+        {
+            Debug.Log("Despawning Player");
+            _despawnPlayerCallback(runner, player);
+        }
     }
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
