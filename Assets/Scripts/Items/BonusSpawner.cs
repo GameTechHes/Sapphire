@@ -34,7 +34,10 @@ namespace Items
                 {
                     Vector3 spawnPosition = spawnPoint.transform.position;
                     spawnPosition.y += 1;
-                    Instantiate(powerupPrefabs[0], spawnPosition, Quaternion.identity);
+
+                    int randomIndex = Random.Range(0, powerupPrefabs.Count);
+
+                    var obj = Instantiate(powerupPrefabs[randomIndex], spawnPosition, Quaternion.Euler(260, 0, 0));
                 }
             }
         }
