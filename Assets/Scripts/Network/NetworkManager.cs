@@ -182,6 +182,5 @@ public struct NetworkInputData : INetworkInput
     public Vector2 look;
     public NetworkBool jump;
     public NetworkBool sprint;
-    public NetworkBool analogMovement;
     public NetworkBool aim;
 }

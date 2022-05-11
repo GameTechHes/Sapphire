@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using Fusion;
@@ -41,13 +40,5 @@ public class LevelManager : NetworkSceneManagerBase
         yield return null;
 
         NetworkManager.SetConnectionStatus(NetworkManager.ConnectionStatus.Loaded, "");
-
-        if (Runner.GameMode == GameMode.Host)
-        {
-            foreach (var player in PlayerManager.allPlayers)
-            {
-                player.Respawn(0);
-            }
-        }
     }
 }

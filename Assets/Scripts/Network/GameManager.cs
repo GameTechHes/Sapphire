@@ -1,3 +1,4 @@
+using System.Linq;
 using Fusion;
 using Sapphire;
 
@@ -36,6 +37,14 @@ public class GameManager : NetworkBehaviour
         if (Object.HasStateAuthority)
         {
             _levelManager.LoadLevel(1);
+        }
+    }
+
+    public override void FixedUpdateNetwork()
+    {
+        if (Object.HasStateAuthority && Player.Players.Count == 2 && Player.Players.All(p => p.IsReady))
+        {
+            _levelManager.LoadLevel(2);
         }
     }
 

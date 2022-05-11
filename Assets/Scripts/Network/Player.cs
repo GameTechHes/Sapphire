@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Fusion;
-using Sapphire;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UserInterface;
 
 namespace Sapphire
@@ -24,6 +24,8 @@ namespace Sapphire
         [Networked] public string Username { get; set; }
         [Networked] public PlayerType PlayerType { get; set; }
 
+        [Networked] public NetworkBool IsReady { get; set; }
+
         private ThirdPersonController _controller;
         private float _respawnInSeconds = -1;
 
@@ -35,16 +37,13 @@ namespace Sapphire
         public static readonly List<Player> Players = new List<Player>();
         public static Player Local;
 
-        public void InitNetworkState(PlayerType type)
-        {
-            Health = MAX_HEALTH;
-            PlayerType = type;
-        }
-
         public override void Spawned()
         {
-            healthBar.SetMaxHealth(MAX_HEALTH);
-            healthBar.SetProgress(Health);
+            if (Object.HasInputAuthority)
+            {
+                healthBar.SetMaxHealth(MAX_HEALTH);
+                healthBar.SetProgress(Health);
+            }
 
             playerID = Object.InputAuthority;
             if (Object.HasInputAuthority)
@@ -82,13 +81,25 @@ namespace Sapphire
             Debug.Log("Spawned [" + this + "] type=" + (PlayerType == PlayerType.KNIGHT
                           ? "Knight"
                           : "Wizard") + " IsClient=" + Runner.IsClient + " IsServer=" + Runner.IsServer +
-                  " HasInputAuth=" + Object.HasInputAuthority + " HasStateAuth=" + Object.HasStateAuthority);
+                      " HasInputAuth=" + Object.HasInputAuthority + " HasStateAuth=" + Object.HasStateAuthority);
+        }
+
+        public void InitNetworkState(PlayerType type)
+        {
+            Health = MAX_HEALTH;
+            PlayerType = type;
         }
 
         [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.StateAuthority, InvokeResim = true)]
         private void RPC_SetPlayerStats(string username)
         {
             Username = username;
+        }
+
+        [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.StateAuthority, InvokeResim = true)]
+        private void RPC_PlayerReady(NetworkBool isReady)
+        {
+            IsReady = isReady;
         }
 
         public override void FixedUpdateNetwork()
@@ -100,9 +111,18 @@ namespace Sapphire
             }
         }
 
+        public override void Render()
+        {
+            if (Object.HasInputAuthority && Keyboard.current.rKey.wasPressedThisFrame)
+            {
+                RPC_PlayerReady(!IsReady);
+            }
+        }
+
         public override void Despawned(NetworkRunner runner, bool hasState)
         {
             Players.Remove(this);
+            PlayerLeft?.Invoke(this);
         }
 
         public void CheckRespawn()

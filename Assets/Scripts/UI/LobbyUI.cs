@@ -34,11 +34,13 @@ public class LobbyUI : MonoBehaviour
         if (_wizardPlayer != null && _wizardPlayer.Object != null && _wizardPlayer.Object.IsValid)
         {
             _wizardText.text = $"Wizard: {_wizardPlayer.Username}";
+            _wizardReady.text = _wizardPlayer.IsReady ? "Ready" : "Not ready";
         }
         
         if (_knightPlayer != null && _knightPlayer.Object != null && _knightPlayer.Object.IsValid)
         {
             _knightText.text = $"Knight: {_knightPlayer.Username}";
+            _knightReady.text = _knightPlayer.IsReady ? "Ready" : "Not ready";
         }
     }
 }
