@@ -7,6 +7,12 @@ using UserInterface;
 
 namespace Sapphire
 {
+    public enum PlayerType
+    {
+        KNIGHT,
+        WIZARD
+    }
+
     public class Player : NetworkBehaviour
     {
         public const byte MAX_HEALTH = 100;
@@ -16,10 +22,11 @@ namespace Sapphire
 
         [Networked] private int Health { get; set; }
         [Networked] public string Username { get; set; }
+        [Networked] public PlayerType PlayerType { get; set; }
 
         private ThirdPersonController _controller;
         private float _respawnInSeconds = -1;
-        
+
         public static Action<Player> PlayerJoined;
         public static Action<Player> PlayerLeft;
 
@@ -28,16 +35,17 @@ namespace Sapphire
         public static readonly List<Player> Players = new List<Player>();
         public static Player Local;
 
-        public void InitNetworkState()
+        public void InitNetworkState(PlayerType type)
         {
             Health = MAX_HEALTH;
+            PlayerType = type;
         }
 
         public override void Spawned()
         {
             healthBar.SetMaxHealth(MAX_HEALTH);
             healthBar.SetProgress(Health);
-            
+
             playerID = Object.InputAuthority;
             if (Object.HasInputAuthority)
             {
@@ -71,10 +79,12 @@ namespace Sapphire
 
             DontDestroyOnLoad(gameObject);
 
-            Debug.Log("Spawned [" + this + "] IsClient=" + Runner.IsClient + " IsServer=" + Runner.IsServer +
-                      " HasInputAuth=" + Object.HasInputAuthority + " HasStateAuth=" + Object.HasStateAuthority);
+            Debug.Log("Spawned [" + this + "] type=" + (PlayerType == PlayerType.KNIGHT
+                          ? "Knight"
+                          : "Wizard") + " IsClient=" + Runner.IsClient + " IsServer=" + Runner.IsServer +
+                  " HasInputAuth=" + Object.HasInputAuthority + " HasStateAuth=" + Object.HasStateAuthority);
         }
-        
+
         [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.StateAuthority, InvokeResim = true)]
         private void RPC_SetPlayerStats(string username)
         {
@@ -99,7 +109,7 @@ namespace Sapphire
         {
             if (_respawnInSeconds > 0)
                 _respawnInSeconds -= Runner.DeltaTime;
-            
+
             if (_respawnInSeconds <= 0)
             {
                 Debug.Log("Player respawned");

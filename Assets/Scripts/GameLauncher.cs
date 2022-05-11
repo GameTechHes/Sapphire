@@ -9,7 +9,7 @@ public class GameLauncher : MonoBehaviour
     [SerializeField] private GameManager _gameManagerPrefab;
     [SerializeField] private RectTransform _mainMenu;
     [SerializeField] private RectTransform _roomPanel;
-    [SerializeField] private RectTransform _listPanel;
+    [SerializeField] private RectTransform _loadingPanel;
     [SerializeField] private TMP_InputField _room;
     [SerializeField] private TMP_InputField _username;
     [SerializeField] private Player _playerPrefab;
@@ -62,7 +62,7 @@ public class GameLauncher : MonoBehaviour
             OnSpawnPlayer, OnDespawnPlayer);
 
         _roomPanel.gameObject.SetActive(false);
-        _listPanel.gameObject.SetActive(true);
+        _loadingPanel.gameObject.SetActive(true);
     }
 
     private void OnConnectionStatusUpdate(NetworkRunner runner, NetworkManager.ConnectionStatus status, string reason)
@@ -108,20 +108,23 @@ public class GameLauncher : MonoBehaviour
         }
 
         Debug.Log($"Spawning character for player {playerref}");
-        runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, playerref, InitNetworkState);
         
+        var type = GameManager.instance.AssignRole(playerref);
+        
+        runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, playerref, InitNetworkState);
+
         void InitNetworkState(NetworkRunner runner, NetworkObject networkObject)
         {
             var player = networkObject.gameObject.GetComponent<Player>();
             Debug.Log($"Initializing player {_username.text}");
-            player.InitNetworkState();
+            player.InitNetworkState(type);
         }
     }
 
     private void OnDespawnPlayer(NetworkRunner runner, PlayerRef playerref)
     {
         Debug.Log($"Despawning Player {playerref}");
-        Sapphire.Player player = PlayerManager.Get(playerref);
+        Player player = PlayerManager.Get(playerref);
         player.TriggerDespawn();
     }
 }
