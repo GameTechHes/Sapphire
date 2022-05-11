@@ -154,13 +154,8 @@ namespace AI
                     if (playeffet)
                     {
                         playeffet = false;
-                        animator.SetBool("attack", false);
-                        animator.SetBool("playerDetected", false);
-                        animator.SetBool("walking", false);
-                        animator.SetBool("die", true);
-
-                        Destroy(this.gameObject, 2);
-                        Invoke("spawnEffet", 1.0f);
+                        
+                        
 
                     }
 
@@ -175,9 +170,12 @@ namespace AI
             if (other.gameObject.CompareTag("Arrow"))
             {
                 Debug.Log("Toucher");
-
-                state = BotState.Dying;
-                playeffet = true;
+                animator.SetBool("attack", false);
+                animator.SetBool("playerDetected", false);
+                animator.SetBool("walking", false);
+                animator.SetBool("die", true);
+                Destroy(this.gameObject, animator.GetCurrentAnimatorStateInfo(0).length+animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
+                Invoke("spawnEffet", 1.0f);
 
             }
         }
@@ -190,58 +188,6 @@ namespace AI
         }
 
 
-        /*void Update()
-    {
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius);
 
-            if (hitCollider.gameObject.tag == "Player")
-            {
-                Vector3 direction = hitCollider.gameObject.transform.position - transform.position;
-
-                float angle = Vector3.Angle(transform.forward, direction);
-                if (angle < viewAngle)
-                {
-                    RaycastHit hit;
-                    // Does the ray intersect any objects excluding the player layer
-                    int layerMask = 1 << 3 | 1 << 6;
-                    layerMask = ~layerMask;
-                    Vector3 ray_src = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
-                    if (!Physics.Raycast(ray_src, direction, out hit, direction.magnitude + 1, layerMask))
-                    {
-                        Debug.DrawRay(ray_src, direction, Color.green);
-                        Debug.Log("Did Hit");
-                        if (direction.magnitude < 1)
-                        {
-                            print("TOUCH");
-                            animator.SetBool("attack", true);
-                            bot.resetCurrentPath();
-                            return;
-                        }
-                        if (!animator.GetBool("playerDetected") || time > minTimeBeforeUpdateTarget)
-                        {
-                            bot.resetCurrentPath();
-                            bot.setNewDestination(hitCollider.gameObject.transform.position);
-                            animator.SetBool("playerDetected",true);
-                            time = 0;
-                            print("setting new target");
-                        }
-                    }
-                    else
-                    {
-                        Debug.DrawRay(ray_src, direction, Color.red);
-                        Debug.Log("Did not Hit");
-                        animator.SetBool("attack", false);
-                    }
-
-                }
-            }
-        }
-        if (animator.GetBool("playerDetected"))
-        {
-            time += Time.deltaTime;
-            
-        }
-
-    }*/
     }
 }

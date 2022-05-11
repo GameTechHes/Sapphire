@@ -1951,7 +1951,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectile: {fileID: 5400317181062787718, guid: 0c45fedb57319184a81a55d65f3e3804, type: 3}
   launchStart: {fileID: 1714940349}
-  ammoCount: 10
+  ammoCount: 1000
   timeBetweenShots: 1
   launchVelocity: 150
   projectileLifetime: 5
