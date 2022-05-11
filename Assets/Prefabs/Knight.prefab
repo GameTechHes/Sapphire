@@ -873,6 +873,7 @@ MonoBehaviour:
   - {fileID: 4820070503751422322}
   - {fileID: 5749675697393819952}
   - {fileID: 173442852932354374}
+  - {fileID: 8138924258719501546}
   SimulationBehaviours: []
 --- !u!114 &1146978748254554189
 MonoBehaviour:
@@ -894,6 +895,10 @@ MonoBehaviour:
   - {fileID: 3749913773585745855}
   - {fileID: 6095503136088812906}
   - {fileID: 7328484934481800214}
+  _Username: 
+  _PlayerType: 0
+  _IsReady:
+    _value: 0
 --- !u!1 &1722389126084337440
 GameObject:
   m_ObjectHideFlags: 0
@@ -1569,8 +1574,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3749913773585745855}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.8, y: 0.78100014, z: -4}
+  m_LocalRotation: {x: -0.0033249245, y: -0.0017752338, z: -0.00000590256, w: 0.9999929}
+  m_LocalPosition: {x: 0.8035504, y: 0.7743503, z: -3.9999716}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7316417065234386541}
@@ -1891,6 +1896,7 @@ GameObject:
   - component: {fileID: 5749675697393819958}
   - component: {fileID: 5749675697393819952}
   - component: {fileID: 173442852932354374}
+  - component: {fileID: 8138924258719501546}
   m_Layer: 7
   m_Name: KnightCharacter
   m_TagString: Player
@@ -2047,6 +2053,35 @@ MonoBehaviour:
   _interpolationDataSource: 0
   aimSpeed: 4
   followCamera: {fileID: 6095503136088812692}
+--- !u!114 &8138924258719501546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4831124644429290595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 506319458, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  Animator: {fileID: 2206876227830701219}
+  SyncSettings: 79
+  FloatAccuracy:
+    _value: 0.001
+    _inverse: 999.99994
+    _hash: -814817977
+  TimeAccuracy:
+    _value: 0.0001
+    _inverse: 10000
+    _hash: 1061325578
+  WeightAccuracy:
+    _value: 0.001
+    _inverse: 999.99994
+    _hash: -814817977
+  StateHashes: 0000000084ca1cc0f9c6230b1c6a54339e2518b671a7e1076b36dbedb1afdc305a6c54cdeef325099739b6af
+  TriggerHashes: 00000000
 --- !u!1 &5057451808294959618
 GameObject:
   m_ObjectHideFlags: 0
