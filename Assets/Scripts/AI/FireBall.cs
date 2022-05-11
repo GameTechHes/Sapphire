@@ -10,6 +10,7 @@ public class FireBall : MonoBehaviour
     {
         Destroy(gameObject);
         var obj = Instantiate(explosionEffet, transform.position, transform.rotation);
+        FindObjectOfType<AudioManager>().Play("Fireball");
         Destroy(obj, 1);
 
     }
