@@ -58,8 +58,12 @@ namespace Player
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.CompareTag("Spell"))
-                _health -= 25;
+            if (other.gameObject.CompareTag("Spell")){
+                int ran = Random.Range(1,4);
+                FindObjectOfType<AudioManager>().Play("Hurt_" + ran.ToString());
+                this.setPlayerHealth(this.getPlayerHealth() - 25);
+            }
+
         }
 
         public int getPlayerHealth()
@@ -69,10 +73,7 @@ namespace Player
 
         public void setPlayerHealth(int newHealth)
         {
-            if (newHealth > 100)
-                this._health = 100;
-            else
-                this._health = newHealth;
+            this._health = newHealth >  100 ? 100 : (newHealth < 0 ? 0 : newHealth);
         }
     }
 }
