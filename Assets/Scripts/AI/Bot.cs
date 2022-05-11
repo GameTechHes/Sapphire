@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,6 +9,10 @@ namespace AI
         [SerializeField] private float wanderRadius;
         [SerializeField] private float maxWanderTimer;
         [SerializeField] private float minWanderTimer;
+
+        [SerializeField] private GameObject fireball;
+        [SerializeField] private GameObject launchStart;
+        private bool _canShoot = true;
 
         private Animator animator;
 
@@ -26,13 +31,14 @@ namespace AI
         void Update()
         {
             if (!GetComponent<NavMeshAgent>().enabled) return;
-            if (agent.remainingDistance - agent.stoppingDistance < 0.1)
+            if (agent.remainingDistance - agent.stoppingDistance < 100 && !animator.GetBool("die")) //0.1
             {
                 if (animator.GetBool("walking")) animator.SetBool("walking", false);
                 if (animator.GetBool("playerDetected")) animator.SetBool("playerDetected", false);
 
                 if (!animator.GetBool("attack"))
                 {
+
                     timer += Time.deltaTime;
                     if (timer >= wanderTimer)
                     {
@@ -40,6 +46,10 @@ namespace AI
                         randDirection += transform.position;
                         SetNewDestination(randDirection);
                     }
+                }
+                else
+                {
+                    Attack();
                 }
             }
             else
@@ -60,6 +70,7 @@ namespace AI
                 else
                 {
                     animator.SetBool("walking", false);
+                    Attack();
                 }
 
                 agent.SetDestination(newPos);
@@ -77,5 +88,25 @@ namespace AI
         {
             agent.ResetPath();
         }
+
+        public void Attack()
+        {
+            if (_canShoot)
+            {
+                StartCoroutine(SendSpell());
+                _canShoot = false;
+            }
+        }
+        IEnumerator SendSpell()
+        {
+            GameObject shoot = Instantiate(fireball, launchStart.transform.position, launchStart.transform.rotation) as GameObject;
+            Rigidbody rb = shoot.GetComponent<Rigidbody>();
+            rb.velocity = launchStart.transform.forward * 20;
+            Destroy(shoot, 5);
+
+            yield return new WaitForSeconds(3);
+            _canShoot = true;
+        }
+
     }
 }

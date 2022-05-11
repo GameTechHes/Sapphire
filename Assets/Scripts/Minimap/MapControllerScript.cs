@@ -54,6 +54,7 @@ namespace Minimap
             minicamBackground.SetActive(_displayMap);
             if (_displayMap)
             {
+                FindObjectOfType<AudioManager>().Play("Opening_map");
                 starterAssetsInputs.StopPlayerMovement();
                 playerInput.actions.FindActionMap("Player").Disable();
                 playerInput.actions.FindActionMap("UI").Enable();

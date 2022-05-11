@@ -15,6 +15,9 @@ namespace AI
         private Animator animator;
         private GameObject playerOnFocus;
 
+        public GameObject dieEffet;
+        private bool playeffet;
+
         enum BotState
         {
             Idle,
@@ -145,9 +148,45 @@ namespace AI
                     Quaternion rot = Quaternion.LookRotation(directionAttack);
                     transform.rotation = Quaternion.Slerp(transform.rotation, rot, 0.8f);
                     break;
+
+                case BotState.Dying:
+
+                    if (playeffet)
+                    {
+                        playeffet = false;
+                        animator.SetBool("attack", false);
+                        animator.SetBool("playerDetected", false);
+                        animator.SetBool("walking", false);
+                        animator.SetBool("die", true);
+
+                        Destroy(this.gameObject, 2);
+                        Invoke("spawnEffet", 1.0f);
+
+                    }
+
+                    break;
             }
 
             time += Time.deltaTime;
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.CompareTag("Arrow"))
+            {
+                Debug.Log("Toucher");
+
+                state = BotState.Dying;
+                playeffet = true;
+
+            }
+        }
+
+        void spawnEffet()
+        {
+            Debug.Log("Invoke!!!!");
+            var obj = Instantiate(dieEffet, transform.position, transform.rotation) as GameObject;
+            Destroy(obj, 2);
         }
 
 
