@@ -15,6 +15,7 @@ public class LobbyUI : MonoBehaviour
     private void Start()
     {
         Player.PlayerJoined += AddPlayer;
+        gameObject.SetActive(false);
     }
 
     public void AddPlayer(Player player)

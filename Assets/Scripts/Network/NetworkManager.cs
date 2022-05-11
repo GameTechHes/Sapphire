@@ -145,6 +145,11 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
     {
+        SetConnectionStatus(ConnectionStatus.Disconnected, "");
+        if (_runner != null && _runner.gameObject)
+        {
+            Destroy(_runner);
+        }
     }
 
     public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message)

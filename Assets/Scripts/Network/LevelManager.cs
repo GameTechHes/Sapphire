@@ -20,6 +20,17 @@ public class LevelManager : NetworkSceneManagerBase
         Runner.SetActiveScene(nextLevelIndex);
     }
 
+    protected override void Shutdown(NetworkRunner runner)
+    {
+        base.Shutdown(runner);
+        if (_loadedScene != default)
+        {
+            SceneManager.UnloadSceneAsync(_loadedScene);
+        }
+
+        _loadedScene = default;
+    }
+
     protected override IEnumerator SwitchScene(SceneRef prevScene, SceneRef newScene, FinishedLoadingDelegate finished)
     {
         Debug.Log($"Switching Scene from {prevScene} to {newScene}");
@@ -27,7 +38,7 @@ public class LevelManager : NetworkSceneManagerBase
         List<NetworkObject> sceneObjects = new List<NetworkObject>();
         if (newScene >= 1)
         {
-            yield return SceneManager.LoadSceneAsync(newScene, LoadSceneMode.Single);
+            yield return SceneManager.LoadSceneAsync(newScene, LoadSceneMode.Additive);
             _loadedScene = SceneManager.GetSceneByBuildIndex(newScene);
             Debug.Log($"Loaded scene {newScene}: {_loadedScene}");
             sceneObjects = FindNetworkObjects(_loadedScene, disable: false);

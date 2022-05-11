@@ -76,8 +76,6 @@ namespace Sapphire
                 // Cursor.lockState = CursorLockMode.Locked;
             }
 
-            DontDestroyOnLoad(gameObject);
-
             Debug.Log("Spawned [" + this + "] type=" + (PlayerType == PlayerType.KNIGHT
                           ? "Knight"
                           : "Wizard") + " IsClient=" + Runner.IsClient + " IsServer=" + Runner.IsServer +

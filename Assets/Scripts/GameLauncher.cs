@@ -1,18 +1,23 @@
+using System;
 using Fusion;
 using Sapphire;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class GameLauncher : MonoBehaviour
 {
     [SerializeField] private GameManager _gameManagerPrefab;
     [SerializeField] private RectTransform _mainMenu;
     [SerializeField] private RectTransform _roomPanel;
+    [SerializeField] private RectTransform _lobbyPanel;
+    [SerializeField] private RectTransform _backgroundPanel;
     [SerializeField] private RectTransform _loadingPanel;
     [SerializeField] private TMP_InputField _room;
     [SerializeField] private TMP_InputField _username;
     [SerializeField] private Player _playerPrefab;
+    [SerializeField] private Camera _menuCamera;
 
     private GameMode _gameMode;
     private NetworkManager.ConnectionStatus _status = NetworkManager.ConnectionStatus.Disconnected;
@@ -32,6 +37,8 @@ public class GameLauncher : MonoBehaviour
                 _mainMenu.gameObject.SetActive(true);
             }
         }
+        
+        UpdateUI();
     }
 
     void SetGameMode(GameMode gameMode)
@@ -60,9 +67,8 @@ public class GameLauncher : MonoBehaviour
 
         networkManager.StartGame(_gameMode, ClientInfo.LobbyName, levelManager, OnConnectionStatusUpdate, OnSpawnWorld,
             OnSpawnPlayer, OnDespawnPlayer);
-
+        
         _roomPanel.gameObject.SetActive(false);
-        _loadingPanel.gameObject.SetActive(true);
     }
 
     private void OnConnectionStatusUpdate(NetworkRunner runner, NetworkManager.ConnectionStatus status, string reason)
@@ -76,16 +82,52 @@ public class GameLauncher : MonoBehaviour
         {
             switch (status)
             {
-                case NetworkManager.ConnectionStatus.Disconnected:
-                    // ErrorBox.Show("Disconnected!", reason, () => { });
-                    break;
                 case NetworkManager.ConnectionStatus.Failed:
-                    // ErrorBox.Show("Error!", reason, () => { });
+                    ErrorBox.Message("Connection failed");
+                    break;
+                case NetworkManager.ConnectionStatus.Disconnected:
+                    ErrorBox.Message("Disconnected from server");
                     break;
             }
         }
 
         _status = status;
+        UpdateUI();
+    }
+
+    private void UpdateUI()
+    {
+        var menu = false;
+        var loading = false;
+        var running = false;
+        
+        switch (_status)
+        {
+            case NetworkManager.ConnectionStatus.Disconnected:
+                menu = true;
+                break;
+            case NetworkManager.ConnectionStatus.Connecting:
+                loading = true;
+                break;
+            case NetworkManager.ConnectionStatus.Failed:
+                menu = true;
+                break;
+            case NetworkManager.ConnectionStatus.Connected:
+                loading = true;
+                break;
+            case NetworkManager.ConnectionStatus.Loading:
+                loading = true;
+                break;
+            case NetworkManager.ConnectionStatus.Loaded:
+                running = true;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+        _loadingPanel.gameObject.SetActive(loading);
+        _lobbyPanel.gameObject.SetActive(running);
+        _backgroundPanel.gameObject.SetActive(!running);
+        _menuCamera.gameObject.SetActive(!running);
     }
 
     private void OnSpawnWorld(NetworkRunner runner)
