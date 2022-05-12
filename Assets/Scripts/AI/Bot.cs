@@ -81,6 +81,7 @@ namespace AI
 
         public void SetAgentSpeed(float speed)
         {
+            animator.SetFloat("animationBlend", speed);
             agent.speed = speed;
         }
 

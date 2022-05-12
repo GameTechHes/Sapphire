@@ -8,6 +8,8 @@ namespace Player
 {
     public class Shoot : MonoBehaviour
     {
+        
+        public float initialAngleCorrector = 4.3f;
         public GameObject projectile;
         public GameObject launchStart;
         public int ammoCount = 10;
@@ -31,7 +33,7 @@ namespace Player
 
         IEnumerator Fire()
         {
-            Quaternion rotation = launchStart.transform.rotation * Quaternion.Euler(new Vector3(0,180,0));
+            Quaternion rotation = launchStart.transform.rotation * Quaternion.Euler(new Vector3(0,180,0)) * Quaternion.Euler(initialAngleCorrector,0.5f,0);
             var ball = Instantiate(projectile, launchStart.transform.position,
                 rotation);
             // Rigidbody arrow_rb = ball.GetComponent<Rigidbody>();

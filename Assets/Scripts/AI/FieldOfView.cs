@@ -149,17 +149,7 @@ namespace AI
                     transform.rotation = Quaternion.Slerp(transform.rotation, rot, 0.8f);
                     break;
 
-                case BotState.Dying:
-
-                    if (playeffet)
-                    {
-                        playeffet = false;
-                        
-                        
-
-                    }
-
-                    break;
+                
             }
 
             time += Time.deltaTime;
@@ -170,6 +160,7 @@ namespace AI
             if (other.gameObject.CompareTag("Arrow"))
             {
                 Debug.Log("Toucher");
+                bot.ResetCurrentPath();
                 animator.SetBool("attack", false);
                 animator.SetBool("playerDetected", false);
                 animator.SetBool("walking", false);
