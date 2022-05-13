@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using StarterAssets;
 using UnityEngine;
@@ -7,41 +8,50 @@ namespace Minimap
 {
     public class MapControllerScript : MonoBehaviour
     {
-        public Camera minicam;
-        public StarterAssetsInputs starterAssetsInputs;
-        public PlayerInput playerInput;
-        public GameObject minicamUI;
-        public GameObject minicamBackground;
+        private StarterAssetsInputs _starterAssetsInputs;
+        private PlayerInput _playerInput;
+        private GameObject _minicamUI;
+        private GameObject _minicamBackground;
+        private AudioManager _audioManager;
 
-        private bool _displayMap = false;
+        private bool _displayMap;
         private bool _canToggle = true;
         private const float ToggleTime = 0.2f;
         private const float MinSize = 15;
         private const float MaxSize = 200;
 
+        private void Awake()
+        {
+            _minicamUI = GameObject.Find("MiniCameraUI");
+            _minicamBackground = GameObject.Find("MinimapBackground");
+            _starterAssetsInputs = FindObjectOfType<StarterAssetsInputs>();
+            _playerInput = FindObjectOfType<PlayerInput>();
+            _audioManager = FindObjectOfType<AudioManager>();
+        }
+
         void Start()
         {
-            minicamUI.SetActive(_displayMap);
-            minicamBackground.SetActive(_displayMap);
+            _minicamUI.SetActive(_displayMap);
+            _minicamBackground.SetActive(_displayMap);
             ResumeGame();
         }
 
         void Update()
         {
-            if ((starterAssetsInputs.resumeGame || starterAssetsInputs.displayMap) && _canToggle)
+            if ((_starterAssetsInputs.resumeGame || _starterAssetsInputs.displayMap) && _canToggle)
             {
-                starterAssetsInputs.displayMap = false;
+                _starterAssetsInputs.displayMap = false;
                 StartCoroutine(ToggleMiniMap());
             }
         }
 
         private void ResumeGame()
         {
-            if (starterAssetsInputs.resumeGame)
+            if (_starterAssetsInputs.resumeGame)
             {
-                starterAssetsInputs.resumeGame = false;
-                playerInput.actions.FindActionMap("Player").Enable();
-                playerInput.actions.FindActionMap("UI").Disable();
+                _starterAssetsInputs.resumeGame = false;
+                _playerInput.actions.FindActionMap("Player").Enable();
+                _playerInput.actions.FindActionMap("UI").Disable();
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;
             }
@@ -50,14 +60,15 @@ namespace Minimap
         private IEnumerator ToggleMiniMap()
         {
             _displayMap = !_displayMap;
-            minicamUI.SetActive(_displayMap);
-            minicamBackground.SetActive(_displayMap);
+            _minicamUI.SetActive(_displayMap);
+            _minicamBackground.SetActive(_displayMap);
+            
             if (_displayMap)
             {
-                FindObjectOfType<AudioManager>().Play("Opening_map");
-                starterAssetsInputs.StopPlayerMovement();
-                playerInput.actions.FindActionMap("Player").Disable();
-                playerInput.actions.FindActionMap("UI").Enable();
+                _audioManager.Play("Opening_map");
+                _starterAssetsInputs.StopPlayerMovement();
+                _playerInput.actions.FindActionMap("Player").Disable();
+                _playerInput.actions.FindActionMap("UI").Enable();
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
             }

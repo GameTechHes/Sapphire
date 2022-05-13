@@ -1,26 +1,28 @@
+using System;
 using UnityEngine;
 
 namespace Minimap
 {
-    /**
-     * TODO: To remove if not used anymore
-     */
     public class ScaleMinicam : MonoBehaviour
     {
-        public GameObject camUI;
-
+        private GameObject _camUI;
         private float _distanceX;
         private float _distanceZ;
         private Camera _minicam;
         private RectTransform _rectTransform;
         private Quaternion _originalRotation;
 
+        private void Awake()
+        {
+            _camUI = GameObject.Find("MiniCameraUI");
+            _minicam = GetComponent<Camera>();
+            _rectTransform = _camUI.GetComponent<RectTransform>();
+        }
+
         void Start()
         {
-            _minicam = GetComponent<Camera>();
             _originalRotation = _minicam.transform.rotation;
-            _rectTransform = camUI.GetComponent<RectTransform>();
-            
+
             var minX = 10000f;
             var minZ = 10000f;
             var maxX = -10000f;

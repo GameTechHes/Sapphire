@@ -15,10 +15,11 @@ namespace Sapphire
 
     public class Player : NetworkBehaviour
     {
-        public const byte MAX_HEALTH = 100;
+        public const byte MaxHealth = 100;
 
-        [SerializeField] private HealthBar healthBar;
+        private HealthBar _healthBar;
         [SerializeField] private GameObject[] objectsToDisable;
+        [SerializeField] private Camera minimapCamera;
 
         [Networked] private int Health { get; set; }
         [Networked] public string Username { get; set; }
@@ -28,6 +29,7 @@ namespace Sapphire
 
         private ThirdPersonController _controller;
         private float _respawnInSeconds = -1;
+        
 
         public static Action<Player> PlayerJoined;
         public static Action<Player> PlayerLeft;
@@ -37,12 +39,17 @@ namespace Sapphire
         public static readonly List<Player> Players = new List<Player>();
         public static Player Local;
 
+        private void Awake()
+        {
+            _healthBar = FindObjectOfType<HealthBar>();
+        }
+
         public override void Spawned()
         {
             if (Object.HasInputAuthority)
             {
-                healthBar.SetMaxHealth(MAX_HEALTH);
-                healthBar.SetProgress(Health);
+                _healthBar.SetMaxHealth(MaxHealth);
+                _healthBar.SetProgress(Health);
             }
 
             playerID = Object.InputAuthority;
@@ -84,7 +91,7 @@ namespace Sapphire
 
         public void InitNetworkState(PlayerType type)
         {
-            Health = MAX_HEALTH;
+            Health = MaxHealth;
             PlayerType = type;
         }
 
@@ -167,6 +174,11 @@ namespace Sapphire
             }
 
             return null;
+        }
+
+        public Camera GetMinimapCamera()
+        {
+            return minimapCamera;
         }
     }
 }

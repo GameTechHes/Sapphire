@@ -36,7 +36,7 @@ public class GameManager : NetworkBehaviour
         _levelManager = FindObjectOfType<LevelManager>(true);
         if (Object.HasStateAuthority)
         {
-            _levelManager.LoadLevel(1);
+            _levelManager.LoadLevel(2);
         }
     }
 

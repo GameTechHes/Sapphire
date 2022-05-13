@@ -1,3 +1,5 @@
+using System;
+using Sapphire;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -8,27 +10,42 @@ namespace Minimap
     {
         public Camera minicam;
         public GameObject myPrefab;
-        public LayerMask layerMask;
+        private const float ScrollMultiplier = 0.2f;
+
+        private void Update()
+        {
+            if (minicam == null && Player.Local != null)
+            {
+                minicam = Player.Local.GetMinimapCamera();
+            }
+        }
 
         public void OnScroll(PointerEventData eventData)
         {
-            var minSize = 5.0f;
-            var maxSize = 200.0f;
-            var scrollingUnit = 20.0f;
-            var scroll = eventData.scrollDelta.y;
-            if (scroll > 0 && minicam.orthographicSize - scrollingUnit > minSize)
+            if (minicam != null)
             {
-                scrollingUnit = -20;
+                var minSize = 5.0f;
+                var maxSize = 200.0f;
+                var scrollingUnit = ScrollMultiplier;
+                var scroll = eventData.scrollDelta.y;
+                
+                if (scroll > 0 ) //&& minicam.orthographicSize - scrollingUnit > minSize)
+                {
+                    // Zoom out
+                    scrollingUnit = ScrollMultiplier * minicam.orthographicSize;
+                }
+                else if (scroll < 0 ) // && minicam.orthographicSize + scrollingUnit < maxSize)
+                {
+                    // Zoom in
+                    scrollingUnit = -ScrollMultiplier * (minicam.orthographicSize - minicam.orthographicSize * ScrollMultiplier);
+                }
+                else
+                {
+                    scrollingUnit = 0;
+                }
+
+                minicam.orthographicSize += scrollingUnit;
             }
-            else if (scroll < 0 && minicam.orthographicSize + scrollingUnit < maxSize)
-            {
-                scrollingUnit = 20;
-            }
-            else
-            {
-                scrollingUnit = 0;
-            }
-            minicam.orthographicSize += scrollingUnit;
         }
 
 
@@ -55,18 +72,21 @@ namespace Minimap
 
         private void CastRayToWorld(Vector2 vec)
         {
-            var mapRay = minicam.ScreenPointToRay(new Vector2(vec.x * minicam.pixelWidth,
-                vec.y * minicam.pixelHeight));
-
-            LayerMask layerMask = ~(1 << LayerMask.NameToLayer("Ignore Raycast")); // ignore collisions with layerX
-            if (Physics.Raycast(mapRay, out var miniMapHit, Mathf.Infinity, layerMask))
+            if (minicam)
             {
-                Debug.DrawRay(mapRay.origin, mapRay.direction * 1000, Color.green, 5);
-                Debug.Log(miniMapHit.collider.name);
+                var mapRay = minicam.ScreenPointToRay(new Vector2(vec.x * minicam.pixelWidth,
+                    vec.y * minicam.pixelHeight));
 
-                if (miniMapHit.collider.GetComponent<SpawnArea>() != null)
+                LayerMask layerMask = ~(1 << LayerMask.NameToLayer("Ignore Raycast")); // ignore collisions with layerX
+                if (Physics.Raycast(mapRay, out var miniMapHit, Mathf.Infinity, layerMask))
                 {
-                    Instantiate(myPrefab, miniMapHit.collider.transform.position, Quaternion.identity);
+                    Debug.DrawRay(mapRay.origin, mapRay.direction * 1000, Color.green, 5);
+                    Debug.Log(miniMapHit.collider.name);
+
+                    if (miniMapHit.collider.GetComponent<SpawnArea>() != null)
+                    {
+                        Instantiate(myPrefab, miniMapHit.collider.transform.position, Quaternion.identity);
+                    }
                 }
             }
         }

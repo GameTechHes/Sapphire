@@ -30,7 +30,7 @@ public class LevelManager : NetworkSceneManagerBase
             {
                 if (obj.GetType() != typeof(LevelManager))
                 {
-                    DestroyImmediate(obj);
+                    Destroy(obj);
                 }
             }
             SceneManager.LoadSceneAsync(0);
