@@ -15,51 +15,33 @@ namespace Sapphire
 
     public class Player : NetworkBehaviour
     {
-        public const byte MaxHealth = 100;
-
-        private HealthBar _healthBar;
+        
         [SerializeField] private GameObject[] objectsToDisable;
         [SerializeField] private Camera minimapCamera;
-
-        [Networked] private int Health { get; set; }
+        
         [Networked] public string Username { get; set; }
         [Networked] public PlayerType PlayerType { get; set; }
-
         [Networked] public NetworkBool IsReady { get; set; }
 
-        private ThirdPersonController _controller;
         private float _respawnInSeconds = -1;
         
 
         public static Action<Player> PlayerJoined;
         public static Action<Player> PlayerLeft;
 
-        public int playerID { get; private set; }
+        public int PlayerID { get; private set; }
 
         public static readonly List<Player> Players = new List<Player>();
         public static Player Local;
 
-        private void Awake()
-        {
-            _healthBar = FindObjectOfType<HealthBar>();
-        }
-
         public override void Spawned()
         {
-            if (Object.HasInputAuthority)
-            {
-                _healthBar.SetMaxHealth(MaxHealth);
-                _healthBar.SetProgress(Health);
-            }
-
-            playerID = Object.InputAuthority;
+            PlayerID = Object.InputAuthority;
             if (Object.HasInputAuthority)
             {
                 Local = this;
                 RPC_SetPlayerStats(ClientInfo.Username);
             }
-
-            _controller = GetComponentInChildren<ThirdPersonController>();
 
             Players.Add(this);
             PlayerJoined?.Invoke(this);
@@ -80,7 +62,7 @@ namespace Sapphire
             }
             else
             {
-                // Cursor.lockState = CursorLockMode.Locked;
+                Cursor.lockState = CursorLockMode.Locked;
             }
 
             Debug.Log("Spawned [" + this + "] type=" + (PlayerType == PlayerType.KNIGHT
@@ -91,7 +73,6 @@ namespace Sapphire
 
         public void InitNetworkState(PlayerType type)
         {
-            Health = MaxHealth;
             PlayerType = type;
         }
 
@@ -138,7 +119,7 @@ namespace Sapphire
             if (_respawnInSeconds <= 0)
             {
                 Debug.Log("Player respawned");
-                _controller.GetComponent<NetworkTransform>().transform.position = new Vector3(0.0f, 100.0f, 0.0f);
+                // TODO move the network controller to spawn point
                 _respawnInSeconds = -1;
             }
         }

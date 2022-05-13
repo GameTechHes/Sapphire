@@ -1,6 +1,7 @@
 using Cinemachine;
 using Fusion;
 using UnityEngine;
+using UserInterface;
 
 namespace Sapphire
 {
@@ -13,11 +14,25 @@ namespace Sapphire
         private float _cameraDistance = 4.0f;
         private Cinemachine3rdPersonFollow _cinemachine3RdPersonFollow;
 
+        public const byte MaxHealth = 100;
+
+        private HealthBar _healthBar;
+        [Networked] private int Health { get; set; }
+
         [Networked] private NetworkBool isAiming { get; set; }
 
         public override void Spawned()
         {
             _controller = GetComponent<Animator>();
+            if (Object.HasInputAuthority)
+            {
+                _healthBar = FindObjectOfType<HealthBar>();
+                _healthBar.SetMaxHealth(MaxHealth);
+                _healthBar.SetProgress(Health);
+            }
+
+            Health = MaxHealth;
+
             _cinemachine3RdPersonFollow = followCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
             isAiming = false;
         }
@@ -32,7 +47,7 @@ namespace Sapphire
                 {
                     if (input.aim)
                     {
-                        _cameraDistance = Mathf.Lerp(_cameraDistance, 2.0f, Time.deltaTime * aimSpeed);
+                        _cameraDistance = Mathf.Lerp(_cameraDistance, 2.0f, Runner.DeltaTime * aimSpeed);
                         _cinemachine3RdPersonFollow.CameraDistance = _cameraDistance;
                         _cinemachine3RdPersonFollow.CameraSide = Mathf.Lerp(_cinemachine3RdPersonFollow.CameraSide,
                             1.0f,
@@ -40,7 +55,7 @@ namespace Sapphire
                     }
                     else
                     {
-                        _cameraDistance = Mathf.Lerp(_cameraDistance, 4.0f, Time.deltaTime * aimSpeed);
+                        _cameraDistance = Mathf.Lerp(_cameraDistance, 4.0f, Runner.DeltaTime * aimSpeed);
                         _cinemachine3RdPersonFollow.CameraDistance = _cameraDistance;
                         _cinemachine3RdPersonFollow.CameraSide = Mathf.Lerp(_cinemachine3RdPersonFollow.CameraSide,
                             0.5f,
@@ -50,31 +65,31 @@ namespace Sapphire
             }
             else
             {
-                _cameraDistance = Mathf.Lerp(_cameraDistance, 4.0f, Time.deltaTime * aimSpeed);
+                _cameraDistance = Mathf.Lerp(_cameraDistance, 4.0f, Runner.DeltaTime * aimSpeed);
                 _cinemachine3RdPersonFollow.CameraDistance = _cameraDistance;
-                _cinemachine3RdPersonFollow.CameraSide = Mathf.Lerp(_cinemachine3RdPersonFollow.CameraSide, 0.5f, Time.deltaTime * aimSpeed);
+                _cinemachine3RdPersonFollow.CameraSide = Mathf.Lerp(_cinemachine3RdPersonFollow.CameraSide, 0.5f,
+                    Runner.DeltaTime * aimSpeed);
             }
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.CompareTag("Spell")){
-                int ran = Random.Range(1,4);
-                FindObjectOfType<AudioManager>().Play("Hurt_" + ran.ToString());
-                this.setPlayerHealth(this.getPlayerHealth() - 25);
+            if (other.gameObject.CompareTag("Spell"))
+            {
+                var ran = Random.Range(1, 4);
+                FindObjectOfType<AudioManager>().Play("Hurt_" + ran);
+                SetPlayerHealth(Health - 25);
             }
-
         }
 
-        public int getPlayerHealth()
+        public int GetPlayerHealth()
         {
-            // return this._health;
-            return 0;
+            return Health;
         }
 
-        public void setPlayerHealth(int newHealth)
+        public void SetPlayerHealth(int newHealth)
         {
-            // this._health = newHealth >  100 ? 100 : (newHealth < 0 ? 0 : newHealth);
+            Health = Mathf.Clamp(newHealth, 0, 100);
         }
     }
 }

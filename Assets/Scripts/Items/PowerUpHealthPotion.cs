@@ -7,11 +7,11 @@ public class PowerUpHealthPotion : MonoBehaviour
     {
         if (collider.gameObject.CompareTag("Player"))
         {
-            int playerhealth = collider.gameObject.GetComponent<Knight>().getPlayerHealth();
+            int playerhealth = collider.gameObject.GetComponent<Knight>().GetPlayerHealth();
 
             if (playerhealth != 100)
             {
-                collider.gameObject.GetComponent<Knight>().setPlayerHealth(playerhealth + 25);
+                collider.gameObject.GetComponent<Knight>().SetPlayerHealth(playerhealth + 25);
                 Destroy(gameObject);
             }
         }
