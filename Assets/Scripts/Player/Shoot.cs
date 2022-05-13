@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-namespace Player
+namespace Sapphire
 {
     public class Shoot : MonoBehaviour
     {

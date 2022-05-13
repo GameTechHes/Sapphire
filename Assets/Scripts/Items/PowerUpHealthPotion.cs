@@ -1,5 +1,5 @@
+using Sapphire;
 using UnityEngine;
-using Player;
 
 public class PowerUpHealthPotion : MonoBehaviour
 {

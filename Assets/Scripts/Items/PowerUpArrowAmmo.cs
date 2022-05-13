@@ -1,4 +1,4 @@
-using Player;
+using Sapphire;
 using UnityEngine;
 
 namespace Items

@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace UserInterface
 {
     public class HealthBar : MonoBehaviour
     {
@@ -11,7 +11,7 @@ namespace UI
         private Slider _slider;
         private int _maxHealth;
 
-        public void Start()
+        public void Awake()
         {
             _slider = GetComponent<Slider>();
             FindObjectOfType<AudioCharacter>().PlayHurtSFX();

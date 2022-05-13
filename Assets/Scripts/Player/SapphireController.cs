@@ -2,7 +2,7 @@ using Items;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Player
+namespace Sapphire
 {
     public class SapphireController : MonoBehaviour
     {

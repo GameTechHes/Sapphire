@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Player
+namespace Sapphire
 {
 	public class BasicRigidBodyPush : MonoBehaviour
 	{

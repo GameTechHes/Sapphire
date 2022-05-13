@@ -1,43 +1,52 @@
 using Cinemachine;
-using StarterAssets;
-using UI;
+using Fusion;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-namespace Player
+namespace Sapphire
 {
-    public class Knight : MonoBehaviour
+    public class Knight : NetworkBehaviour
     {
-        public int maxHealth = 100;
         public float aimSpeed = 4.0f;
-        public HealthBar healthBar;
         public CinemachineVirtualCamera followCamera;
-        private StarterAssetsInputs _inputs;
 
-        private int _health;
         private Animator _controller;
         private float _cameraDistance = 4.0f;
         private Cinemachine3rdPersonFollow _cinemachine3RdPersonFollow;
 
-        void Start()
+        [Networked] private NetworkBool isAiming { get; set; }
+
+        public override void Spawned()
         {
-            _health = maxHealth;
-            healthBar.SetMaxHealth(maxHealth);
-            healthBar.SetProgress(_health);
             _controller = GetComponent<Animator>();
-            _inputs = GetComponent<StarterAssetsInputs>();
             _cinemachine3RdPersonFollow = followCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
+            isAiming = false;
         }
 
-        private void Update()
+        public override void FixedUpdateNetwork()
         {
-            healthBar.SetProgress(_health);
-
-            if (_inputs.aim)
+            if (GetInput(out NetworkInputData input))
             {
-                _cameraDistance = Mathf.Lerp(_cameraDistance, 2.0f, Time.deltaTime * aimSpeed);
-                _cinemachine3RdPersonFollow.CameraDistance = _cameraDistance;
-                _cinemachine3RdPersonFollow.CameraSide = Mathf.Lerp(_cinemachine3RdPersonFollow.CameraSide, 1.0f, Time.deltaTime * aimSpeed);
+                isAiming = input.aim;
+                _controller.SetBool("Aim", isAiming);
+                if (Object.HasInputAuthority)
+                {
+                    if (input.aim)
+                    {
+                        _cameraDistance = Mathf.Lerp(_cameraDistance, 2.0f, Time.deltaTime * aimSpeed);
+                        _cinemachine3RdPersonFollow.CameraDistance = _cameraDistance;
+                        _cinemachine3RdPersonFollow.CameraSide = Mathf.Lerp(_cinemachine3RdPersonFollow.CameraSide,
+                            1.0f,
+                            Runner.DeltaTime * aimSpeed);
+                    }
+                    else
+                    {
+                        _cameraDistance = Mathf.Lerp(_cameraDistance, 4.0f, Time.deltaTime * aimSpeed);
+                        _cinemachine3RdPersonFollow.CameraDistance = _cameraDistance;
+                        _cinemachine3RdPersonFollow.CameraSide = Mathf.Lerp(_cinemachine3RdPersonFollow.CameraSide,
+                            0.5f,
+                            Runner.DeltaTime * aimSpeed);
+                    }
+                }
             }
             else
             {
@@ -45,15 +54,6 @@ namespace Player
                 _cinemachine3RdPersonFollow.CameraDistance = _cameraDistance;
                 _cinemachine3RdPersonFollow.CameraSide = Mathf.Lerp(_cinemachine3RdPersonFollow.CameraSide, 0.5f, Time.deltaTime * aimSpeed);
             }
-        }
-
-        void OnAim(InputValue value)
-        {
-            _controller.SetBool("Aim", value.isPressed);
-            if(value.isPressed){
-                FindObjectOfType<AudioManager>().Play("AimingBow");
-            }
-
         }
 
         private void OnTriggerEnter(Collider other)
@@ -68,12 +68,13 @@ namespace Player
 
         public int getPlayerHealth()
         {
-            return this._health;
+            // return this._health;
+            return 0;
         }
 
         public void setPlayerHealth(int newHealth)
         {
-            this._health = newHealth >  100 ? 100 : (newHealth < 0 ? 0 : newHealth);
+            // this._health = newHealth >  100 ? 100 : (newHealth < 0 ? 0 : newHealth);
         }
     }
 }

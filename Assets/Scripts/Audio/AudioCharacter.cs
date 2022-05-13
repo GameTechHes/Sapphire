@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioCharacter : MonoBehaviour
@@ -15,7 +13,6 @@ public class AudioCharacter : MonoBehaviour
             int numberOfSound = isLeftFoot ? 3 : 4;
             isLeftFoot = !isLeftFoot;            
             string soundName = "Walking_" +  numberOfSound.ToString();
-            Debug.Log(soundName);
             FindObjectOfType<AudioManager>().Play(soundName);
         }
     }
@@ -25,8 +22,6 @@ public class AudioCharacter : MonoBehaviour
             int numberOfSound = isLeftFoot ? 2 : 3;
             isLeftFoot = !isLeftFoot;            
             string soundName = "Running_" +  numberOfSound.ToString();
-            Debug.Log(soundName);
-
             FindObjectOfType<AudioManager>().Play(soundName);
         }
     }
