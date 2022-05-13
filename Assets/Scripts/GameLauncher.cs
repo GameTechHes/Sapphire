@@ -21,6 +21,7 @@ public class GameLauncher : MonoBehaviour
 
     private GameMode _gameMode;
     private NetworkManager.ConnectionStatus _status = NetworkManager.ConnectionStatus.Disconnected;
+    private static GameLauncher _instance;
 
     private void Awake()
     {
@@ -29,16 +30,14 @@ public class GameLauncher : MonoBehaviour
 
     void Update()
     {
-        if (_roomPanel != null && Keyboard.current != null && Keyboard.current.escapeKey.isPressed)
+        if (Keyboard.current != null && Keyboard.current.escapeKey.isPressed)
         {
-            if (_roomPanel.gameObject.activeInHierarchy)
+            if (_roomPanel != null && _roomPanel.gameObject.activeInHierarchy)
             {
                 _roomPanel.gameObject.SetActive(false);
                 _mainMenu.gameObject.SetActive(true);
             }
         }
-        
-        UpdateUI();
     }
 
     void SetGameMode(GameMode gameMode)
@@ -55,7 +54,7 @@ public class GameLauncher : MonoBehaviour
     {
         ClientInfo.Username = _username.text;
         ClientInfo.LobbyName = _room.text;
-        
+
         NetworkManager networkManager = FindObjectOfType<NetworkManager>();
         if (networkManager == null)
         {
@@ -67,7 +66,7 @@ public class GameLauncher : MonoBehaviour
 
         networkManager.StartGame(_gameMode, ClientInfo.LobbyName, levelManager, OnConnectionStatusUpdate, OnSpawnWorld,
             OnSpawnPlayer, OnDespawnPlayer);
-        
+
         _roomPanel.gameObject.SetActive(false);
     }
 
@@ -83,16 +82,20 @@ public class GameLauncher : MonoBehaviour
             switch (status)
             {
                 case NetworkManager.ConnectionStatus.Failed:
-                    ErrorBox.Message("Connection failed");
+                    // ErrorBox.Message("Connection failed");
                     break;
                 case NetworkManager.ConnectionStatus.Disconnected:
-                    ErrorBox.Message("Disconnected from server");
+                    // ErrorBox.Message("Disconnected from server");
+                    break;
+                case NetworkManager.ConnectionStatus.Connecting:
+                case NetworkManager.ConnectionStatus.Loading:
+                    if(_loadingPanel != null)
+                        _loadingPanel.gameObject.SetActive(true);
                     break;
             }
         }
 
         _status = status;
-        UpdateUI();
     }
 
     private void UpdateUI()
@@ -100,7 +103,7 @@ public class GameLauncher : MonoBehaviour
         var menu = false;
         var loading = false;
         var running = false;
-        
+
         switch (_status)
         {
             case NetworkManager.ConnectionStatus.Disconnected:
@@ -124,6 +127,7 @@ public class GameLauncher : MonoBehaviour
             default:
                 throw new ArgumentOutOfRangeException();
         }
+
         _loadingPanel.gameObject.SetActive(loading);
         _lobbyPanel.gameObject.SetActive(running);
         _backgroundPanel.gameObject.SetActive(!running);
@@ -150,9 +154,9 @@ public class GameLauncher : MonoBehaviour
         }
 
         Debug.Log($"Spawning character for player {playerref}");
-        
+
         var type = GameManager.instance.AssignRole(playerref);
-        
+
         runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, playerref, InitNetworkState);
 
         void InitNetworkState(NetworkRunner runner, NetworkObject networkObject)
