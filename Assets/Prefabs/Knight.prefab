@@ -278,6 +278,7 @@ MonoBehaviour:
   - {fileID: 5749675697393819952}
   - {fileID: 173442852932354374}
   - {fileID: 8138924258719501546}
+  - {fileID: 564951037}
   SimulationBehaviours: []
 --- !u!114 &1146978748254554189
 MonoBehaviour:
@@ -1287,11 +1288,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4831124644429290595}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 84cc4b8885f84a61ca1de480fb440f74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
   initialAngleCorrector: 4.3
   projectile: {fileID: 5400317181062787718, guid: 0c45fedb57319184a81a55d65f3e3804, type: 3}
   launchStart: {fileID: 1714940349}

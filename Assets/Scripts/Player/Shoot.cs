@@ -1,74 +1,92 @@
 using System.Collections;
-using StarterAssets;
+using Fusion;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Sapphire
 {
-    public class Shoot : MonoBehaviour
+    public class Shoot : NetworkBehaviour
     {
-        
         public float initialAngleCorrector = 4.3f;
         public GameObject projectile;
         public GameObject launchStart;
-        public int ammoCount = 10;
         public int timeBetweenShots = 1;
-        public float launchVelocity = 100f;
-        public float projectileLifetime = 1000000000;
-        public Text ammoText;
-        public Transform crosshair;
-    
-        private bool _canShoot = true;
+        public float projectileLifetime = 1000.0f;
+
+        [Networked] public int ammoCount { get; set; }
+        [Networked] private bool _canShoot { get; set; }
+
+        private Text _ammoText;
+        private GameObject _crosshair;
+        private AudioManager _audioManager;
         private Camera _mainCamera;
-        private StarterAssetsInputs _inputs;
-        
-        void Start()
+
+        private void Awake()
         {
-            ammoText.text = ammoCount.ToString();
-            _mainCamera = Camera.main;
-            _inputs = GetComponent<StarterAssetsInputs>();
-            crosshair.gameObject.SetActive(false);
+            _ammoText = GameObject.Find("AmmoCounter").GetComponent<Text>();
+            _crosshair = GameObject.Find("Crosshair");
+            _audioManager = FindObjectOfType<AudioManager>();
+        }
+
+        public override void Spawned()
+        {
+            ammoCount = 100;
+            _canShoot = true;
+            if (Object.HasInputAuthority)
+            {
+                _ammoText.text = ammoCount.ToString();
+                _mainCamera = Camera.main;
+                _crosshair.gameObject.SetActive(false);
+            }
+        }
+
+        public override void FixedUpdateNetwork()
+        {
+            if (GetInput(out NetworkInputData input))
+            {
+                if (input.shoot && input.aim)
+                {
+                    if (_canShoot && ammoCount > 0)
+                    {
+                        _audioManager.Play("ShootingBow");
+                        _canShoot = false;
+                        AddAmmo(-1);
+                        StartCoroutine(Fire());
+                    }
+                }
+
+                if (Object.HasInputAuthority)
+                {
+                    _crosshair.SetActive(input.aim);
+                }
+            }
         }
 
         IEnumerator Fire()
         {
-            Quaternion rotation = launchStart.transform.rotation * Quaternion.Euler(new Vector3(0,180,0)) * Quaternion.Euler(initialAngleCorrector,0.5f,0);
+            // TODO: use RPC and Runner.Spawn
+            Quaternion rotation = launchStart.transform.rotation * Quaternion.Euler(new Vector3(0, 180, 0)) *
+                                  Quaternion.Euler(initialAngleCorrector, 0.5f, 0);
             var ball = Instantiate(projectile, launchStart.transform.position,
                 rotation);
-            // Rigidbody arrow_rb = ball.GetComponent<Rigidbody>();
-            // arrow_rb.AddForce(launchStart.transform.forward * launchVelocity + launchStart.transform.up * 10.0f);
             Destroy(ball, projectileLifetime);
             yield return new WaitForSeconds(timeBetweenShots);
-            _canShoot = true;
-        }
 
-        public void OnShoot() //called by player
-        {
-            if (_canShoot && ammoCount > 0 && _inputs.aim)
-            {
-                FindObjectOfType<AudioManager>().Play("ShootingBow");
-                _canShoot = false;
-                AddAmmo(-1);
-                StartCoroutine(Fire());
-            }
+            // TODO: use RPC to update networked value
+            _canShoot = true;
         }
 
         public void AddAmmo(int amount)
         {
             ammoCount += amount;
-            ammoText.text = ammoCount.ToString();
+            if (Object.HasInputAuthority)
+                _ammoText.text = ammoCount.ToString();
         }
 
-        void OnAim(InputValue inputValue)
+        public override void Render()
         {
-            crosshair.gameObject.SetActive(inputValue.isPressed);
-        }
+            var worldPos = _mainCamera.ScreenToWorldPoint(_crosshair.transform.position);
 
-        public void Update()
-        {
-            var worldPos = _mainCamera.ScreenToWorldPoint(crosshair.position);
-            
             if (Physics.Raycast(worldPos, _mainCamera.transform.forward, out var hit, 100.0f))
             {
                 var target = hit.point;

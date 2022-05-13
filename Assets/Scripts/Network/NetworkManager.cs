@@ -104,8 +104,14 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
                 move = _starterAssetsInputs.move,
                 look = _starterAssetsInputs.look,
                 sprint = _starterAssetsInputs.sprint,
-                aim = _starterAssetsInputs.aim
+                aim = _starterAssetsInputs.aim,
             };
+            if (_starterAssetsInputs.shoot)
+            {
+                inputData.shoot = true;
+                _starterAssetsInputs.shoot = false;
+            }
+
             if (_starterAssetsInputs.jump)
             {
                 inputData.jump = true;
@@ -188,4 +194,5 @@ public struct NetworkInputData : INetworkInput
     public NetworkBool jump;
     public NetworkBool sprint;
     public NetworkBool aim;
+    public NetworkBool shoot;
 }

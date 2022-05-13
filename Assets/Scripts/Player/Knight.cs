@@ -19,30 +19,25 @@ namespace Sapphire
         private HealthBar _healthBar;
         [Networked] private int Health { get; set; }
 
-        [Networked] private NetworkBool isAiming { get; set; }
-
         public override void Spawned()
         {
+            Health = MaxHealth;
+
             _controller = GetComponent<Animator>();
             if (Object.HasInputAuthority)
             {
                 _healthBar = FindObjectOfType<HealthBar>();
                 _healthBar.SetMaxHealth(MaxHealth);
                 _healthBar.SetProgress(Health);
+                _cinemachine3RdPersonFollow = followCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
             }
-
-            Health = MaxHealth;
-
-            _cinemachine3RdPersonFollow = followCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
-            isAiming = false;
         }
 
         public override void FixedUpdateNetwork()
         {
             if (GetInput(out NetworkInputData input))
             {
-                isAiming = input.aim;
-                _controller.SetBool("Aim", isAiming);
+                _controller.SetBool("Aim", input.aim);
                 if (Object.HasInputAuthority)
                 {
                     if (input.aim)
@@ -78,7 +73,12 @@ namespace Sapphire
             {
                 var ran = Random.Range(1, 4);
                 FindObjectOfType<AudioManager>().Play("Hurt_" + ran);
-                SetPlayerHealth(Health - 25);
+                SetPlayerHealth(Health - 10);
+            }
+
+            if (other.gameObject.CompareTag("Arrow"))
+            {
+                SetPlayerHealth(Health - 20);
             }
         }
 
@@ -87,6 +87,7 @@ namespace Sapphire
             return Health;
         }
 
+        // TODO: convert to RPC
         public void SetPlayerHealth(int newHealth)
         {
             Health = Mathf.Clamp(newHealth, 0, 100);
