@@ -1,5 +1,6 @@
 using System.Collections;
 using Fusion;
+using Items;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,7 +9,7 @@ namespace Sapphire
     public class Shoot : NetworkBehaviour
     {
         public float initialAngleCorrector = 4.3f;
-        public GameObject projectile;
+        public Arrow projectile;
         public GameObject launchStart;
         public int timeBetweenShots = 1;
         public float projectileLifetime = 1000.0f;
@@ -67,7 +68,7 @@ namespace Sapphire
             // TODO: use RPC and Runner.Spawn
             Quaternion rotation = launchStart.transform.rotation * Quaternion.Euler(new Vector3(0, 180, 0)) *
                                   Quaternion.Euler(initialAngleCorrector, 0.5f, 0);
-            var ball = Instantiate(projectile, launchStart.transform.position,
+            var ball = Runner.Spawn(projectile, launchStart.transform.position,
                 rotation);
             Destroy(ball, projectileLifetime);
             yield return new WaitForSeconds(timeBetweenShots);
