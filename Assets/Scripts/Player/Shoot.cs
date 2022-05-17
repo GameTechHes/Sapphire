@@ -85,19 +85,22 @@ namespace Sapphire
 
         public override void Render()
         {
-            var worldPos = _mainCamera.ScreenToWorldPoint(_crosshair.transform.position);
+            if (Object.HasInputAuthority)
+            {
+                var worldPos = _mainCamera.ScreenToWorldPoint(_crosshair.transform.position);
 
-            if (Physics.Raycast(worldPos, _mainCamera.transform.forward, out var hit, 100.0f))
-            {
-                var target = hit.point;
-                var direction = (target - launchStart.transform.position).normalized;
-                var rotation = Quaternion.LookRotation(direction);
-                launchStart.transform.rotation = rotation;
-            }
-            else
-            {
-                var rotation = Quaternion.LookRotation(_mainCamera.transform.forward);
-                launchStart.transform.rotation = rotation;
+                if (Physics.Raycast(worldPos, _mainCamera.transform.forward, out var hit, 100.0f))
+                {
+                    var target = hit.point;
+                    var direction = (target - launchStart.transform.position).normalized;
+                    var rotation = Quaternion.LookRotation(direction);
+                    launchStart.transform.rotation = rotation;
+                }
+                else
+                {
+                    var rotation = Quaternion.LookRotation(_mainCamera.transform.forward);
+                    launchStart.transform.rotation = rotation;
+                }
             }
         }
 

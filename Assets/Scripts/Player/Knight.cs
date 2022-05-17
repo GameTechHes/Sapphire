@@ -61,9 +61,12 @@ namespace Sapphire
             else
             {
                 _cameraDistance = Mathf.Lerp(_cameraDistance, 4.0f, Runner.DeltaTime * aimSpeed);
-                _cinemachine3RdPersonFollow.CameraDistance = _cameraDistance;
-                _cinemachine3RdPersonFollow.CameraSide = Mathf.Lerp(_cinemachine3RdPersonFollow.CameraSide, 0.5f,
-                    Runner.DeltaTime * aimSpeed);
+                if (_cinemachine3RdPersonFollow != null)
+                {
+                    _cinemachine3RdPersonFollow.CameraDistance = _cameraDistance;
+                    _cinemachine3RdPersonFollow.CameraSide = Mathf.Lerp(_cinemachine3RdPersonFollow.CameraSide, 0.5f,
+                        Runner.DeltaTime * aimSpeed);
+                }
             }
         }
 

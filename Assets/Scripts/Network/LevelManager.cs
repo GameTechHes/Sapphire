@@ -30,14 +30,14 @@ public class LevelManager : NetworkSceneManagerBase
             {
                 if (obj.GetType() != typeof(LevelManager))
                 {
-                    Destroy(obj);
+                    // Destroy(obj);
                 }
             }
             SceneManager.LoadSceneAsync(0);
         }
 
         _loadedScene = default;
-        Destroy(gameObject);
+        // Destroy(gameObject);
     }
 
     protected override IEnumerator SwitchScene(SceneRef prevScene, SceneRef newScene, FinishedLoadingDelegate finished)

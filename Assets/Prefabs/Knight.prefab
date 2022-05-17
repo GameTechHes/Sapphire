@@ -294,7 +294,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
   objectsToDisable:
-  - {fileID: 0}
   - {fileID: 5813024366959105168}
   - {fileID: 3749913773585745855}
   - {fileID: 6095503136088812906}
@@ -1297,12 +1296,9 @@ MonoBehaviour:
   initialAngleCorrector: 4.3
   projectile: {fileID: 5400317181062787718, guid: 0c45fedb57319184a81a55d65f3e3804, type: 3}
   launchStart: {fileID: 1714940349}
-  ammoCount: 1000
   timeBetweenShots: 1
-  launchVelocity: 150
   projectileLifetime: 5
-  ammoText: {fileID: 0}
-  crosshair: {fileID: 0}
+  _ammoCount: 0
 --- !u!114 &2219702348305879888
 MonoBehaviour:
   m_ObjectHideFlags: 0
