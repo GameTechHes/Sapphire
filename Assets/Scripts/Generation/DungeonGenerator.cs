@@ -31,7 +31,7 @@ namespace Generation
             * We can do this because the RuntimeBaker script is executed before
             * So we are sure that bake is initialized
             */
-            // bake.BakeAll();
+            bake.BakeAll();
         }
 
         private void InstantiateRoom(Room roomPrefab, int x, int y)
