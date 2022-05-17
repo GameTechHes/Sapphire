@@ -31,6 +31,8 @@ namespace AI
         void Update()
         {
             if (!GetComponent<NavMeshAgent>().enabled) return;
+            
+            animator.SetFloat("animationBlend", agent.velocity.magnitude);
             if (agent.remainingDistance - agent.stoppingDistance < 100 && !animator.GetBool("die")) //0.1
             {
                 if (animator.GetBool("walking")) animator.SetBool("walking", false);
@@ -60,7 +62,8 @@ namespace AI
 
         public void SetNewDestination(Vector3 dest)
         {
-            if (NavMesh.SamplePosition(dest, out var navHit, wanderRadius, NavMesh.AllAreas))
+            if ( animator.GetBool("die")) return;
+            if (NavMesh.SamplePosition(dest, out var navHit, wanderRadius, NavMesh.AllAreas) )
             {
                 Vector3 newPos = navHit.position;
                 if (!animator.GetBool("playerDetected"))
@@ -81,8 +84,8 @@ namespace AI
 
         public void SetAgentSpeed(float speed)
         {
-            animator.SetFloat("animationBlend", speed);
             agent.speed = speed;
+
         }
 
         public void ResetCurrentPath()

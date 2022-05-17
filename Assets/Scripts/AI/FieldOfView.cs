@@ -17,6 +17,7 @@ namespace AI
 
         public GameObject dieEffet;
         private bool playeffet;
+        private bool isDead = false;
 
         enum BotState
         {
@@ -75,7 +76,7 @@ namespace AI
         void Update()
         {
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius);
-
+            if(isDead) return;
             switch (state)
             {
                 case BotState.Idle:
@@ -159,6 +160,7 @@ namespace AI
         {
             if (other.gameObject.CompareTag("Arrow"))
             {
+                isDead = true;
                 Debug.Log("Toucher");
                 bot.ResetCurrentPath();
                 animator.SetBool("attack", false);
