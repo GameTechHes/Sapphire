@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 {
+    public NetworkPrefabRef botPrefab;
     private NetworkRunner _runner;
     private StarterAssetsInputs _starterAssetsInputs;
     private ConnectionStatus _status;
@@ -184,6 +185,10 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnSceneLoadStart(NetworkRunner runner)
     {
+    }
+
+    public void SpawnABotPlease(Vector3 pos, Quaternion rot){
+        _runner.Spawn(botPrefab, pos, rot);
     }
 }
 

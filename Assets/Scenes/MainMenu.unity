@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731707, g: 0.13414726, b: 0.12107857, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2116,7 +2116,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -3142,6 +3142,8 @@ MonoBehaviour:
   _username: {fileID: 757657716}
   _playerPrefab: {fileID: 1146978748254554189, guid: e42f7a335ef318c42a5f80fbcfa0ce76, type: 3}
   _menuCamera: {fileID: 1766210410}
+  botPrefab:
+    RawGuidValue: f8d61b92649bad15991a448eb0eedbc8
 --- !u!4 &915230575
 Transform:
   m_ObjectHideFlags: 0
