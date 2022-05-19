@@ -9,7 +9,8 @@ namespace Minimap
     public class MiniMapInputHandler : MonoBehaviour, IPointerClickHandler, IScrollHandler
     {
         public Camera minicam;
-        public GameObject myPrefab;
+        // public GameObject myPrefab;
+        private NetworkManager nm;
         private const float ScrollMultiplier = 0.2f;
 
         private void Update()
@@ -19,7 +20,14 @@ namespace Minimap
                 minicam = Player.Local.GetMinimapCamera();
             }
         }
-
+        /// <summary>
+        /// Start is called on the frame when a script is enabled just before
+        /// any of the Update methods is called the first time.
+        /// </summary>
+        void Start()
+        {
+            nm = FindObjectOfType<NetworkManager>();
+        }
         public void OnScroll(PointerEventData eventData)
         {
             if (minicam != null)
@@ -85,7 +93,7 @@ namespace Minimap
 
                     if (miniMapHit.collider.GetComponent<SpawnArea>() != null)
                     {
-                        Instantiate(myPrefab, miniMapHit.collider.transform.position, Quaternion.identity);
+                        nm.SpawnABotPlease(miniMapHit.collider.transform.position, Quaternion.identity);
                     }
                 }
             }

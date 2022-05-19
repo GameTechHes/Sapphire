@@ -18,6 +18,7 @@ public class GameLauncher : MonoBehaviour
     [SerializeField] private TMP_InputField _username;
     [SerializeField] private Player _playerPrefab;
     [SerializeField] private Camera _menuCamera;
+    [SerializeField] private NetworkPrefabRef botPrefab;
 
     private GameMode _gameMode;
     private NetworkManager.ConnectionStatus _status = NetworkManager.ConnectionStatus.Disconnected;
@@ -59,6 +60,7 @@ public class GameLauncher : MonoBehaviour
         if (networkManager == null)
         {
             networkManager = new GameObject("NetworkManager").AddComponent<NetworkManager>();
+            networkManager.botPrefab = botPrefab;
         }
 
         LevelManager levelManager = FindObjectOfType<LevelManager>();

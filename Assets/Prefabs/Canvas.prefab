@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1558428878022611705}
   - component: {fileID: 752493914155658133}
   - component: {fileID: 8651523180011290543}
+  - component: {fileID: 8943827134720372126}
   m_Layer: 5
   m_Name: MiniCameraUI
   m_TagString: Untagged
@@ -87,6 +88,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minicam: {fileID: 0}
   myPrefab: {fileID: 4382585901459117726, guid: f8d61b92649bad15991a448eb0eedbc8, type: 3}
+--- !u!114 &8943827134720372126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1050896501810824772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectInterest: 0
+  DefaultInterestGroups: []
+  DestroyWhenStateAuthorityLeaves: 0
+  AllowStateAuthorityOverride: 0
+  AoiPositionSource: {fileID: 0}
+  Flags: 0
+  NetworkGuid:
+    RawGuidValue: 00000000000000000000000000000000
+  NestedObjects: []
+  NetworkedBehaviours: []
+  SimulationBehaviours: []
 --- !u!1 &1066234437360031624
 GameObject:
   m_ObjectHideFlags: 0
