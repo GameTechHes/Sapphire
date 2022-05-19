@@ -12,15 +12,15 @@ namespace Sapphire
         public Arrow projectile;
         public GameObject launchStart;
         public int timeBetweenShots = 1;
-        public float projectileLifetime = 1000.0f;
 
         [Networked] public int ammoCount { get; set; }
-        [Networked] private bool _canShoot { get; set; }
+        [Networked] private NetworkBool _canShoot { get; set; }
 
         private Text _ammoText;
         private GameObject _crosshair;
         private AudioManager _audioManager;
         private Camera _mainCamera;
+        private Quaternion _launchRotation;
 
         private void Awake()
         {
@@ -49,7 +49,8 @@ namespace Sapphire
                 {
                     if (_canShoot && ammoCount > 0)
                     {
-                        _audioManager.Play("ShootingBow");
+                        if (Object.HasInputAuthority)
+                            _audioManager.Play("ShootingBow");
                         _canShoot = false;
                         AddAmmo(-1);
                         StartCoroutine(Fire());
@@ -65,16 +66,20 @@ namespace Sapphire
 
         IEnumerator Fire()
         {
-            // TODO: use RPC and Runner.Spawn
-            Quaternion rotation = launchStart.transform.rotation * Quaternion.Euler(new Vector3(0, 180, 0)) *
+            Quaternion rotation = _launchRotation * Quaternion.Euler(new Vector3(0, 180, 0)) *
                                   Quaternion.Euler(initialAngleCorrector, 0.5f, 0);
-            var ball = Runner.Spawn(projectile, launchStart.transform.position,
-                rotation);
-            Destroy(ball, projectileLifetime);
+            Runner.Spawn(projectile, launchStart.transform.position, rotation,
+                Object.InputAuthority, (runner, obj) => { obj.GetComponent<Arrow>().InitNetworkState(); });
+
             yield return new WaitForSeconds(timeBetweenShots);
 
-            // TODO: use RPC to update networked value
-            _canShoot = true;
+            RPC_SetCanShoot(true);
+        }
+
+        [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+        private void RPC_SetCanShoot(NetworkBool canShoot)
+        {
+            _canShoot = canShoot;
         }
 
         public void AddAmmo(int amount)
@@ -89,18 +94,18 @@ namespace Sapphire
             if (Object.HasInputAuthority)
             {
                 var worldPos = _mainCamera.ScreenToWorldPoint(_crosshair.transform.position);
-
+                
                 if (Physics.Raycast(worldPos, _mainCamera.transform.forward, out var hit, 100.0f))
                 {
                     var target = hit.point;
                     var direction = (target - launchStart.transform.position).normalized;
                     var rotation = Quaternion.LookRotation(direction);
-                    launchStart.transform.rotation = rotation;
+                    _launchRotation = rotation;
                 }
                 else
                 {
                     var rotation = Quaternion.LookRotation(_mainCamera.transform.forward);
-                    launchStart.transform.rotation = rotation;
+                    _launchRotation = rotation;
                 }
             }
         }

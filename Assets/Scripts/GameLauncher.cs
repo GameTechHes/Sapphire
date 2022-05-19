@@ -98,42 +98,6 @@ public class GameLauncher : MonoBehaviour
         _status = status;
     }
 
-    private void UpdateUI()
-    {
-        var menu = false;
-        var loading = false;
-        var running = false;
-
-        switch (_status)
-        {
-            case NetworkManager.ConnectionStatus.Disconnected:
-                menu = true;
-                break;
-            case NetworkManager.ConnectionStatus.Connecting:
-                loading = true;
-                break;
-            case NetworkManager.ConnectionStatus.Failed:
-                menu = true;
-                break;
-            case NetworkManager.ConnectionStatus.Connected:
-                loading = true;
-                break;
-            case NetworkManager.ConnectionStatus.Loading:
-                loading = true;
-                break;
-            case NetworkManager.ConnectionStatus.Loaded:
-                running = true;
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
-
-        _loadingPanel.gameObject.SetActive(loading);
-        _lobbyPanel.gameObject.SetActive(running);
-        _backgroundPanel.gameObject.SetActive(!running);
-        _menuCamera.gameObject.SetActive(!running);
-    }
-
     private void OnSpawnWorld(NetworkRunner runner)
     {
         Debug.Log("Spawning GameManager");
