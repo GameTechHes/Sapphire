@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731707, g: 0.13414726, b: 0.12107857, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3140,7 +3140,7 @@ MonoBehaviour:
   _loadingPanel: {fileID: 1944354375}
   _room: {fileID: 1979088349}
   _username: {fileID: 757657716}
-  _playerPrefab: {fileID: 1146978748254554189, guid: e42f7a335ef318c42a5f80fbcfa0ce76, type: 3}
+  _playerPrefab: {fileID: 8110207729028579357, guid: 28ca0d0261d819d48a838b4875c9deb6, type: 3}
   _menuCamera: {fileID: 1766210410}
   botPrefab:
     RawGuidValue: f8d61b92649bad15991a448eb0eedbc8

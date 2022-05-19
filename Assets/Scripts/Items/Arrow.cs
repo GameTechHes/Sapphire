@@ -55,7 +55,7 @@ namespace Items
                 RPC_DespawnArrow();
         }
 
-        [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+        [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
         private void RPC_DespawnArrow()
         {
             Runner.Despawn(Object);
