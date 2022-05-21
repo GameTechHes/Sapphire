@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace AI
+namespace Sapphire
 {
     public class Bot : MonoBehaviour
     {
