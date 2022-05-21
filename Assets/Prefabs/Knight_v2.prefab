@@ -1402,6 +1402,7 @@ MonoBehaviour:
   - {fileID: 7737952414579781239}
   - {fileID: 2792364222655270401}
   - {fileID: 2641441636702353594}
+  - {fileID: 4207979064920824855}
   SimulationBehaviours: []
 --- !u!95 &4181644003070432228
 Animator:
@@ -1563,12 +1564,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7468045054430040868}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 27dffa7ecfcfdfa98b457b2b8ed0b17f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sapphireText: {fileID: 0}
+  _interpolationDataSource: 0
 --- !u!114 &8543625489996345468
 MonoBehaviour:
   m_ObjectHideFlags: 0
