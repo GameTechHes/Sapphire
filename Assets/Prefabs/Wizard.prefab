@@ -636,6 +636,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4463868907105534}
   - component: {fileID: 95538263452871118}
+  - component: {fileID: 5532057873847908827}
   - component: {fileID: 136306802490482818}
   - component: {fileID: 306872425011100814}
   - component: {fileID: 209246321779910492}
@@ -691,6 +692,35 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &5532057873847908827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1248815240492774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 506319458, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  Animator: {fileID: 95538263452871118}
+  SyncSettings: 79
+  FloatAccuracy:
+    _value: 0.001
+    _inverse: 999.99994
+    _hash: -814817977
+  TimeAccuracy:
+    _value: 0.0001
+    _inverse: 10000
+    _hash: 1061325578
+  WeightAccuracy:
+    _value: 0.001
+    _inverse: 999.99994
+    _hash: -814817977
+  StateHashes: 00000000ef69cc689265f3a3
+  TriggerHashes: 00000000
 --- !u!136 &136306802490482818
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -742,7 +772,7 @@ MonoBehaviour:
     RawGuidValue: 28ca0d0261d819d48a838b4875c9deb6
   NestedObjects: []
   NetworkedBehaviours:
-  - {fileID: 306872425011100814}
+  - {fileID: 5532057873847908827}
   - {fileID: 7547794475521165770}
   - {fileID: 8110207729028579357}
   - {fileID: -5783933301469443899}
@@ -827,6 +857,8 @@ MonoBehaviour:
   objectsToDisable:
   - {fileID: 8084699466401460649}
   - {fileID: 988458753318457185}
+  - {fileID: 6583716411587962126}
+  - {fileID: 8281484588912600389}
   minimapCamera: {fileID: 2041774897894400625}
   _Username: 
   _PlayerType: 1

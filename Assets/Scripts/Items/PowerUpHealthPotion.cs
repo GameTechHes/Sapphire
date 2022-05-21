@@ -1,20 +1,18 @@
+using Items;
 using Sapphire;
-using UnityEngine;
 
-public class PowerUpHealthPotion : MonoBehaviour
+public class PowerUpHealthPotion : PowerUpBase
 {
-    void OnTriggerEnter(Collider collider)
+    protected override void ApplyEffects(Player player)
     {
-        if (collider.gameObject.CompareTag("Player"))
-        {
-            int playerhealth = collider.gameObject.GetComponent<Knight>().GetPlayerHealth();
-
-            if (playerhealth != 100)
-            {
-                collider.gameObject.GetComponent<Knight>().SetPlayerHealth(playerhealth + 25);
-                Destroy(gameObject);
-            }
-        }
+        // int playerhealth = obj.gameObject.GetComponent<Knight>().GetPlayerHealth();
+        //
+        // if (playerhealth != 100)
+        // {
+        //     obj.gameObject.GetComponent<Knight>().SetPlayerHealth(playerhealth + 25);
+        //     Runner.Despawn(Object);
+        // }
+        if(Object != null && Object.IsValid)
+            Runner.Despawn(Object);
     }
-
 }

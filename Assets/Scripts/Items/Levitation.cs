@@ -26,7 +26,6 @@ namespace Items
                 levitate = true;
         }
 
-        // Update is called once per frame
         void Update()
         {
             // Spin object around Y-Axis

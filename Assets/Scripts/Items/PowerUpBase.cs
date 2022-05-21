@@ -1,17 +1,21 @@
+using System;
+using Fusion;
+using Sapphire;
 using UnityEngine;
 
 namespace Items
 {
-    /**
-     * TODO: Delete this class if player armature not used
-     */
-    public class PowerUpBase : MonoBehaviour
+    public abstract class PowerUpBase : NetworkBehaviour
     {
-        private GameObject _playerArmature;
-        
-        void Start()
+        private void OnTriggerEnter(Collider other)
         {
-            _playerArmature = GameObject.Find("PlayerArmature");
+            if (other.CompareTag("Player"))
+            {
+                var player = other.GetComponent<Player>();
+                ApplyEffects(player);
+            }
         }
+
+        protected abstract void ApplyEffects(Player player);
     }
 }

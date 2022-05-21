@@ -13,7 +13,7 @@ namespace AI
     {
         private NavMeshSurface surface;
 
-        void Start()
+        private void Awake()
         {
             surface = GetComponent<NavMeshSurface>();
         }

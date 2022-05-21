@@ -14,6 +14,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     private Action<NetworkRunner, ConnectionStatus, string> _connectionStatusChangeCallback;
     private Action<NetworkRunner> _spawnWorldCallback;
+    private Action<NetworkRunner> _onSceneLoadDone;
     private Action<NetworkRunner, PlayerRef> _spawnPlayerCallback;
     private Action<NetworkRunner, PlayerRef> _despawnPlayerCallback;
 
@@ -38,12 +39,15 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         Action<NetworkRunner, ConnectionStatus, string> onConnectStatusChange,
         Action<NetworkRunner> onSpawnWorld,
         Action<NetworkRunner, PlayerRef> onSpawnPlayer,
-        Action<NetworkRunner, PlayerRef> onDespawnPlayer)
+        Action<NetworkRunner, PlayerRef> onDespawnPlayer,
+        Action<NetworkRunner> onSceneLoadDone
+        )
     {
         _connectionStatusChangeCallback = onConnectStatusChange;
         _spawnWorldCallback = onSpawnWorld;
         _spawnPlayerCallback = onSpawnPlayer;
         _despawnPlayerCallback = onDespawnPlayer;
+        _onSceneLoadDone = onSceneLoadDone;
 
         SetConnectionStatus(ConnectionStatus.Connecting, "");
 
@@ -181,6 +185,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnSceneLoadDone(NetworkRunner runner)
     {
+        _onSceneLoadDone(runner);
     }
 
     public void OnSceneLoadStart(NetworkRunner runner)
