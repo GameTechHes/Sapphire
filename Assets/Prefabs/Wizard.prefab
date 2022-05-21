@@ -719,7 +719,7 @@ MonoBehaviour:
     _value: 0.001
     _inverse: 999.99994
     _hash: -814817977
-  StateHashes: 00000000ef69cc689265f3a3
+  StateHashes: 00000000ef69cc689265f3a3525d0957d67edfb818d695eb9cf54304b1afdc305a6c54cd
   TriggerHashes: 00000000
 --- !u!136 &136306802490482818
 CapsuleCollider:
@@ -748,7 +748,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
-  fireball: {fileID: 100004, guid: 6836f5eaa96f845c4ac0909f84272556, type: 3}
+  fireball: {fileID: 2689184236050669419, guid: 6836f5eaa96f845c4ac0909f84272556, type: 3}
   launchStart: {fileID: 4067782370591337463}
 --- !u!114 &209246321779910492
 MonoBehaviour:
@@ -773,6 +773,7 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 5532057873847908827}
+  - {fileID: 306872425011100814}
   - {fileID: 7547794475521165770}
   - {fileID: 8110207729028579357}
   - {fileID: -5783933301469443899}

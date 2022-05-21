@@ -18,6 +18,7 @@ public class ShootFireball : NetworkBehaviour
          if (GetInput(out NetworkInputData input))
             {
                  if (input.shoot){
+                     Debug.Log("CLICKED");
                      Attack();
                  }
             }
