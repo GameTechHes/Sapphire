@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Cinemachine;
 using Fusion;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -13,7 +14,7 @@ namespace Sapphire
         WIZARD
     }
 
-    public class Player : NetworkBehaviour
+    public abstract class Player : NetworkBehaviour
     {
         
         [SerializeField] private GameObject[] objectsToDisable;
@@ -22,25 +23,42 @@ namespace Sapphire
         [Networked] public string Username { get; set; }
         [Networked] public PlayerType PlayerType { get; set; }
         [Networked] public NetworkBool IsReady { get; set; }
+        [Networked] public int Health { get; set; }
+        
+        public const byte MaxHealth = 100;
 
         private float _respawnInSeconds = -1;
+
+        private HealthBar _healthBar;
         
+        public Transform cameraRoot;
+        private CinemachineVirtualCamera _followCamera;
+        protected Animator _controller;
+        protected float _cameraDistance = 4.0f;
+        protected Cinemachine3rdPersonFollow _cinemachine3RdPersonFollow;
 
         public static Action<Player> PlayerJoined;
         public static Action<Player> PlayerLeft;
-
-        public int PlayerID { get; private set; }
 
         public static readonly List<Player> Players = new List<Player>();
         public static Player Local;
 
         public override void Spawned()
         {
-            PlayerID = Object.InputAuthority;
+            Health = MaxHealth;
+            
+            _controller = GetComponent<Animator>();
+            
             if (Object.HasInputAuthority)
             {
                 Local = this;
                 RPC_SetPlayerStats(ClientInfo.Username);
+                _healthBar = FindObjectOfType<HealthBar>();
+                _healthBar.SetMaxHealth(MaxHealth);
+                _healthBar.SetProgress(Health);
+                _followCamera = FindObjectOfType<CinemachineVirtualCamera>();
+                _followCamera.Follow = cameraRoot;
+                _cinemachine3RdPersonFollow = _followCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
             }
 
             Players.Add(this);
