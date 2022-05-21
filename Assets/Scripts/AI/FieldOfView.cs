@@ -22,6 +22,12 @@ public class FieldOfView : NetworkBehaviour
 
     private Text SbireText;
 
+    private float wanderTimer;
+    private float timer;
+
+    [SerializeField] private float wanderRadius;
+    [SerializeField] private float maxWanderTimer;
+    [SerializeField] private float minWanderTimer;
     enum BotState
     {
         Idle,
@@ -78,7 +84,7 @@ public class FieldOfView : NetworkBehaviour
         return false;
     }
 
-    void Update()
+    public override void FixedUpdateNetwork()
     {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius);
         if (isDead) return;
@@ -87,7 +93,6 @@ public class FieldOfView : NetworkBehaviour
             case BotState.Idle:
                 bot.SetAgentSpeed(2);
                 animator.SetBool("attack", false);
-                animator.SetBool("playerDetected", false);
 
                 foreach (var hitCollider in hitColliders)
                 {
@@ -98,21 +103,26 @@ public class FieldOfView : NetworkBehaviour
                         Vector3 directionIdle = playerOnFocus.transform.position - transform.position;
                         if (IsInViewAngle(directionIdle) && IsInRaycast(directionIdle))
                         {
-                            animator.SetBool("playerDetected", true);
                             bot.ResetCurrentPath(); // Just in case something is going wrong
                             bot.SetNewDestination(playerOnFocus.transform.position);
                             time = 0;
                             state = BotState.Focus;
+                            break;
                         }
                     }
                 }
-
+                //No valid target --> Just chilling
+                timer += Time.deltaTime;
+                if (timer >= wanderTimer)
+                {
+                    Vector3 randDirection = Random.insideUnitSphere * wanderRadius;
+                    randDirection += transform.position;
+                    bot.SetNewDestination(randDirection);
+                }
                 break;
 
             case BotState.Focus:
                 Vector3 direction = playerOnFocus.transform.position - transform.position;
-                animator.SetBool("walking", false);
-                animator.SetBool("playerDetected", true);
                 bot.SetAgentSpeed(4);
                 if (direction.magnitude <= playerRange)
                 {
@@ -138,11 +148,9 @@ public class FieldOfView : NetworkBehaviour
 
                 break;
             case BotState.Attacking:
-                animator.SetBool("attack", true);
                 Vector3 directionAttack = playerOnFocus.transform.position - transform.position;
                 if (directionAttack.magnitude > playerRange)
                 {
-                    animator.SetBool("attack", false);
                     state = BotState.Idle;
                     break;
                 }
@@ -151,7 +159,12 @@ public class FieldOfView : NetworkBehaviour
                 {
                     state = BotState.Idle;
                 }
-
+                if(bot.canShoot) {
+                    animator.SetBool("attack", true);
+                }else{
+                    animator.SetBool("attack", false);
+                }
+                bot.Attack();
                 Quaternion rot = Quaternion.LookRotation(directionAttack);
                 transform.rotation = Quaternion.Slerp(transform.rotation, rot, 0.8f);
                 break;
@@ -170,8 +183,6 @@ public class FieldOfView : NetworkBehaviour
             Debug.Log("Toucher");
             bot.ResetCurrentPath();
             animator.SetBool("attack", false);
-            animator.SetBool("playerDetected", false);
-            animator.SetBool("walking", false);
             animator.SetBool("die", true);
             Destroy(this.gameObject, animator.GetCurrentAnimatorStateInfo(0).length + animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
             Invoke("spawnEffet", 1.0f);

@@ -11,7 +11,7 @@ public class Bot : NetworkBehaviour
 
     [SerializeField] private FireBall fireball;
     [SerializeField] private GameObject launchStart;
-    private bool _canShoot = true;
+    public bool canShoot = true;
 
     private Animator animator;
 
@@ -32,31 +32,7 @@ public class Bot : NetworkBehaviour
         if (!GetComponent<NavMeshAgent>().enabled) return;
 
         animator.SetFloat("animationBlend", agent.velocity.magnitude);
-        if (agent.remainingDistance - agent.stoppingDistance < 100 && !animator.GetBool("die")) //0.1
-        {
-            if (animator.GetBool("walking")) animator.SetBool("walking", false);
-            if (animator.GetBool("playerDetected")) animator.SetBool("playerDetected", false);
-
-            if (!animator.GetBool("attack"))
-            {
-
-                timer += Time.deltaTime;
-                if (timer >= wanderTimer)
-                {
-                    Vector3 randDirection = Random.insideUnitSphere * wanderRadius;
-                    randDirection += transform.position;
-                    SetNewDestination(randDirection);
-                }
-            }
-            else
-            {
-                Attack();
-            }
-        }
-        else
-        {
-            timer = 0;
-        }
+       
     }
 
     public void SetNewDestination(Vector3 dest)
@@ -65,16 +41,6 @@ public class Bot : NetworkBehaviour
         if (NavMesh.SamplePosition(dest, out var navHit, wanderRadius, NavMesh.AllAreas))
         {
             Vector3 newPos = navHit.position;
-            if (!animator.GetBool("playerDetected"))
-            {
-                animator.SetBool("walking", true);
-            }
-            else
-            {
-                animator.SetBool("walking", false);
-                Attack();
-            }
-
             agent.SetDestination(newPos);
             timer = 0;
             wanderTimer = Random.Range(minWanderTimer, maxWanderTimer);
@@ -96,21 +62,23 @@ public class Bot : NetworkBehaviour
 
     public void Attack()
     {
-        if (_canShoot)
+        if (canShoot)
         {
             StartCoroutine(SendSpell());
-            _canShoot = false;
+            canShoot = false;
+            animator.SetBool("attack", true);
+
         }
     }
     IEnumerator SendSpell()
     {
-
+        yield return new WaitForSeconds(0.5f); //just to sync with animation
         FireBall fb = Runner.Spawn(fireball, launchStart.transform.position, transform.rotation);
         Rigidbody rb = fb.GetComponent<Rigidbody>();
         rb.velocity = transform.forward * 20;
 
         yield return new WaitForSeconds(3);
-        _canShoot = true;
+        canShoot = true;
         yield return new WaitForSeconds(2);
         fb.RPC_DespawnArrow();
     }
