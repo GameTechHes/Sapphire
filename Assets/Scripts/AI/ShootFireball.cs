@@ -34,10 +34,11 @@ public class ShootFireball : NetworkBehaviour
         }
     }
     IEnumerator SendSpell()
-    {
-        FireBall fb = Runner.Spawn(fireball, launchStart.transform.position, launchStart.transform.rotation);
+    {   
+
+        FireBall fb = Runner.Spawn(fireball, launchStart.transform.position, transform.rotation);
         Rigidbody rb = fb.GetComponent<Rigidbody>();
-        rb.velocity = launchStart.transform.forward * 20;
+        rb.velocity = transform.forward * 20;
 
         yield return new WaitForSeconds(3);
         _canShoot = true;
