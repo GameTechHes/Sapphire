@@ -4737,6 +4737,8 @@ GameObject:
   - component: {fileID: 2088797492032120480}
   - component: {fileID: -4349668034521497329}
   - component: {fileID: 2689184236050669419}
+  - component: {fileID: 7343848371770492352}
+  - component: {fileID: 5820747553987393777}
   m_Layer: 0
   m_Name: frameBall
   m_TagString: Spell
@@ -9584,7 +9586,59 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38585240604756a469f16bec44d5bda9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
   explosionEffet: {fileID: 100004, guid: a89abc0d2591545288f4c041059ae633, type: 3}
+--- !u!114 &7343848371770492352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectInterest: 0
+  DefaultInterestGroups: []
+  DestroyWhenStateAuthorityLeaves: 0
+  AllowStateAuthorityOverride: 0
+  AoiPositionSource: {fileID: 0}
+  Flags: 2305
+  NetworkGuid:
+    RawGuidValue: 6836f5eaa96f845c4ac0909f84272556
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 2689184236050669419}
+  - {fileID: 5820747553987393777}
+  SimulationBehaviours: []
+--- !u!114 &5820747553987393777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  InterpolationSpace: 0
+  InterpolationTarget: {fileID: 400004}
+  InterpolateErrorCorrection: 1
+  InterpolatedErrorCorrectionSettings:
+    MinRate: 3.3
+    MaxRate: 10
+    PosBlendStart: 0.25
+    PosBlendEnd: 1
+    PosMinCorrection: 0.025
+    PosTeleportDistance: 2
+    RotBlendStart: 0.1
+    RotBlendEnd: 0.5
+    RotTeleportRadians: 1.5
 --- !u!1 &100006
 GameObject:
   m_ObjectHideFlags: 0

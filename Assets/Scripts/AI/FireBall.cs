@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
 
-public class FireBall : MonoBehaviour
+public class FireBall : NetworkBehaviour
 {
     public GameObject explosionEffet;
 
@@ -14,5 +15,9 @@ public class FireBall : MonoBehaviour
         Destroy(obj, 1);
 
     }
-
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    public void RPC_DespawnArrow()
+    {
+        Runner.Despawn(Object);
+    }
 }
