@@ -1,11 +1,12 @@
 using Fusion;
 using UnityEngine;
-
+using Sapphire;
 namespace Items
 {
     public class Arrow : NetworkBehaviour
     {
         private const float InitialSpeed = 35;
+        public const int damage = 10;
 
         const float G = 9.81f;
         [Networked] private Vector3 velocity { get; set; }
@@ -50,8 +51,13 @@ namespace Items
 
         private void OnTriggerEnter(Collider other)
         {
-            var netOjb = other.gameObject.GetComponent<NetworkObject>();
+            GameObject go = other.gameObject;
+            var netOjb = go.GetComponent<NetworkObject>();
             if (netOjb != null && netOjb.InputAuthority != Object.InputAuthority)
+                if(go.CompareTag("Player")){
+                    Player player = go.GetComponent<Player>();
+                    player.SetHealth(player.Health - damage);
+                }
                 RPC_DespawnArrow();
         }
 

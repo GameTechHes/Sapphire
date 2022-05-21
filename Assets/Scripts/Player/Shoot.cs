@@ -66,7 +66,7 @@ namespace Sapphire
 
         IEnumerator Fire()
         {
-            Quaternion rotation = _launchRotation * Quaternion.Euler(new Vector3(0, 180, 0)) *
+            Quaternion rotation = transform.rotation * Quaternion.Euler(new Vector3(0, 180, 0)) *
                                   Quaternion.Euler(initialAngleCorrector, 0.5f, 0);
             Runner.Spawn(projectile, launchStart.transform.position, rotation,
                 Object.InputAuthority, (runner, obj) => { obj.GetComponent<Arrow>().InitNetworkState(); });

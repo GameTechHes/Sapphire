@@ -6,11 +6,19 @@ using Sapphire;
 public class FireBall : NetworkBehaviour
 {
     public GameObject explosionEffet;
+    public int damage = 10;
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player") ){
-            if(other.gameObject.GetComponent<Player>().PlayerType == PlayerType.WIZARD){
+        if (other.CompareTag("Player"))
+        {
+            if (other.gameObject.GetComponent<Player>().PlayerType == PlayerType.KNIGHT)
+            {
+                Player player = other.gameObject.GetComponent<Player>();
+                player.SetHealth(player.Health - damage);
+            }
+            else
+            {
                 return;
             }
         }

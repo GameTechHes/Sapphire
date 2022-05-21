@@ -22,6 +22,8 @@ public class GameLauncher : MonoBehaviour
     [SerializeField] private Camera _menuCamera;
     [SerializeField] private NetworkPrefabRef botPrefab;
     [SerializeField] private DungeonGenerator _dungeonGenerator;
+
+    public bool debugSpawnKnightFirst = false;
     bool isWizzardAlreadySpawn = false;
     private GameMode _gameMode;
     private NetworkManager.ConnectionStatus _status = NetworkManager.ConnectionStatus.Disconnected;
@@ -128,13 +130,21 @@ public class GameLauncher : MonoBehaviour
         var type = GameManager.instance.AssignRole(playerref);
         if (isWizzardAlreadySpawn)
         {
+            if (debugSpawnKnightFirst){
+                runner.Spawn(_playerWizzardPrefab, Vector3.zero, Quaternion.identity, playerref, InitNetworkState);
+            }else{
+                runner.Spawn(_playerKnightPrefab, Vector3.zero, Quaternion.identity, playerref, InitNetworkState);
 
-            runner.Spawn(_playerKnightPrefab, Vector3.zero, Quaternion.identity, playerref, InitNetworkState);
+            }
         }
         else
         {
-            runner.Spawn(_playerWizzardPrefab, Vector3.zero, Quaternion.identity, playerref, InitNetworkState);
-            isWizzardAlreadySpawn = true;
+            if (debugSpawnKnightFirst){
+                runner.Spawn(_playerKnightPrefab, Vector3.zero, Quaternion.identity, playerref, InitNetworkState);
+            }else{
+                runner.Spawn(_playerWizzardPrefab, Vector3.zero, Quaternion.identity, playerref, InitNetworkState);
+                isWizzardAlreadySpawn = true;
+            }
         }
 
         void InitNetworkState(NetworkRunner runner, NetworkObject networkObject)

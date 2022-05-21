@@ -179,5 +179,9 @@ namespace Sapphire
         {
             return minimapCamera;
         }
+        public void SetHealth(int newHealth){
+            Health = newHealth;
+            _healthBar.SetProgress(Health);
+        }
     }
 }
