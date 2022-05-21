@@ -1,18 +1,15 @@
 using Sapphire;
-using UnityEngine;
 
 namespace Items
 {
     public class PowerUpSapphire : PowerUpBase
     {
-        void OnTriggerEnter(Collider collider)
+        protected override void ApplyEffects(Player player)
         {
-            if (collider.gameObject.CompareTag("Player"))
-            {
-                collider.gameObject.GetComponent<SapphireController>().AddSapphire();
-                FindObjectOfType<AudioManager>().Play("CollectingSapphire");
-                Destroy(gameObject);
-            }
+            // player.GetComponent<SapphireController>().AddSapphire();
+            FindObjectOfType<AudioManager>().Play("CollectingSapphire");
+            if(Object != null && Object.IsValid)
+                Runner.Despawn(Object);
         }
     }
 }

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AI;
 using Fusion;
+using Items;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -13,6 +14,8 @@ namespace Generation
         public List<Room> roomPrefabs;
 
         public Corridor corridorPrefab;
+
+        public BonusSpawner _bonusSpawner;
 
         [FormerlySerializedAs("totalRoomCount")]
         public int maxRooms;
@@ -38,6 +41,12 @@ namespace Generation
             */
             var bake = GetComponent<RuntimeBaker>();
             bake.BakeAll();
+
+            /***
+             * Create bonus spawner after the map is generated
+             */
+            if (Object.HasStateAuthority)
+                Runner.Spawn(_bonusSpawner);
         }
 
         private void InstantiateRoom(Room roomPrefab, int x, int y)

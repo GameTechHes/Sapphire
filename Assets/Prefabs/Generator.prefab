@@ -79,6 +79,7 @@ MonoBehaviour:
   - {fileID: 827034184, guid: 3a707cabc7c5d064a90d400219fe5e54, type: 3}
   - {fileID: 827034184, guid: 85ac603ee26a01f4697a0ac06ed0ff20, type: 3}
   corridorPrefab: {fileID: 2565459888925047785, guid: 8645ccc9152fb324d9460a716686fb9d, type: 3}
+  _bonusSpawner: {fileID: 1459775771690505321, guid: acf7339b8d2f7bb4ba712e3e54d6e88c, type: 3}
   maxRooms: 10
 --- !u!114 &867340613699898630
 MonoBehaviour:

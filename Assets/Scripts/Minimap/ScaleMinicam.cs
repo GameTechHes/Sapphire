@@ -9,14 +9,14 @@ namespace Minimap
         private float _distanceX;
         private float _distanceZ;
         private Camera _minicam;
-        private RectTransform _rectTransform;
+        // private RectTransform _rectTransform;
         private Quaternion _originalRotation;
 
         private void Awake()
         {
             _camUI = GameObject.Find("MiniCameraUI");
             _minicam = GetComponent<Camera>();
-            _rectTransform = _camUI.GetComponent<RectTransform>();
+            // _rectTransform = _camUI.GetComponent<RectTransform>();
         }
 
         void Start()
@@ -44,8 +44,8 @@ namespace Minimap
             }
             else
             {
-                var unitsPerPixel = _distanceX / _rectTransform.rect.width;
-                var desiredHalfHeight = 0.5f * unitsPerPixel * _rectTransform.rect.height;
+                // var unitsPerPixel = _distanceX / _rectTransform.rect.width;
+                // var desiredHalfHeight = 0.5f * unitsPerPixel * _rectTransform.rect.height;
                 _minicam.orthographicSize = 10;
             }
         }
