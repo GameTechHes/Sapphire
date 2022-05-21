@@ -10,7 +10,7 @@ public class FireBall : NetworkBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("Player") ){
-            if(other.gameObject.GetComponent<Player>().PlayerType == PlayerType.WIZARD){
+            if(other.gameObject.GetComponentInParent<Player>().PlayerType == PlayerType.WIZARD){
                 return;
             }
         }
