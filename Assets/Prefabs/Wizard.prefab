@@ -807,6 +807,8 @@ MonoBehaviour:
   objectsToDisable:
   - {fileID: 8084699466401460649}
   - {fileID: 988458753318457185}
+  - {fileID: 6583716411587962126}
+  - {fileID: 8281484588912600389}
   minimapCamera: {fileID: 2041774897894400625}
   _Username: 
   _PlayerType: 1

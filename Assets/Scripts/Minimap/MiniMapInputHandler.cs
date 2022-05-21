@@ -1,4 +1,3 @@
-using System;
 using Sapphire;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,7 +8,6 @@ namespace Minimap
     public class MiniMapInputHandler : MonoBehaviour, IPointerClickHandler, IScrollHandler
     {
         public Camera minicam;
-        // public GameObject myPrefab;
         private NetworkManager nm;
         private const float ScrollMultiplier = 0.2f;
 
@@ -20,14 +18,11 @@ namespace Minimap
                 minicam = Player.Local.GetMinimapCamera();
             }
         }
-        /// <summary>
-        /// Start is called on the frame when a script is enabled just before
-        /// any of the Update methods is called the first time.
-        /// </summary>
-        void Start()
+        private void Awake()
         {
             nm = FindObjectOfType<NetworkManager>();
         }
+        
         public void OnScroll(PointerEventData eventData)
         {
             if (minicam != null)
@@ -37,12 +32,12 @@ namespace Minimap
                 var scrollingUnit = ScrollMultiplier;
                 var scroll = eventData.scrollDelta.y;
                 
-                if (scroll > 0 ) //&& minicam.orthographicSize - scrollingUnit > minSize)
+                if (scroll < 0 ) //&& minicam.orthographicSize - scrollingUnit > minSize)
                 {
                     // Zoom out
                     scrollingUnit = ScrollMultiplier * minicam.orthographicSize;
                 }
-                else if (scroll < 0 ) // && minicam.orthographicSize + scrollingUnit < maxSize)
+                else if (scroll > 0 ) // && minicam.orthographicSize + scrollingUnit < maxSize)
                 {
                     // Zoom in
                     scrollingUnit = -ScrollMultiplier * (minicam.orthographicSize - minicam.orthographicSize * ScrollMultiplier);
