@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using AI;
+using Fusion;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace Generation
 {
-    public class DungeonGenerator : MonoBehaviour
+    public class DungeonGenerator : NetworkBehaviour
     {
         public Room centralRoomPrefab;
         public List<Room> roomPrefabs;
@@ -21,16 +22,21 @@ namespace Generation
 
         private readonly Dictionary<Vector2Int, Room> _rooms = new Dictionary<Vector2Int, Room>();
 
-
-        void Start()
+        [Networked] private int _randomSeed { get; set; }
+        
+        public override void Spawned()
         {
+            print($"Random seed: {_randomSeed}");
+            
+            Random.InitState(_randomSeed);
+            
             InstantiateRoom(centralRoomPrefab, 0, 0);
-            var bake = GetComponent<RuntimeBaker>();
-
+            
             /***
             * We can do this because the RuntimeBaker script is executed before
             * So we are sure that bake is initialized
             */
+            var bake = GetComponent<RuntimeBaker>();
             bake.BakeAll();
         }
 
@@ -127,6 +133,14 @@ namespace Generation
 
 
             return adjRooms;
+        }
+
+        /// <summary>
+        /// Only run on the server
+        /// </summary>
+        public void InitNetworkState()
+        {
+            _randomSeed = Random.Range(0, 1_000_000);
         }
     }
 }

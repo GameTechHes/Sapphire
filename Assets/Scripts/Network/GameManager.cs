@@ -1,5 +1,6 @@
 using System.Linq;
 using Fusion;
+using Generation;
 using Sapphire;
 
 public class GameManager : NetworkBehaviour
@@ -58,5 +59,10 @@ public class GameManager : NetworkBehaviour
 
         _knight = playerRef;
         return PlayerType.KNIGHT;
+    }
+
+    public void OnDungeonSceneLoaded()
+    {
+        
     }
 }

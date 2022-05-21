@@ -3144,6 +3144,7 @@ MonoBehaviour:
   _menuCamera: {fileID: 1766210410}
   botPrefab:
     RawGuidValue: f8d61b92649bad15991a448eb0eedbc8
+  _dungeonGenerator: {fileID: 867340613699898629, guid: 87417171b82cdbe45b9955898597b908, type: 3}
 --- !u!4 &915230575
 Transform:
   m_ObjectHideFlags: 0

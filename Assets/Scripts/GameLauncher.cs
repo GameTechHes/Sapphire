@@ -1,5 +1,6 @@
 using System;
 using Fusion;
+using Generation;
 using Sapphire;
 using TMPro;
 using UnityEngine;
@@ -19,10 +20,12 @@ public class GameLauncher : MonoBehaviour
     [SerializeField] private Player _playerPrefab;
     [SerializeField] private Camera _menuCamera;
     [SerializeField] private NetworkPrefabRef botPrefab;
+    [SerializeField] private DungeonGenerator _dungeonGenerator;
 
     private GameMode _gameMode;
     private NetworkManager.ConnectionStatus _status = NetworkManager.ConnectionStatus.Disconnected;
     private static GameLauncher _instance;
+    public static GameManager Gm;
 
     private void Awake()
     {
@@ -67,7 +70,7 @@ public class GameLauncher : MonoBehaviour
         levelManager.NetworkManager = networkManager;
 
         networkManager.StartGame(_gameMode, ClientInfo.LobbyName, levelManager, OnConnectionStatusUpdate, OnSpawnWorld,
-            OnSpawnPlayer, OnDespawnPlayer);
+            OnSpawnPlayer, OnDespawnPlayer, OnSceneLoadDone);
 
         _roomPanel.gameObject.SetActive(false);
     }
@@ -103,7 +106,7 @@ public class GameLauncher : MonoBehaviour
     private void OnSpawnWorld(NetworkRunner runner)
     {
         Debug.Log("Spawning GameManager");
-        runner.Spawn(_gameManagerPrefab, Vector3.zero, Quaternion.identity, null, InitNetworkState);
+        Gm = runner.Spawn(_gameManagerPrefab, Vector3.zero, Quaternion.identity, null, InitNetworkState);
 
         void InitNetworkState(NetworkRunner runner, NetworkObject world)
         {
@@ -138,5 +141,18 @@ public class GameLauncher : MonoBehaviour
         Debug.Log($"Despawning Player {playerref}");
         var player = Player.Get(playerref);
         player.TriggerDespawn();
+    }
+
+    private void OnSceneLoadDone(NetworkRunner runner)
+    {
+        if (runner.IsServer && runner.CurrentScene == 2)
+        {
+            Gm.OnDungeonSceneLoaded();
+
+            runner.Spawn(_dungeonGenerator, Vector3.zero, Quaternion.identity, runner.LocalPlayer, (networkRunner, obj) =>
+            {
+                obj.GetComponent<DungeonGenerator>().InitNetworkState();
+            });
+        }
     }
 }
