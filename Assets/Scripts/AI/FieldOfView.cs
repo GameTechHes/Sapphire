@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using Sapphire;
 
 public class FieldOfView : MonoBehaviour
@@ -18,6 +19,8 @@ public class FieldOfView : MonoBehaviour
     private bool playeffet;
     private bool isDead = false;
 
+    private Text SbireText;
+
     enum BotState
     {
         Idle,
@@ -36,6 +39,8 @@ public class FieldOfView : MonoBehaviour
         animator.SetBool("attack", false);
         animator.SetBool("playerDetected", false);
         if (viewAngle > 90) viewAngle = 90;
+
+        SbireText = GameObject.Find("SbiresCounter").GetComponent<Text>();
     }
 
     void OnDrawGizmosSelected()
@@ -172,6 +177,10 @@ public class FieldOfView : MonoBehaviour
             animator.SetBool("die", true);
             Destroy(this.gameObject, animator.GetCurrentAnimatorStateInfo(0).length + animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
             Invoke("spawnEffet", 1.0f);
+
+            int nbSbire = int.Parse(SbireText.text);
+            nbSbire--;
+            SbireText.text = nbSbire.ToString();
 
         }
     }

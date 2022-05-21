@@ -11,6 +11,9 @@ namespace Minimap
         private NetworkManager nm;
         private const float ScrollMultiplier = 0.2f;
 
+        private int MaxSbire = 10;
+        private Text SbireText;
+
         private void Update()
         {
             if (minicam == null && Player.Local != null)
@@ -21,6 +24,8 @@ namespace Minimap
         private void Awake()
         {
             nm = FindObjectOfType<NetworkManager>();
+
+            SbireText = GameObject.Find("SbiresCounter").GetComponent<Text>();
         }
         
         public void OnScroll(PointerEventData eventData)
@@ -86,9 +91,14 @@ namespace Minimap
                     Debug.DrawRay(mapRay.origin, mapRay.direction * 1000, Color.green, 5);
                     Debug.Log(miniMapHit.collider.name);
 
-                    if (miniMapHit.collider.GetComponent<SpawnArea>() != null)
+                    int nbSbire = int.Parse(SbireText.text);
+
+                    if (miniMapHit.collider.GetComponent<SpawnArea>() != null && nbSbire < MaxSbire)
                     {
                         nm.SpawnABotPlease(miniMapHit.collider.transform.position, Quaternion.identity);
+
+                        nbSbire++;
+                        SbireText.text = nbSbire.ToString();
                     }
                 }
             }
