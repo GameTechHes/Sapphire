@@ -90,13 +90,10 @@ public class FieldOfView : MonoBehaviour
 
                 foreach (var hitCollider in hitColliders)
                 {
-                    if (hitCollider.gameObject.CompareTag("Player"))
+                    if (hitCollider.gameObject.CompareTag("Player") && hitCollider.gameObject.GetComponent<Player>().PlayerType == PlayerType.KNIGHT)
                     {
                         playerOnFocus = hitCollider.gameObject;
-                        if (playerOnFocus.GetComponent<Player>().PlayerType == PlayerType.WIZARD)
-                        {
-                            break;
-                        }
+                       
                         Vector3 directionIdle = playerOnFocus.transform.position - transform.position;
                         if (IsInViewAngle(directionIdle) && IsInRaycast(directionIdle))
                         {
