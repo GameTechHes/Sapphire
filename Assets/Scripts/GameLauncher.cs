@@ -147,8 +147,6 @@ public class GameLauncher : MonoBehaviour
     {
         if (runner.IsServer && runner.CurrentScene == 2)
         {
-            Gm.OnDungeonSceneLoaded();
-
             runner.Spawn(_dungeonGenerator, Vector3.zero, Quaternion.identity, runner.LocalPlayer, (networkRunner, obj) =>
             {
                 obj.GetComponent<DungeonGenerator>().InitNetworkState();

@@ -1,30 +1,45 @@
+using Fusion;
 using Items;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Sapphire
 {
-    public class SapphireController : MonoBehaviour
+    public class SapphireController : NetworkBehaviour
     {
-        public Text sapphireText;
+        private Text _sapphireText;
 
         private int _totalSapphire;
-        private int _sapphireCounter;
+        
+        [Networked(OnChanged = nameof(OnCountChange))] private int _sapphireCounter { get; set; }
 
-        void Start()
+        public override void Spawned()
         {
+            _sapphireCounter = 0;
             _totalSapphire = FindObjectsOfType<PowerUpSapphire>().Length;
+            _sapphireText = GameObject.Find("SapphireCounter").GetComponent<Text>();
             SetText();
         }
 
-        public void AddSapphire()
+        [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+        public void RPC_AddSapphire()
         {
             _sapphireCounter += 1;
-            SetText();
+        }
+        
+        public static void OnCountChange(Changed<SapphireController> changed)
+        {
+            changed.Behaviour.OnCountChange();
+        }
+
+        private void OnCountChange()
+        {
+            if(Object.HasInputAuthority)
+                SetText();
         }
 
         private void SetText(){
-            sapphireText.text = _sapphireCounter + " / " + _totalSapphire;
+            _sapphireText.text = _sapphireCounter + " / " + _totalSapphire;
         }
     }
 }

@@ -60,9 +60,4 @@ public class GameManager : NetworkBehaviour
         _knight = playerRef;
         return PlayerType.KNIGHT;
     }
-
-    public void OnDungeonSceneLoaded()
-    {
-        
-    }
 }

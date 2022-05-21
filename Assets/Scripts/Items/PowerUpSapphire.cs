@@ -6,9 +6,20 @@ namespace Items
     {
         protected override void ApplyEffects(Player player)
         {
-            // player.GetComponent<SapphireController>().AddSapphire();
-            FindObjectOfType<AudioManager>().Play("CollectingSapphire");
-            if(Object != null && Object.IsValid)
+            if (player.Object.HasInputAuthority)
+            {
+                var sapphireController = player.GetComponent<SapphireController>();
+
+                if (sapphireController != null)
+                {
+                    sapphireController.RPC_AddSapphire();
+                }
+            }
+
+            if (player.Object.HasInputAuthority)
+                FindObjectOfType<AudioManager>().Play("CollectingSapphire");
+
+            if (Object != null && Object.IsValid)
                 Runner.Despawn(Object);
         }
     }
