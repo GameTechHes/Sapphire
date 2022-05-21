@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Sapphire;
+using Fusion;
 
-public class FieldOfView : MonoBehaviour
+public class FieldOfView : NetworkBehaviour 
 {
     public int viewAngle = 30;
     public float detectionRadius = 2;

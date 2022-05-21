@@ -22,6 +22,6 @@ public class FireBall : NetworkBehaviour
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RPC_DespawnArrow()
     {
-        Runner.Despawn(Object);
+        Runner.Despawn(gameObject.GetComponent<NetworkObject>());
     }
 }
