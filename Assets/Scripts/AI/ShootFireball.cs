@@ -38,6 +38,5 @@ public class ShootFireball : NetworkBehaviour
         yield return new WaitForSeconds(3);
         _canShoot = true;
         yield return new WaitForSeconds(2);
-        // fb.RPC_Despawn();
     }
 }
