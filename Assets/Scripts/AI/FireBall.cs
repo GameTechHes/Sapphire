@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Fusion;
 using Sapphire;
+using UnityEngine;
+
 public class FireBall : NetworkBehaviour
 {
     public GameObject explosionEffet;
@@ -12,24 +11,31 @@ public class FireBall : NetworkBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            if (other.gameObject.GetComponent<Player>().PlayerType == PlayerType.KNIGHT)
+            if (other.GetComponent<Player>().PlayerType == PlayerType.KNIGHT)
             {
-                Player player = other.gameObject.GetComponent<Player>();
+                Player player = other.GetComponent<Player>();
                 player.SetHealth(player.Health - damage);
+                int rdm = Random.Range(1, 5);
+                string sound = "Hurt_" + rdm.ToString();
+                FindObjectOfType<AudioManager>().Play(sound);
             }
             else
             {
                 return;
             }
         }
-        Destroy(gameObject);
+
         var obj = Instantiate(explosionEffet, transform.position, transform.rotation);
         FindObjectOfType<AudioManager>().Play("Fireball");
         Destroy(obj, 1);
+        if (Object != null && Object.IsValid)
+            Runner.Despawn(Object);
     }
-    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    public void RPC_DespawnArrow()
+
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    public void RPC_Despawn()
     {
-        Runner.Despawn(gameObject.GetComponent<NetworkObject>());
+        if (Object != null && Object.IsValid)
+            Runner.Despawn(Object);
     }
 }

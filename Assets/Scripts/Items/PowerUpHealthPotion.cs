@@ -1,18 +1,17 @@
-using Items;
 using Sapphire;
 
-public class PowerUpHealthPotion : PowerUpBase
+namespace Items
 {
-    protected override void ApplyEffects(Player player)
+    public class PowerUpHealthPotion : PowerUpBase
     {
-        // int playerhealth = obj.gameObject.GetComponent<Knight>().GetPlayerHealth();
-        //
-        // if (playerhealth != 100)
-        // {
-        //     obj.gameObject.GetComponent<Knight>().SetPlayerHealth(playerhealth + 25);
-        //     Runner.Despawn(Object);
-        // }
-        if(Object != null && Object.IsValid)
-            Runner.Despawn(Object);
+        protected override void ApplyEffects(Player player)
+        {
+            if (player.Health != 100)
+            {
+                player.RPC_AddHealth(25);
+                gameObject.SetActive(false);
+                RPC_Despawn();
+            }
+        }
     }
 }

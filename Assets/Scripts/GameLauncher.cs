@@ -1,11 +1,9 @@
-using System;
 using Fusion;
 using Generation;
 using Sapphire;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 public class GameLauncher : MonoBehaviour
 {

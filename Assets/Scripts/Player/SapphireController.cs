@@ -10,8 +10,9 @@ namespace Sapphire
         private Text _sapphireText;
 
         private int _totalSapphire;
-        
-        [Networked(OnChanged = nameof(OnCountChange))] private int _sapphireCounter { get; set; }
+
+        [Networked(OnChanged = nameof(OnCountChange))]
+        private int _sapphireCounter { get; set; }
 
         public override void Spawned()
         {
@@ -26,7 +27,7 @@ namespace Sapphire
         {
             _sapphireCounter += 1;
         }
-        
+
         public static void OnCountChange(Changed<SapphireController> changed)
         {
             changed.Behaviour.OnCountChange();
@@ -34,11 +35,12 @@ namespace Sapphire
 
         private void OnCountChange()
         {
-            if(Object.HasInputAuthority)
+            if (Object.HasInputAuthority)
                 SetText();
         }
 
-        private void SetText(){
+        private void SetText()
+        {
             _sapphireText.text = _sapphireCounter + " / " + _totalSapphire;
         }
     }

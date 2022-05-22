@@ -16,21 +16,22 @@ namespace Sapphire
 
     public abstract class Player : NetworkBehaviour
     {
-        
         [SerializeField] private GameObject[] objectsToDisable;
         [SerializeField] private Camera minimapCamera;
-        
+
         [Networked] public string Username { get; set; }
         [Networked] public PlayerType PlayerType { get; set; }
         [Networked] public NetworkBool IsReady { get; set; }
-        [Networked] public int Health { get; set; }
-        
-        public const byte MaxHealth = 100;
+
+        [Networked(OnChanged = nameof(OnHealthChange))]
+        public int Health { get; set; }
+
+        private const byte MaxHealth = 50;
 
         private float _respawnInSeconds = -1;
 
         private HealthBar _healthBar;
-        
+
         public Transform cameraRoot;
         private CinemachineVirtualCamera _followCamera;
         protected Animator _controller;
@@ -46,9 +47,9 @@ namespace Sapphire
         public override void Spawned()
         {
             Health = MaxHealth;
-            
+
             _controller = GetComponent<Animator>();
-            
+
             if (Object.HasInputAuthority)
             {
                 Local = this;
@@ -105,6 +106,23 @@ namespace Sapphire
         private void RPC_PlayerReady(NetworkBool isReady)
         {
             IsReady = isReady;
+        }
+
+        [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+        public void RPC_AddHealth(int health)
+        {
+            Health += health;
+        }
+
+        public static void OnHealthChange(Changed<Player> changed)
+        {
+            changed.Behaviour.OnHealthChange();
+        }
+
+        private void OnHealthChange()
+        {
+            if (Object.HasInputAuthority)
+                _healthBar.SetProgress(Health);
         }
 
         public override void FixedUpdateNetwork()
@@ -180,7 +198,9 @@ namespace Sapphire
         {
             return minimapCamera;
         }
-        public void SetHealth(int newHealth){
+
+        public void SetHealth(int newHealth)
+        {
             Health = newHealth;
             _healthBar.SetProgress(Health);
         }
