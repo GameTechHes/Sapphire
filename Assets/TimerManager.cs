@@ -10,29 +10,29 @@ public class TimerManager : NetworkBehaviour
     // Start is called before the first frame update
     [Networked] private TickTimer gameTimer { get; set; }
     public Text timerText;
-    public float durationInSeconds = 600.0f;
+    private float duration = 15.0f;
 
-    private void FixedUpdate()
+    public override void FixedUpdateNetwork()
     {
         var activePlayers = Runner.ActivePlayers;
+        // Deux joueurs sont connectés
         if (activePlayers.Count() >= 2)
         {
+            // Si le timer n'est pas lamcé ni
             if (!gameTimer.IsRunning)
             {
-                gameTimer = TickTimer.CreateFromSeconds(Runner, durationInSeconds);
+                gameTimer = TickTimer.CreateFromSeconds(Runner, duration);
             }
             else
             {
                 timerText.text = ((int)gameTimer.RemainingTime(Runner)).ToString();
             }
-
-            Debug.Log(gameTimer.RemainingTime(Runner).ToString());
         }
         else
         {
             if (!gameTimer.Expired(Runner))
             {
-                timerText.text = durationInSeconds.ToString();
+                timerText.text = duration.ToString();
 
             }
         }
