@@ -58,6 +58,15 @@ namespace Sapphire
             }
         }
 
+        public override void Spawned()
+        {
+            base.Spawned();
+            if (Object.HasInputAuthority)
+            {
+                GameObject.Find("Sbires").SetActive(false);
+            }
+        }
+
         // TODO: convert to RPC
         public void SetPlayerHealth(int newHealth)
         {
