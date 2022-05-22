@@ -9,8 +9,9 @@ namespace Items
             var sapphireController = player.GetComponent<SapphireController>();
             if (sapphireController != null)
             {
-                sapphireController.RPC_AddSapphire(Object);
+                sapphireController.RPC_AddSapphire();
                 gameObject.SetActive(false);
+                RPC_Despawn();
             }
             FindObjectOfType<AudioManager>().Play("CollectingSapphire");
         }

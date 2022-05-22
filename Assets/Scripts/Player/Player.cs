@@ -25,7 +25,7 @@ namespace Sapphire
         [Networked] public NetworkBool IsReady { get; set; }
         [Networked] public int Health { get; set; }
         
-        public const byte MaxHealth = 100;
+        private const byte MaxHealth = 50;
 
         private float _respawnInSeconds = -1;
 
@@ -106,6 +106,12 @@ namespace Sapphire
             IsReady = isReady;
         }
 
+        [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+        public void RPC_AddHealth(int health)
+        {
+            Health += health;
+        }
+        
         public override void FixedUpdateNetwork()
         {
             if (Object.HasStateAuthority)

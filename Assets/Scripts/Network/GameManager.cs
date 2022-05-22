@@ -1,6 +1,5 @@
 using System.Linq;
 using Fusion;
-using Generation;
 using Sapphire;
 
 public class GameManager : NetworkBehaviour
