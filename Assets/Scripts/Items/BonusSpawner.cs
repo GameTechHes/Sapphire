@@ -11,6 +11,7 @@ namespace Items
         public PowerUpSapphire sapphire;
         public int threshold;
         private const int MAX_SPAWNPOINT = 3;
+        private List<GameObject> spawnPointsList;
 
         public override void Spawned()
         {
@@ -18,8 +19,19 @@ namespace Items
             if (!Object.HasStateAuthority)
                 return;
 
+            spawnSapphires();
+            spawnPowerups();
+
+        }
+
+        void spawnSapphires()
+        {
+            var spawnPointsPerRoom = GameObject.FindGameObjectsWithTag("SpawningPoints");
+            Debug.Log(spawnPointsPerRoom.Length);
+
+
             var spawnPoints = GameObject.FindGameObjectsWithTag("SpawningPoint");
-            var spawnPointsList = spawnPoints.ToList();
+            spawnPointsList = spawnPoints.ToList();
             int toSpawnItems = MAX_SPAWNPOINT;
 
             if (spawnPointsList.Count <= MAX_SPAWNPOINT)
@@ -36,6 +48,10 @@ namespace Items
                 Runner.Spawn(sapphire, spawnPosition, Quaternion.identity, Object.StateAuthority);
                 spawnPointsList.RemoveAt(currentIndex);
             }
+        }
+
+        void spawnPowerups()
+        {
 
             foreach (GameObject spawnPoint in spawnPointsList)
             {
