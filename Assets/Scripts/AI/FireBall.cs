@@ -16,6 +16,9 @@ public class FireBall : NetworkBehaviour
             {
                 Player player = other.gameObject.GetComponent<Player>();
                 player.SetHealth(player.Health - damage);
+                int rdm = Random.Range(1, 5);
+                string sound = "Hurt_" + rdm.ToString();
+                FindObjectOfType<AudioManager>().Play(sound);
             }
             else
             {

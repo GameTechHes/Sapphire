@@ -57,6 +57,9 @@ namespace Items
                 if(go.CompareTag("Player")){
                     Player player = go.GetComponent<Player>();
                     player.SetHealth(player.Health - damage);
+                    int rdm = Random.Range(1,5);
+                    string sound = "Hurt_" + rdm.ToString();
+                    FindObjectOfType<AudioManager>().Play(sound);
                 }
                 RPC_DespawnArrow();
         }
