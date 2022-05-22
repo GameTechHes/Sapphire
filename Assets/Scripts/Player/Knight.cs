@@ -61,16 +61,34 @@ namespace Sapphire
         public override void Spawned()
         {
             base.Spawned();
-            if (Object.HasInputAuthority)
-            {
-                GameObject.Find("Sbires").SetActive(false);
-            }
+            SetUI();
         }
 
         // TODO: convert to RPC
         public void SetPlayerHealth(int newHealth)
         {
             Health = Mathf.Clamp(newHealth, 0, 100);
+        }
+
+        public void SetUI()
+        {
+            int baseXPosition = 90;
+            int baseYPosition = 100;
+
+            var timerUI = GameObject.Find("TimeLeft");
+            var sbiresUI = GameObject.Find("Sbires");
+            var sapphireUI = GameObject.Find("Sapphires");
+            var ammoUI = GameObject.Find("Ammo");
+
+            if (Object.HasInputAuthority)
+            {
+                GameObject.Find("Sbires").SetActive(false);
+            }
+
+            ammoUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(baseXPosition, baseYPosition+200);
+            sapphireUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(baseXPosition, baseYPosition+100);
+            timerUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(baseXPosition, baseYPosition);
+
         }
     }
 }
