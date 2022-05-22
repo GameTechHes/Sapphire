@@ -13,7 +13,7 @@ namespace Sapphire
         public GameObject launchStart;
         public int timeBetweenShots = 1;
 
-        [Networked] public int ammoCount { get; set; }
+        [Networked(OnChanged = nameof(OnAmmoChange))] public int ammoCount { get; set; }
         [Networked] private NetworkBool _canShoot { get; set; }
 
         private Text _ammoText;
@@ -75,6 +75,17 @@ namespace Sapphire
 
             RPC_SetCanShoot(true);
         }
+        
+        public static void OnAmmoChange(Changed<Shoot> changed)
+        {
+            changed.Behaviour.OnAmmoChange();
+        }
+
+        private void OnAmmoChange()
+        {
+            if (Object.HasInputAuthority)
+                _ammoText.text = ammoCount.ToString();
+        }
 
         [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
         private void RPC_SetCanShoot(NetworkBool canShoot)
@@ -85,8 +96,12 @@ namespace Sapphire
         public void AddAmmo(int amount)
         {
             ammoCount += amount;
-            if (Object.HasInputAuthority)
-                _ammoText.text = ammoCount.ToString();
+        }
+
+        [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+        public void RPC_AddAmmo(int amount)
+        {
+            AddAmmo(amount);
         }
 
         public override void Render()

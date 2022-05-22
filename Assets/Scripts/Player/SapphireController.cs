@@ -12,7 +12,7 @@ namespace Sapphire
         private int _totalSapphire;
 
         [Networked(OnChanged = nameof(OnCountChange))]
-        public int _sapphireCounter { get; set; }
+        private int _sapphireCounter { get; set; }
 
         public override void Spawned()
         {

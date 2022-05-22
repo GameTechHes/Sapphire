@@ -8,7 +8,7 @@ namespace Items
     {
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Player") && other.gameObject.GetComponent<Player>().PlayerType == PlayerType.KNIGHT)
+            if (other.CompareTag("Player"))
             {
                 if (other.GetComponent<NetworkObject>().HasInputAuthority)
                 {
