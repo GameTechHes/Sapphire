@@ -9,7 +9,7 @@ namespace Items
     {
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Player"))
+            if (other.CompareTag("Player") && other.gameObject.GetComponent<Player>().PlayerType == PlayerType.KNIGHT)
             {
                 var player = other.GetComponent<Player>();
                 ApplyEffects(player);
