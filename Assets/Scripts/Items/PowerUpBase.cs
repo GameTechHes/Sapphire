@@ -11,8 +11,12 @@ namespace Items
         {
             if (other.CompareTag("Player"))
             {
-                var player = other.GetComponent<Player>();
-                ApplyEffects(player);
+                if (other.GetComponent<NetworkObject>().HasInputAuthority)
+                {
+                    var player = other.GetComponent<Player>();
+                    if(player)
+                        ApplyEffects(player);
+                }
             }
         }
 

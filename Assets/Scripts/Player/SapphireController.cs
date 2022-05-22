@@ -22,9 +22,10 @@ namespace Sapphire
         }
 
         [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
-        public void RPC_AddSapphire()
+        public void RPC_AddSapphire(NetworkObject obj)
         {
             _sapphireCounter += 1;
+            Runner.Despawn(obj);
         }
         
         public static void OnCountChange(Changed<SapphireController> changed)

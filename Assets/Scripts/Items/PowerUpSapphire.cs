@@ -6,21 +6,13 @@ namespace Items
     {
         protected override void ApplyEffects(Player player)
         {
-            if (player.Object.HasInputAuthority)
+            var sapphireController = player.GetComponent<SapphireController>();
+            if (sapphireController != null)
             {
-                var sapphireController = player.GetComponent<SapphireController>();
-
-                if (sapphireController != null)
-                {
-                    sapphireController.RPC_AddSapphire();
-                }
+                sapphireController.RPC_AddSapphire(Object);
+                gameObject.SetActive(false);
             }
-
-            if (player.Object.HasInputAuthority)
-                FindObjectOfType<AudioManager>().Play("CollectingSapphire");
-
-            if (Object != null && Object.IsValid)
-                Runner.Despawn(Object);
+            FindObjectOfType<AudioManager>().Play("CollectingSapphire");
         }
     }
 }
