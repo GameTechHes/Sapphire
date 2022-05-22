@@ -2,11 +2,13 @@ using System.Linq;
 using Fusion;
 using Generation;
 using Sapphire;
+using UnityEngine;
 
 public class GameManager : NetworkBehaviour
 {
     private LevelManager _levelManager;
     public static GameManager instance { get; private set; }
+
 
     [Networked] private int _wizard { get; set; }
     [Networked] private int _knight { get; set; }
