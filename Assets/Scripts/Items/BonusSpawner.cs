@@ -11,6 +11,7 @@ namespace Items
         public PowerUpSapphire sapphire;
         public int threshold;
         private const int MAX_SPAWNPOINT = 3;
+        private List<GameObject> spawnPointsList;
 
         public override void Spawned()
         {
@@ -18,27 +19,52 @@ namespace Items
             if (!Object.HasStateAuthority)
                 return;
 
-            var spawnPoints = GameObject.FindGameObjectsWithTag("SpawningPoint");
-            var spawnPointsList = spawnPoints.ToList();
-            int toSpawnItems = MAX_SPAWNPOINT;
+            spawnSapphires();
+            spawnPowerups();
 
-            if (spawnPointsList.Count <= MAX_SPAWNPOINT)
-            {
-                toSpawnItems = spawnPointsList.Count;
-            }
+        }
 
-            for (int i = 0; i < toSpawnItems; ++i)
+        void spawnSapphires()
+        {
+            int spawnedSapphire = 0;
+            // Each element contains all the spawning points in its own room.
+            var spawnPointsPerRoom = GameObject.FindGameObjectsWithTag("SpawningPoints");
+            foreach (GameObject spawnPointRoom in spawnPointsPerRoom)
             {
-                int currentIndex = Random.Range(0, spawnPointsList.Count);
-                GameObject currentSpawnPoint = spawnPointsList[currentIndex];
-                Vector3 spawnPosition = currentSpawnPoint.transform.position;
+                if (spawnedSapphire >= MAX_SPAWNPOINT)
+                {
+                    return;
+                }
+                int nbChildren = spawnPointRoom.transform.childCount;
+                int randIndex = Random.Range(0, nbChildren);
+                GameObject chosenChild = spawnPointRoom.transform.GetChild(randIndex).gameObject;
+                Vector3 spawnPosition = chosenChild.transform.position;
                 spawnPosition.y += 1;
                 Runner.Spawn(sapphire, spawnPosition, Quaternion.identity, Object.StateAuthority);
-                spawnPointsList.RemoveAt(currentIndex);
+                spawnedSapphire += 1;
+
+                chosenChild.GetComponent<SpawningPoint>().isTaken = true;
             }
+        }
+
+
+        List<GameObject> shuffleList(List<GameObject> listToShuffle)
+        {
+            var randomized = listToShuffle.OrderBy(item => Random.Range(0, listToShuffle.Count)).ToList();
+            return randomized;
+        }
+
+        void spawnPowerups()
+        {
+            spawnPointsList = shuffleList(GameObject.FindGameObjectsWithTag("SpawningPoint").ToList());
+            
 
             foreach (GameObject spawnPoint in spawnPointsList)
             {
+                if (spawnPoint.GetComponent<SpawningPoint>().isTaken)
+                {
+                    continue;
+                }
                 float randomNumber = Random.Range(0, 100);
                 if (randomNumber >= threshold)
                 {
@@ -49,6 +75,7 @@ namespace Items
 
                     Runner.Spawn(powerupPrefabs[randomIndex], spawnPosition, Quaternion.Euler(260, 0, 0),
                         Object.StateAuthority);
+                    spawnPoint.GetComponent<SpawningPoint>().isTaken = true;
                 }
             }
         }
