@@ -22,6 +22,7 @@ public class GameManager : NetworkBehaviour
     public enum PlayState
     {
         LOBBY,
+        STARTING,
         INGAME,
     }
 
@@ -58,16 +59,16 @@ public class GameManager : NetworkBehaviour
 
             if (playState == PlayState.LOBBY && Player.Players.Count == 2 && Player.Players.All(p => p.IsReady))
             {
-                StartGame();
-                playState = PlayState.INGAME;
+                FindObjectOfType<TimerManager>().StartTimer();
+                playState = PlayState.STARTING;
             }
         }
     }
 
-    public void SpawnSbire(Vector3 position, Quaternion rotation)
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    public void RPC_SpawnSbire(Vector3 position, Quaternion rotation)
     {
-        if (Object.HasStateAuthority)
-            Runner.Spawn(botPrefab, position, rotation);
+        Runner.Spawn(botPrefab, position, rotation);
     }
 
 
@@ -94,8 +95,9 @@ public class GameManager : NetworkBehaviour
 
     public void StartGame()
     {
-        if (Object.HasStateAuthority && _knightPlayer)
+        if (Object.HasStateAuthority && playState == PlayState.STARTING && _knightPlayer)
         {
+            playState = PlayState.INGAME;
             var knight = Player.Get(_knightPlayer);
             var cc = knight.GetComponent<CharacterController>();
             var spawnpt = GameObject.Find("InitialKnightSpawnPoint");
@@ -105,6 +107,8 @@ public class GameManager : NetworkBehaviour
                 knight.transform.position = spawnpt.transform.position;
                 cc.enabled = true;
             }
+
+            FindObjectOfType<TimerManager>().StartGameTimer();
         }
     }
 }

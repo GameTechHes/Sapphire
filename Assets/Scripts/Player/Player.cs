@@ -8,12 +8,6 @@ using UserInterface;
 
 namespace Sapphire
 {
-    public enum PlayerType
-    {
-        KNIGHT,
-        WIZARD
-    }
-
     public abstract class Player : NetworkBehaviour
     {
         [SerializeField] private GameObject[] objectsToDisable;
@@ -45,7 +39,7 @@ namespace Sapphire
 
         public override void Spawned()
         {
-            Health = MAX_HEALTH / 2;
+            Health = MAX_HEALTH;
 
             _controller = GetComponent<Animator>();
 

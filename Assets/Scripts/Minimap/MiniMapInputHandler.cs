@@ -72,7 +72,8 @@ namespace Minimap
 
         private void CastRayToWorld(Vector2 vec)
         {
-            if (minicam)
+            var localPlayer = Player.Local;
+            if (minicam && localPlayer != null && localPlayer.GetComponent<Wizard>() != null)
             {
                 var mapRay = minicam.ScreenPointToRay(new Vector2(vec.x * minicam.pixelWidth,
                     vec.y * minicam.pixelHeight));
@@ -81,12 +82,9 @@ namespace Minimap
                 if (Physics.Raycast(mapRay, out var miniMapHit, Mathf.Infinity, layerMask))
                 {
                     Debug.DrawRay(mapRay.origin, mapRay.direction * 1000, Color.green, 5);
-                    Debug.Log(miniMapHit.collider.name);
-
-
                     if (miniMapHit.collider.GetComponent<SpawnArea>() != null && GameManager.instance.sbireNumber < MaxSbire)
                     {
-                        GameManager.instance.SpawnSbire(miniMapHit.collider.transform.position, Quaternion.identity);
+                        GameManager.instance.RPC_SpawnSbire(miniMapHit.collider.transform.position, Quaternion.identity);
                     }
                 }
             }

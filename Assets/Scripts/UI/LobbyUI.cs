@@ -42,5 +42,10 @@ public class LobbyUI : MonoBehaviour
             _knightText.text = $"Knight: {_knightPlayer.Username}";
             _knightReady.text = _knightPlayer.IsReady ? "Ready" : "Not ready";
         }
+
+        if (GameManager.playState == GameManager.PlayState.INGAME)
+        {
+            gameObject.SetActive(false);
+        }
     }
 }

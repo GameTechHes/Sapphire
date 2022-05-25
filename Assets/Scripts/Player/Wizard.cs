@@ -19,7 +19,10 @@ namespace Sapphire
             {
                 var ran = Random.Range(1, 4);
                 FindObjectOfType<AudioManager>().Play("Hurt_" + ran);
-                RPC_AddHealth(-Arrow.damage);
+                RPC_AddHealth(-Arrow.DAMAGE);
+                
+                // Delete in local to prevent multiple trigger
+                Destroy(other);
             }
         }
 

@@ -1,38 +1,67 @@
-using System.Linq;
+using System.Collections;
 using Fusion;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class TimerManager : NetworkBehaviour
 {
-    [Networked] private TickTimer gameTimer { get; set; }
+    [Networked] private TickTimer _startingTimer { get; set; }
+    [Networked] private TickTimer _gameTimer { get; set; }
+    
     public Text timerText;
-    private float duration = 60.0f;
+    public StartingCountdown uiCountdown;
+    private bool started = false;
 
     public override void FixedUpdateNetwork()
     {
-        if (!Runner)
-            return;
+        if (_startingTimer.IsRunning)
+        {
+            // timerText.text = ((int) gameTimer.RemainingTime(Runner)).ToString();
+            var remainingTime = _startingTimer.RemainingTime(Runner);
+            if (remainingTime != null)
+            {
+                uiCountdown.SetText(((int) _startingTimer.RemainingTime(Runner) + 1).ToString());
+            }
+        }
 
-        var activePlayers = Runner.ActivePlayers;
-        // Deux joueurs sont connectés
-        if (activePlayers.Count() >= 2)
+        if (_startingTimer.Expired(Runner))
         {
-            // Si le timer n'est pas lancé ni
-            if (!gameTimer.IsRunning)
+            // timerText.text = "GO !";
+            uiCountdown.SetText("Gooo !");
+            StartCoroutine(HideCountdown());
+            GameManager.instance.StartGame();
+        }
+
+        if (_gameTimer.IsRunning)
+        {
+            var remainingTime = _gameTimer.RemainingTime(Runner);
+            if (remainingTime != null)
             {
-                gameTimer = TickTimer.CreateFromSeconds(Runner, duration);
-            }
-            else
-            {
-                timerText.text = ((int) gameTimer.RemainingTime(Runner)).ToString();
+                timerText.text = ((int) _gameTimer.RemainingTime(Runner) + 1).ToString();
             }
         }
-        else
+        
+        if (_gameTimer.Expired(Runner))
         {
-            if (!gameTimer.Expired(Runner))
-            {
-                timerText.text = duration.ToString();
-            }
+            timerText.text = "Time's up !";
         }
+    }
+
+    public void StartTimer()
+    {
+        if(!_startingTimer.IsRunning)
+            _startingTimer = TickTimer.CreateFromSeconds(Runner, 5);
+    }
+
+    public void StartGameTimer()
+    {
+        if(!_gameTimer.IsRunning)
+            _gameTimer = TickTimer.CreateFromSeconds(Runner, 3 * 60);
+    }
+
+    private IEnumerator HideCountdown()
+    {
+        yield return new WaitForSeconds(3.0f);
+        uiCountdown.gameObject.SetActive(false);
     }
 }

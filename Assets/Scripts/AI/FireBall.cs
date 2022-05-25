@@ -5,12 +5,12 @@ using UnityEngine;
 public class FireBall : NetworkBehaviour
 {
     public GameObject explosionEffet;
-    public const int damage = 10;
+    public const int DAMAGE = 10;
 
     private void OnTriggerEnter(Collider other)
     {
         // Prevent self collision with the wizard
-        if (other.GetComponent<Wizard>() != null)
+        if (other.GetComponent<Wizard>() != null || other.GetComponent<Bot>() != null)
             return;
 
         var obj = Instantiate(explosionEffet, transform.position, transform.rotation);
@@ -20,11 +20,4 @@ public class FireBall : NetworkBehaviour
         if (Object != null && Object.IsValid)
             Runner.Despawn(Object);
     }
-
-    // [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    // public void RPC_Despawn()
-    // {
-    //     if (Object != null && Object.IsValid)
-    //         Runner.Despawn(Object);
-    // }
 }
