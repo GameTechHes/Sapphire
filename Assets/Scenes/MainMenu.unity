@@ -3212,13 +3212,10 @@ MonoBehaviour:
   _loadingPanel: {fileID: 1944354375}
   _room: {fileID: 1979088349}
   _username: {fileID: 757657716}
-  _playerKnightPrefab: {fileID: 2792364222655270401, guid: 4487308b5741ebd4398b098be2edde3c, type: 3}
-  _playerWizzardPrefab: {fileID: 1418673595439579895, guid: 28ca0d0261d819d48a838b4875c9deb6, type: 3}
   _menuCamera: {fileID: 1766210410}
   botPrefab:
     RawGuidValue: f8d61b92649bad15991a448eb0eedbc8
   _dungeonGenerator: {fileID: 867340613699898629, guid: 87417171b82cdbe45b9955898597b908, type: 3}
-  debugSpawnKnightFirst: 1
 --- !u!4 &915230575
 Transform:
   m_ObjectHideFlags: 0
@@ -4252,7 +4249,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1622231641}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 6665462902f5f794da80b215cccff4b6, type: 3}
