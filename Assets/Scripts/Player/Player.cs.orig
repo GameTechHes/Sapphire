@@ -45,7 +45,11 @@ namespace Sapphire
 
         public override void Spawned()
         {
+<<<<<<< HEAD
             Health = MAX_HEALTH / 2;
+=======
+            Health = MAX_HEALTH;
+>>>>>>> teleport
 
             _controller = GetComponent<Animator>();
 
@@ -108,7 +112,6 @@ namespace Sapphire
             {
                 Health = MAX_HEALTH;
             }
-
             if (Health < 0)
             {
                 Health = 0;
@@ -166,11 +169,18 @@ namespace Sapphire
                 _respawnInSeconds = -1;
 
                 Health = MAX_HEALTH;
-
-                ThirdPersonController tpc = GetComponent<ThirdPersonController>();
-                if (tpc)
-                    tpc.SetTeleportPosition(spawnPt.transform.position);
-
+                
+                print("Spawn pt: " + spawnPt.transform.position);
+                
+                Transform spawn = spawnPt.transform;
+                ThirdPersonController net= GetComponent<ThirdPersonController>();
+                net.SetTeleportPosition(spawnPt.transform.position);
+                
+                print("Player pos: " + transform.position);
+                // transform.position = spawn.position;
+                // transform.rotation = spawn.rotation;
+                
+                
                 Debug.Log($"Player respawned {Object.InputAuthority}");
             }
         }

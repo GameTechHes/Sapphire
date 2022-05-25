@@ -19,7 +19,7 @@ public class LobbyUI : MonoBehaviour
 
     public void AddPlayer(Player player)
     {
-        if (player.PlayerType == PlayerType.WIZARD)
+        if (player.GetType() == typeof(Wizard))
         {
             _wizardPlayer = player;
         }

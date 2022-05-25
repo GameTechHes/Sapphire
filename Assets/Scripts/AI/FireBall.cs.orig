@@ -1,0 +1,48 @@
+using Fusion;
+using Sapphire;
+using UnityEngine;
+
+public class FireBall : NetworkBehaviour
+{
+    public GameObject explosionEffet;
+    public const int damage = 10;
+
+    private void OnTriggerEnter(Collider other)
+    {
+<<<<<<< HEAD
+        // Prevent self collision with the wizard
+        if (other.GetComponent<Wizard>() != null)
+            return;
+=======
+        if (other.CompareTag("Player"))
+        {
+            if (other.GetComponent<Knight>() != null)
+            {
+                Player player = other.GetComponent<Player>();
+                player.SetHealth(player.Health - damage);
+                int rdm = Random.Range(1, 5);
+                string sound = "Hurt_" + rdm.ToString();
+                FindObjectOfType<AudioManager>().Play(sound);
+            }
+            else
+            {
+                return;
+            }
+        }
+>>>>>>> teleport
+
+        var obj = Instantiate(explosionEffet, transform.position, transform.rotation);
+        Destroy(obj, 1);
+        FindObjectOfType<AudioManager>().Play("Fireball");
+
+        if (Object != null && Object.IsValid)
+            Runner.Despawn(Object);
+    }
+
+    // [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    // public void RPC_Despawn()
+    // {
+    //     if (Object != null && Object.IsValid)
+    //         Runner.Despawn(Object);
+    // }
+}

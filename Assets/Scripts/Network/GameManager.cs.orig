@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+using System;
+=======
 using System.Collections.Generic;
+>>>>>>> teleport
 using System.Linq;
 using Fusion;
 using Sapphire;
@@ -10,18 +14,27 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private Player _playerWizardPrefab;
 
     private LevelManager _levelManager;
+    private NetworkRunner _runner;
     public static GameManager instance { get; private set; }
 
+    [Networked] private PlayerRef _wizard { get; set; }
+    [Networked] private PlayerRef _knight { get; set; }
+
+<<<<<<< HEAD
+    [Networked] private int _wizard { get; set; }
+    [Networked] private int _knight { get; set; }
     [Networked] public int sbireNumber { get; set; }
 
     [SerializeField] private NetworkObject botPrefab;
+=======
+    public Queue<PlayerRef> PlayerQueue = new Queue<PlayerRef>();
+>>>>>>> teleport
 
     public enum PlayState
     {
         LOBBY,
         INGAME,
     }
-
     [Networked] private PlayState _networkedPlayState { get; set; }
 
     public static PlayState playState
@@ -43,8 +56,11 @@ public class GameManager : NetworkBehaviour
         if (Object.HasStateAuthority)
         {
             _levelManager = FindObjectOfType<LevelManager>(true);
+            _runner = FindObjectOfType<NetworkRunner>();
             _levelManager.LoadLevel(2);
         }
+        
+        print("Player count: " + Player.Players.Count);
     }
 
     public override void FixedUpdateNetwork()
@@ -55,29 +71,24 @@ public class GameManager : NetworkBehaviour
         }
     }
 
+<<<<<<< HEAD
     public void SpawnSbire(Vector3 position, Quaternion rotation)
     {
         if (Object.HasStateAuthority)
             Runner.Spawn(botPrefab, position, rotation);
     }
 
-
+    public PlayerType AssignRole(PlayerRef playerRef)
+=======
     public void SpawnPlayer(NetworkRunner runner, PlayerRef playerRef)
+>>>>>>> teleport
     {
-        if(!Object.HasStateAuthority)
-            return;
-        
-        var count = Player.Players.Count;
-        if (count == 0)
-        {
-            runner.Spawn(_playerKnightPrefab, Vector3.zero, Quaternion.identity, playerRef);
-        } else if (count == 1)
-        {
-            runner.Spawn(_playerWizardPrefab, Vector3.zero, Quaternion.identity, playerRef);
+        GameObject LobbySpawnPoint = GameObject.Find("Lobby/KnightSpawnPoint");
+        if(LobbySpawnPoint != null){
+            Debug.Log("Spawned player on :" + LobbySpawnPoint.transform.position.ToString());
+        runner.Spawn(_playerKnightPrefab, LobbySpawnPoint.transform.position, LobbySpawnPoint.transform.rotation, playerRef);
+
         }
-        else
-        {
-            Debug.LogError("Already 2 players in game");
-        }
+        runner.Spawn(_playerKnightPrefab, Vector3.zero, Quaternion.identity, playerRef);
     }
 }

@@ -15,14 +15,10 @@ public class GameLauncher : MonoBehaviour
     [SerializeField] private RectTransform _loadingPanel;
     [SerializeField] private TMP_InputField _room;
     [SerializeField] private TMP_InputField _username;
-    [SerializeField] private Player _playerKnightPrefab;
-    [SerializeField] private Player _playerWizzardPrefab;
     [SerializeField] private Camera _menuCamera;
     [SerializeField] private NetworkPrefabRef botPrefab;
     [SerializeField] private DungeonGenerator _dungeonGenerator;
 
-    public bool debugSpawnKnightFirst = false;
-    bool isWizzardAlreadySpawn = false;
     private GameMode _gameMode;
     private NetworkManager.ConnectionStatus _status = NetworkManager.ConnectionStatus.Disconnected;
     private static GameLauncher _instance;
@@ -107,7 +103,7 @@ public class GameLauncher : MonoBehaviour
     private void OnSpawnWorld(NetworkRunner runner)
     {
         Debug.Log("Spawning GameManager");
-        Gm = runner.Spawn(_gameManagerPrefab, Vector3.zero, Quaternion.identity, null, InitNetworkState);
+        runner.Spawn(_gameManagerPrefab, Vector3.zero, Quaternion.identity, null, InitNetworkState);
 
         void InitNetworkState(NetworkRunner runner, NetworkObject world)
         {
@@ -124,33 +120,7 @@ public class GameLauncher : MonoBehaviour
         }
 
         Debug.Log($"Spawning character for player {playerref}");
-
-        var type = GameManager.instance.AssignRole(playerref);
-        if (isWizzardAlreadySpawn)
-        {
-            if (debugSpawnKnightFirst){
-                runner.Spawn(_playerWizzardPrefab, Vector3.zero, Quaternion.identity, playerref, InitNetworkState);
-            }else{
-                runner.Spawn(_playerKnightPrefab, Vector3.zero, Quaternion.identity, playerref, InitNetworkState);
-
-            }
-        }
-        else
-        {
-            if (debugSpawnKnightFirst){
-                runner.Spawn(_playerKnightPrefab, Vector3.zero, Quaternion.identity, playerref, InitNetworkState);
-            }else{
-                runner.Spawn(_playerWizzardPrefab, Vector3.zero, Quaternion.identity, playerref, InitNetworkState);
-                isWizzardAlreadySpawn = true;
-            }
-        }
-
-        void InitNetworkState(NetworkRunner runner, NetworkObject networkObject)
-        {
-            var player = networkObject.gameObject.GetComponent<Player>();
-            Debug.Log($"Initializing player {_username.text}");
-            player.InitNetworkState(type);
-        }
+        GameManager.instance.SpawnPlayer(runner, playerref);
     }
 
     private void OnDespawnPlayer(NetworkRunner runner, PlayerRef playerref)
@@ -164,10 +134,8 @@ public class GameLauncher : MonoBehaviour
     {
         if (runner.IsServer && runner.CurrentScene == 2)
         {
-            runner.Spawn(_dungeonGenerator, Vector3.zero, Quaternion.identity, runner.LocalPlayer, (networkRunner, obj) =>
-            {
-                obj.GetComponent<DungeonGenerator>().InitNetworkState();
-            });
+            runner.Spawn(_dungeonGenerator, Vector3.zero, Quaternion.identity, runner.LocalPlayer,
+                (networkRunner, obj) => { obj.GetComponent<DungeonGenerator>().InitNetworkState(); });
         }
     }
 }

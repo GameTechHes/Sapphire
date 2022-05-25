@@ -12,7 +12,7 @@ public class ShootFireball : NetworkBehaviour
     {
         if (GetInput(out NetworkInputData input))
         {
-            if (input.shoot)
+            if (input.shoot && Object.HasInputAuthority)
             {
                 Attack();
             }
@@ -31,13 +31,16 @@ public class ShootFireball : NetworkBehaviour
     IEnumerator SendSpell()
     {
         FireBall fb = Runner.Spawn(fireball, launchStart.transform.position, transform.rotation);
-        Rigidbody rb = fb.GetComponent<Rigidbody>();
-        rb.velocity = transform.forward * 20;
+        if (fb)
+        {
+            Rigidbody rb = fb.GetComponent<Rigidbody>();
+            rb.velocity = transform.forward * 20;
 
-        yield return new WaitForSeconds(3);
-        _canShoot = true;
-        yield return new WaitForSeconds(2);
-        if (fb.Object != null && fb.Object.IsValid)
-            Runner.Despawn(fb.Object);
+            yield return new WaitForSeconds(3);
+            _canShoot = true;
+            yield return new WaitForSeconds(2);
+            if (fb.Object != null && fb.Object.IsValid)
+                Runner.Despawn(fb.Object);
+        }
     }
 }

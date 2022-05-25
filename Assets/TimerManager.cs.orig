@@ -15,10 +15,10 @@ public class TimerManager : NetworkBehaviour
             return;
         
         var activePlayers = Runner.ActivePlayers;
-        // Deux joueurs sont connectï¿½s
+        // Deux joueurs sont connectés
         if (activePlayers.Count() >= 2)
         {
-            // Si le timer n'est pas lamcï¿½ ni
+            // Si le timer n'est pas lamcé ni
             if (!gameTimer.IsRunning)
             {
                 gameTimer = TickTimer.CreateFromSeconds(Runner, duration);
@@ -32,7 +32,12 @@ public class TimerManager : NetworkBehaviour
         {
             if (!gameTimer.Expired(Runner))
             {
+<<<<<<< HEAD
                 timerText.text = duration.ToString();
+
+=======
+                timerText.text = durationInSeconds.ToString();
+>>>>>>> teleport
             }
         }
     }

@@ -10,7 +10,8 @@ namespace Sapphire
     [DisallowMultipleComponent]
     public class ThirdPersonController : NetworkTransform
     {
-        [Header("Player")] [Tooltip("Move speed of the character in m/s")]
+        [Header("Player")]
+        [Tooltip("Move speed of the character in m/s")]
         public float MoveSpeed = 2.0f;
 
         [Tooltip("Sprint speed of the character in m/s")]
@@ -22,7 +23,8 @@ namespace Sapphire
         [Tooltip("Acceleration and deceleration")]
         public float SpeedChangeRate = 10.0f;
 
-        [Space(10)] [Tooltip("The height the player can jump")]
+        [Space(10)]
+        [Tooltip("The height the player can jump")]
         public float JumpHeight = 1.2f;
 
         [Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
@@ -69,9 +71,9 @@ namespace Sapphire
 
         // player
         [Networked] private float _animationBlend { get; set; }
-        [Networked] private float _targetRotation {get; set;}
-        [Networked] private float _rotationVelocity {get; set;}
-        [Networked] private float _verticalVelocity {get; set;}
+        [Networked] private float _targetRotation { get; set; }
+        [Networked] private float _rotationVelocity { get; set; }
+        [Networked] private float _verticalVelocity { get; set; }
         private float _terminalVelocity = 53.0f;
 
         // timeout deltatime
@@ -84,7 +86,7 @@ namespace Sapphire
         private int _animIDJump;
         private int _animIDFreeFall;
         private int _animIDMotionSpeed;
-
+        private Vector3 teleportTo;
         private Animator _animator;
         private CharacterController _controller;
         private StarterAssetsInputs _localInput;
@@ -103,6 +105,7 @@ namespace Sapphire
         public override void Spawned()
         {
             base.Spawned();
+            teleportTo = Vector3.zero;
             CacheController();
 
             _hasAnimator = TryGetComponent(out _animator);
@@ -148,7 +151,7 @@ namespace Sapphire
             base.Render();
             _hasAnimator = TryGetComponent(out _animator);
         }
-        
+
         public override void FixedUpdateNetwork()
         {
             if (GetInput(out NetworkInputData newNetworkInput))
@@ -160,6 +163,14 @@ namespace Sapphire
             JumpAndGravity();
             GroundedCheck();
             Move();
+        }
+
+        public void SetTeleportPosition(Vector3 pos)
+        {
+            Debug.Log(("TELEPORTING +|-~^-_-^~ Zouuuuup !!"));
+            _controller.enabled = false;
+            transform.position = pos;
+            _controller.enabled = true;
         }
 
         public void GroundedCheck()
@@ -206,7 +217,7 @@ namespace Sapphire
             _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Runner.DeltaTime * SpeedChangeRate);
 
             Vector3 inputDirection = new Vector3(_networkInput.move.x, 0.0f, _networkInput.move.y).normalized;
-            
+
             if (_networkInput.move != Vector2.zero && !_networkInput.aim)
             {
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _camRotation;
@@ -218,7 +229,7 @@ namespace Sapphire
                 // rotate to face input direction relative to camera position
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             }
-            
+
             if (_networkInput.aim)
             {
                 _targetRotation = _camRotation;
@@ -226,11 +237,11 @@ namespace Sapphire
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref tempRot,
                     RotationSmoothTime, Mathf.Infinity, Runner.DeltaTime);
                 _rotationVelocity = tempRot;
-            
+
                 // rotate to face input direction relative to camera position
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             }
-            
+
             Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 
             // move the player
