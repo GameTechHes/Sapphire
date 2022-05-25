@@ -16,6 +16,9 @@ public class GameManager : NetworkBehaviour
 
     [SerializeField] private NetworkObject botPrefab;
 
+    private PlayerRef _knightPlayer;
+    private Player _wizardPlayer;
+
     public enum PlayState
     {
         LOBBY,
@@ -52,6 +55,12 @@ public class GameManager : NetworkBehaviour
         if (Object.HasStateAuthority)
         {
             sbireNumber = FindObjectsOfType<FieldOfView>().Where(b => !b.IsDead).ToArray().Length;
+
+            if (playState == PlayState.LOBBY && Player.Players.Count == 2 && Player.Players.All(p => p.IsReady))
+            {
+                StartGame();
+                playState = PlayState.INGAME;
+            }
         }
     }
 
@@ -64,20 +73,38 @@ public class GameManager : NetworkBehaviour
 
     public void SpawnPlayer(NetworkRunner runner, PlayerRef playerRef)
     {
-        if(!Object.HasStateAuthority)
+        if (!Object.HasStateAuthority)
             return;
-        
+
         var count = Player.Players.Count;
         if (count == 0)
         {
             runner.Spawn(_playerKnightPrefab, Vector3.zero, Quaternion.identity, playerRef);
-        } else if (count == 1)
+            _knightPlayer = playerRef;
+        }
+        else if (count == 1)
         {
-            runner.Spawn(_playerWizardPrefab, Vector3.zero, Quaternion.identity, playerRef);
+            _wizardPlayer = runner.Spawn(_playerWizardPrefab, Vector3.zero, Quaternion.identity, playerRef);
         }
         else
         {
             Debug.LogError("Already 2 players in game");
+        }
+    }
+
+    public void StartGame()
+    {
+        if (Object.HasStateAuthority && _knightPlayer)
+        {
+            var knight = Player.Get(_knightPlayer);
+            var cc = knight.GetComponent<CharacterController>();
+            var spawnpt = GameObject.Find("InitialKnightSpawnPoint");
+            if (cc != null && spawnpt != null)
+            {
+                cc.enabled = false;
+                knight.transform.position = spawnpt.transform.position;
+                cc.enabled = true;
+            }
         }
     }
 }

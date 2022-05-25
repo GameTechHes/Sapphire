@@ -12,7 +12,7 @@ public class ShootFireball : NetworkBehaviour
     {
         if (GetInput(out NetworkInputData input))
         {
-            if (input.shoot && Object.HasInputAuthority)
+            if (input.shoot && Object.HasStateAuthority)
             {
                 Attack();
             }
