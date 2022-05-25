@@ -38,12 +38,6 @@ namespace Items
             transform.position -= velocity * Runner.DeltaTime;
         }
 
-        public override void Spawned()
-        {
-            Debug.Log("Arrow spawned");
-            velocity = transform.forward * InitialSpeed;
-        }
-
         public override void FixedUpdateNetwork()
         {
             updateVelocity();

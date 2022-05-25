@@ -52,18 +52,15 @@ namespace Sapphire
                         if (Object.HasInputAuthority)
                         {
                             _audioManager.Play("ShootingBow");
-                            Quaternion rotation = _mainCamera.transform.rotation *
+                            Quaternion rotation = launchStart.transform.rotation *
                                                   Quaternion.Euler(new Vector3(0, 180, 0)) *
-                                                  Quaternion.Euler(initialAngleCorrector, 0.5f, 0);
+                                                  Quaternion.Euler(initialAngleCorrector, 0, 0);
                             RPC_SpawnArrow(launchStart.transform.position, rotation);
                             StartCoroutine(Fire());
                         }
 
-                        if (Object.HasStateAuthority)
-                        {
-                            _canShoot = false;
-                            ammoCount -= 1;
-                        }
+                        _canShoot = false;
+                        ammoCount -= 1;
                     }
                 }
 
@@ -77,7 +74,8 @@ namespace Sapphire
         [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
         void RPC_SpawnArrow(Vector3 position, Quaternion rotation)
         {
-            Runner.Spawn(projectile, position, rotation);
+            Runner.Spawn(projectile, position, rotation, null,
+                (runner, o) => { o.GetComponent<Arrow>().InitNetworkState(); });
         }
 
         IEnumerator Fire()
@@ -120,23 +118,23 @@ namespace Sapphire
                     var target = hit.point;
                     var direction = (target - launchStart.transform.position).normalized;
                     var rotation = Quaternion.LookRotation(direction);
-                    _launchRotation = rotation;
+                    launchStart.transform.rotation = rotation;
                 }
                 else
                 {
                     var rotation = Quaternion.LookRotation(_mainCamera.transform.forward);
-                    _launchRotation = rotation;
+                    launchStart.transform.rotation = rotation;
                 }
             }
         }
 
-        // private void OnDrawGizmos()
-        // {
-        //     if (Physics.Raycast(launchStart.transform.position, launchStart.transform.forward, out var hit, 50.0f))
-        //     {
-        //         Gizmos.color = Color.red;
-        //         Gizmos.DrawSphere(hit.point, 0.1f);
-        //     }
-        // }
+        private void OnDrawGizmos()
+        {
+            if (Physics.Raycast(launchStart.transform.position, launchStart.transform.forward, out var hit, 100.0f))
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawSphere(hit.point, 0.1f);
+            }
+        }
     }
 }
