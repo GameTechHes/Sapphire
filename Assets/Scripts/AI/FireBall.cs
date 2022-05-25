@@ -17,14 +17,14 @@ public class FireBall : NetworkBehaviour
         Destroy(obj, 1);
         FindObjectOfType<AudioManager>().Play("Fireball");
 
-        if (Object.HasStateAuthority)
-            RPC_Despawn();
-    }
-
-    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    public void RPC_Despawn()
-    {
         if (Object != null && Object.IsValid)
             Runner.Despawn(Object);
     }
+
+    // [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    // public void RPC_Despawn()
+    // {
+    //     if (Object != null && Object.IsValid)
+    //         Runner.Despawn(Object);
+    // }
 }

@@ -50,7 +50,7 @@ public class GameManager : NetworkBehaviour
     {
         if (Object.HasStateAuthority)
         {
-            sbireNumber = FindObjectsOfType<Bot>().Length;
+            sbireNumber = FindObjectsOfType<FieldOfView>().Where(b => !b.IsDead).ToArray().Length;
         }
     }
 

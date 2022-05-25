@@ -80,7 +80,8 @@ public class Bot : NetworkBehaviour
             yield return new WaitForSeconds(3);
             canShoot = true;
             yield return new WaitForSeconds(2);
-            fb.RPC_Despawn();
+            if (fb.Object != null && fb.Object.IsValid)
+                Runner.Despawn(fb.Object);
         }
     }
 }

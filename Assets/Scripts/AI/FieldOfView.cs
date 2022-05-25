@@ -18,7 +18,7 @@ public class FieldOfView : NetworkBehaviour
 
     public GameObject dieEffet;
     private bool playeffet;
-    private bool isDead = false;
+    [Networked] public NetworkBool IsDead { get; set; }
 
     [SerializeField] private float wanderTimer;
 
@@ -80,7 +80,7 @@ public class FieldOfView : NetworkBehaviour
     public override void FixedUpdateNetwork()
     {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius);
-        if (isDead) return;
+        if (IsDead) return;
         switch (state)
         {
             case BotState.Idle:
@@ -180,13 +180,19 @@ public class FieldOfView : NetworkBehaviour
     {
         if (other.gameObject.CompareTag("Arrow"))
         {
-            isDead = true;
+            RPC_SetIsDead(true);
             bot.ResetCurrentPath();
             animator.SetBool("attack", false);
             animator.SetBool("die", true);
             StartCoroutine(Despawn());
             Invoke("SpawnEffect", 1.0f);
         }
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    private void RPC_SetIsDead(NetworkBool isDead)
+    {
+        IsDead = isDead;
     }
 
     private IEnumerator Despawn()
@@ -201,7 +207,8 @@ public class FieldOfView : NetworkBehaviour
 
     void SpawnEffect()
     {
-        var obj = Instantiate(dieEffet, transform.position, transform.rotation) as GameObject;
-        Destroy(obj, 2);
+        // Pourquoi on spawn un effet ?? C'est le même que la fireball, c'est bizarre non ?
+        // var obj = Instantiate(dieEffet, transform.position, transform.rotation) as GameObject;
+        // Destroy(obj, 2);
     }
 }

@@ -1,7 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Fusion;
+using UnityEngine;
 
 public class ShootFireball : NetworkBehaviour
 {
@@ -38,6 +37,7 @@ public class ShootFireball : NetworkBehaviour
         yield return new WaitForSeconds(3);
         _canShoot = true;
         yield return new WaitForSeconds(2);
-        fb.RPC_Despawn();
+        if (fb.Object != null && fb.Object.IsValid)
+            Runner.Despawn(fb.Object);
     }
 }
