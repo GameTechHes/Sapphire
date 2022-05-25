@@ -1553,10 +1553,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
   initialAngleCorrector: 4.3
-  projectile: {fileID: 2018566282244087024, guid: 0c45fedb57319184a81a55d65f3e3804, type: 3}
+  projectile:
+    RawGuidValue: 0c45fedb57319184a81a55d65f3e3804
   launchStart: {fileID: 2641441635670058746}
   timeBetweenShots: 1
-  _ammoCount: 0
+  _ammoCount: 100
 --- !u!114 &4207979064920824855
 MonoBehaviour:
   m_ObjectHideFlags: 0

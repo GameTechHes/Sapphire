@@ -22,12 +22,9 @@ public class FieldOfView : NetworkBehaviour
 
     private Text SbireText;
 
-    private float wanderTimer;
-    private float timer;
+    [SerializeField] private float wanderTimer;
 
     [SerializeField] private float wanderRadius;
-    [SerializeField] private float maxWanderTimer;
-    [SerializeField] private float minWanderTimer;
     enum BotState
     {
         Idle,
@@ -44,7 +41,6 @@ public class FieldOfView : NetworkBehaviour
         bot = GetComponent<Bot>();
         animator = GetComponent<Animator>();
         animator.SetBool("attack", false);
-        animator.SetBool("playerDetected", false);
         if (viewAngle > 90) viewAngle = 90;
 
         SbireText = GameObject.Find("SbiresCounter").GetComponent<Text>();
@@ -92,6 +88,7 @@ public class FieldOfView : NetworkBehaviour
         {
             case BotState.Idle:
                 bot.SetAgentSpeed(2);
+                bot.SetStoppingDistance(1.0f);
                 animator.SetBool("attack", false);
 
                 foreach (var hitCollider in hitColliders)
@@ -112,9 +109,10 @@ public class FieldOfView : NetworkBehaviour
                     }
                 }
                 //No valid target --> Just chilling
-                timer += Time.deltaTime;
-                if (timer >= wanderTimer)
+                if (time >= wanderTimer)
                 {
+
+                    time = 0;
                     Vector3 randDirection = Random.insideUnitSphere * wanderRadius;
                     randDirection += transform.position;
                     bot.SetNewDestination(randDirection);
@@ -124,6 +122,7 @@ public class FieldOfView : NetworkBehaviour
             case BotState.Focus:
                 Vector3 direction = playerOnFocus.transform.position - transform.position;
                 bot.SetAgentSpeed(4);
+                bot.SetStoppingDistance(4.0f);
                 if (direction.magnitude <= playerRange)
                 {
                     bot.ResetCurrentPath();
@@ -172,7 +171,7 @@ public class FieldOfView : NetworkBehaviour
 
         }
 
-        time += Time.deltaTime;
+        time += Runner.DeltaTime;
     }
 
     private void OnTriggerEnter(Collider other)

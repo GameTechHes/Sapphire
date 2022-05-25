@@ -1468,7 +1468,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 5
+  m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -1510,13 +1510,14 @@ MonoBehaviour:
   _interpolationDataSource: 0
   viewAngle: 45
   detectionRadius: 20
-  minTimeBeforeUpdateTarget: 0.5
+  minTimeBeforeUpdateTarget: 1
   timeBeforeUnfocusPlayer: 15
   playerRange: 12
   layerMask:
     serializedVersion: 2
     m_Bits: 256
   dieEffet: {fileID: 100004, guid: a89abc0d2591545288f4c041059ae633, type: 3}
+  wanderTimer: 10
   wanderRadius: 15
   maxWanderTimer: 10
   minWanderTimer: 2

@@ -28,14 +28,13 @@ public class FireBall : NetworkBehaviour
         var obj = Instantiate(explosionEffet, transform.position, transform.rotation);
         FindObjectOfType<AudioManager>().Play("Fireball");
         Destroy(obj, 1);
-        if (Object != null && Object.IsValid)
-            Runner.Despawn(Object);
+        // Destroy(this.gameObject);
+        RPC_Despawn();
     }
 
-    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RPC_Despawn()
     {
-        if (Object != null && Object.IsValid)
-            Runner.Despawn(Object);
+            Runner.Despawn(Object, true);
     }
 }

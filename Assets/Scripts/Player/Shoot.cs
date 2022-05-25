@@ -9,7 +9,7 @@ namespace Sapphire
     public class Shoot : NetworkBehaviour
     {
         public float initialAngleCorrector = 4.3f;
-        public Arrow projectile;
+        public NetworkPrefabRef projectile;
         public GameObject launchStart;
         public int timeBetweenShots = 1;
 
@@ -32,7 +32,7 @@ namespace Sapphire
         public override void Spawned()
         {
             ammoCount = 100;
-            _canShoot = true;
+            RPC_SetCanShoot(true);
             if (Object.HasInputAuthority)
             {
                 _ammoText.text = ammoCount.ToString();
@@ -47,14 +47,24 @@ namespace Sapphire
             {
                 if (input.shoot && input.aim)
                 {
+                    Debug.Log("Tried to shoot"); ;
                     if (_canShoot && ammoCount > 0)
                     {
+                        Debug.Log("can_shoot and ammo");
                         if (Object.HasInputAuthority)
                             _audioManager.Play("ShootingBow");
-                        _canShoot = false;
-                        AddAmmo(-1);
+                        RPC_SetCanShoot(false);
+                        RPC_AddAmmo(-1);
+                        Quaternion rotation = _mainCamera.transform.rotation * Quaternion.Euler(new Vector3(0, 180, 0)) *
+                                  Quaternion.Euler(initialAngleCorrector, 0.5f, 0);
+                        Runner.Spawn(projectile, launchStart.transform.position, rotation);
                         StartCoroutine(Fire());
                     }
+                    else
+                    {
+                        Debug.Log("_can_shoot :" + _canShoot.ToString() + "ammoCount: " + ammoCount.ToString());
+                    }
+
                 }
 
                 if (Object.HasInputAuthority)
@@ -66,16 +76,13 @@ namespace Sapphire
 
         IEnumerator Fire()
         {
-            Quaternion rotation = transform.rotation * Quaternion.Euler(new Vector3(0, 180, 0)) *
-                                  Quaternion.Euler(initialAngleCorrector, 0.5f, 0);
-            Runner.Spawn(projectile, launchStart.transform.position, rotation,
-                Object.InputAuthority, (runner, obj) => { obj.GetComponent<Arrow>().InitNetworkState(); });
+           
 
             yield return new WaitForSeconds(timeBetweenShots);
 
             RPC_SetCanShoot(true);
         }
-        
+
         public static void OnAmmoChange(Changed<Shoot> changed)
         {
             changed.Behaviour.OnAmmoChange();
@@ -109,7 +116,7 @@ namespace Sapphire
             if (Object.HasInputAuthority)
             {
                 var worldPos = _mainCamera.ScreenToWorldPoint(_crosshair.transform.position);
-                
+
                 if (Physics.Raycast(worldPos, _mainCamera.transform.forward, out var hit, 100.0f))
                 {
                     var target = hit.point;

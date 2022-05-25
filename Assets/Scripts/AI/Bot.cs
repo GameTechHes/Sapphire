@@ -17,13 +17,11 @@ public class Bot : NetworkBehaviour
 
     private NavMeshAgent agent;
     private float wanderTimer;
-    private float timer;
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
-        animator.SetBool("walking", false);
         animator.SetBool("die", false);
     }
 
@@ -34,7 +32,9 @@ public class Bot : NetworkBehaviour
         animator.SetFloat("animationBlend", agent.velocity.magnitude);
        
     }
-
+    public void SetStoppingDistance(float dist){
+        agent.stoppingDistance = dist;
+    }
     public void SetNewDestination(Vector3 dest)
     {
         if (animator.GetBool("die")) return;
@@ -42,8 +42,6 @@ public class Bot : NetworkBehaviour
         {
             Vector3 newPos = navHit.position;
             agent.SetDestination(newPos);
-            timer = 0;
-            wanderTimer = Random.Range(minWanderTimer, maxWanderTimer);
         }
     }
 

@@ -40,6 +40,7 @@ namespace Items
 
         public override void Spawned()
         {
+            Debug.Log("Arrow spawned");
             velocity = transform.forward * InitialSpeed;
         }
 
