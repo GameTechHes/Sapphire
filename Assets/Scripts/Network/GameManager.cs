@@ -61,6 +61,12 @@ public class GameManager : NetworkBehaviour
 
     public void SpawnPlayer(NetworkRunner runner, PlayerRef playerRef)
     {
+        GameObject LobbySpawnPoint = GameObject.Find("Lobby/KnightSpawnPoint");
+        if(LobbySpawnPoint != null){
+            Debug.Log("Spawned player on :" + LobbySpawnPoint.transform.position.ToString());
+        runner.Spawn(_playerKnightPrefab, LobbySpawnPoint.transform.position, LobbySpawnPoint.transform.rotation, playerRef);
+
+        }
         runner.Spawn(_playerKnightPrefab, Vector3.zero, Quaternion.identity, playerRef);
     }
 }

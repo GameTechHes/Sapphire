@@ -159,11 +159,16 @@ namespace Sapphire
                 Health = MAX_HEALTH;
                 
                 print("Spawn pt: " + spawnPt.transform.position);
-                print("Player pos: " + transform.position);
-
+                
                 Transform spawn = spawnPt.transform;
-                transform.position = spawn.position;
-                transform.rotation = spawn.rotation;
+                ThirdPersonController net= GetComponent<ThirdPersonController>();
+                net.SetTeleportPosition(spawnPt.transform.position);
+                
+                print("Player pos: " + transform.position);
+                // transform.position = spawn.position;
+                // transform.rotation = spawn.rotation;
+                
+                
                 Debug.Log($"Player respawned {Object.InputAuthority}");
             }
         }
