@@ -8,6 +8,7 @@ namespace Items
         {
             if (player.Health != 100)
             {
+                FindObjectOfType<AudioManager>().Play("CollectingPotion");
                 player.RPC_AddHealth(25);
                 gameObject.SetActive(false);
                 RPC_Despawn();
