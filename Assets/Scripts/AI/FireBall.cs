@@ -11,7 +11,7 @@ public class FireBall : NetworkBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            if (other.GetComponent<Player>().PlayerType == PlayerType.KNIGHT)
+            if (other.GetComponent<Knight>() != null)
             {
                 Player player = other.GetComponent<Player>();
                 player.SetHealth(player.Health - damage);

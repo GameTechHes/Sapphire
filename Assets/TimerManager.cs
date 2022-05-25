@@ -1,19 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Fusion;
 using System.Linq;
+using Fusion;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class TimerManager : NetworkBehaviour
 {
-    // Start is called before the first frame update
     [Networked] private TickTimer gameTimer { get; set; }
     public Text timerText;
     public float durationInSeconds = 600.0f;
 
-    private void FixedUpdate()
+    public override void FixedUpdateNetwork()
     {
+        if(!Runner)
+            return;
+        
         var activePlayers = Runner.ActivePlayers;
         if (activePlayers.Count() >= 2)
         {
@@ -23,7 +23,7 @@ public class TimerManager : NetworkBehaviour
             }
             else
             {
-                timerText.text = ((int)gameTimer.RemainingTime(Runner)).ToString();
+                timerText.text = ((int) gameTimer.RemainingTime(Runner)).ToString();
             }
 
             Debug.Log(gameTimer.RemainingTime(Runner).ToString());
@@ -33,7 +33,6 @@ public class TimerManager : NetworkBehaviour
             if (!gameTimer.Expired(Runner))
             {
                 timerText.text = durationInSeconds.ToString();
-
             }
         }
     }

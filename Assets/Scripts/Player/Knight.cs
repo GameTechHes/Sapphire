@@ -8,6 +8,7 @@ namespace Sapphire
 
         public override void FixedUpdateNetwork()
         {
+            base.FixedUpdateNetwork();
             if (GetInput(out NetworkInputData input))
             {
                 _controller.SetBool("Aim", input.aim);

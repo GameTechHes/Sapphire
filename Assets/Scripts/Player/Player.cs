@@ -20,13 +20,12 @@ namespace Sapphire
         [SerializeField] private Camera minimapCamera;
 
         [Networked] public string Username { get; set; }
-        [Networked] public PlayerType PlayerType { get; set; }
         [Networked] public NetworkBool IsReady { get; set; }
 
         [Networked(OnChanged = nameof(OnHealthChange))]
         public int Health { get; set; }
 
-        private const byte MaxHealth = 50;
+        private const byte MAX_HEALTH = 100;
 
         private float _respawnInSeconds = -1;
 
@@ -46,24 +45,24 @@ namespace Sapphire
 
         public override void Spawned()
         {
-            Health = MaxHealth;
+            Health = MAX_HEALTH;
 
             _controller = GetComponent<Animator>();
+
+            Players.Add(this);
+            PlayerJoined?.Invoke(this);
 
             if (Object.HasInputAuthority)
             {
                 Local = this;
                 RPC_SetPlayerStats(ClientInfo.Username);
                 _healthBar = FindObjectOfType<HealthBar>();
-                _healthBar.SetMaxHealth(MaxHealth);
+                _healthBar.SetMaxHealth(MAX_HEALTH);
                 _healthBar.SetProgress(Health);
                 _followCamera = FindObjectOfType<CinemachineVirtualCamera>();
                 _followCamera.Follow = cameraRoot;
                 _cinemachine3RdPersonFollow = _followCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
             }
-
-            Players.Add(this);
-            PlayerJoined?.Invoke(this);
 
             if (!Object.HasInputAuthority)
             {
@@ -85,15 +84,8 @@ namespace Sapphire
             }
 
 
-            Debug.Log("Spawned [" + this + "] type=" + (PlayerType == PlayerType.KNIGHT
-                          ? "Knight"
-                          : "Wizard") + " IsClient=" + Runner.IsClient + " IsServer=" + Runner.IsServer +
+            Debug.Log("Spawned [" + this + "] IsClient=" + Runner.IsClient + " IsServer=" + Runner.IsServer +
                       " HasInputAuth=" + Object.HasInputAuthority + " HasStateAuth=" + Object.HasStateAuthority);
-        }
-
-        public void InitNetworkState(PlayerType type)
-        {
-            PlayerType = type;
         }
 
         [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.StateAuthority, InvokeResim = true)]
@@ -148,22 +140,32 @@ namespace Sapphire
             PlayerLeft?.Invoke(this);
         }
 
+        public void Respawn(float inSeconds)
+        {
+            _respawnInSeconds = inSeconds;
+        }
+
         public void CheckRespawn()
         {
             if (_respawnInSeconds > 0)
                 _respawnInSeconds -= Runner.DeltaTime;
 
-            if (_respawnInSeconds <= 0)
+            var spawnPt = GameObject.Find("KnightSpawnPoint");
+            if (spawnPt != null && _respawnInSeconds <= 0)
             {
-                Debug.Log("Player respawned");
-                // TODO move the network controller to spawn point
+                Debug.Log($"Respawning {Object.InputAuthority}");
                 _respawnInSeconds = -1;
-            }
-        }
 
-        public void Respawn(float inSeconds)
-        {
-            _respawnInSeconds = inSeconds;
+                Health = MAX_HEALTH;
+                
+                print("Spawn pt: " + spawnPt.transform.position);
+                print("Player pos: " + transform.position);
+
+                Transform spawn = spawnPt.transform;
+                transform.position = spawn.position;
+                transform.rotation = spawn.rotation;
+                Debug.Log($"Player respawned {Object.InputAuthority}");
+            }
         }
 
         public void TriggerDespawn()

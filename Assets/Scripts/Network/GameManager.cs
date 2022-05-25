@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Fusion;
 using Sapphire;
@@ -5,41 +6,49 @@ using UnityEngine;
 
 public class GameManager : NetworkBehaviour
 {
+    [SerializeField] private Player _playerKnightPrefab;
+    [SerializeField] private Player _playerWizardPrefab;
+
     private LevelManager _levelManager;
+    private NetworkRunner _runner;
     public static GameManager instance { get; private set; }
 
+    [Networked] private PlayerRef _wizard { get; set; }
+    [Networked] private PlayerRef _knight { get; set; }
 
-    [Networked] private int _wizard { get; set; }
-    [Networked] private int _knight { get; set; }
+    public Queue<PlayerRef> PlayerQueue = new Queue<PlayerRef>();
 
     public enum PlayState
     {
         LOBBY,
         INGAME,
     }
-
-    [Networked] private PlayState networkedPlayState { get; set; }
+    [Networked] private PlayState _networkedPlayState { get; set; }
 
     public static PlayState playState
     {
         get => (instance != null && instance.Object != null && instance.Object.IsValid)
-            ? instance.networkedPlayState
+            ? instance._networkedPlayState
             : PlayState.LOBBY;
         set
         {
             if (instance != null && instance.Object != null && instance.Object.IsValid)
-                instance.networkedPlayState = value;
+                instance._networkedPlayState = value;
         }
     }
 
     public override void Spawned()
     {
         instance = this;
-        _levelManager = FindObjectOfType<LevelManager>(true);
+
         if (Object.HasStateAuthority)
         {
+            _levelManager = FindObjectOfType<LevelManager>(true);
+            _runner = FindObjectOfType<NetworkRunner>();
             _levelManager.LoadLevel(2);
         }
+        
+        print("Player count: " + Player.Players.Count);
     }
 
     public override void FixedUpdateNetwork()
@@ -50,15 +59,8 @@ public class GameManager : NetworkBehaviour
         }
     }
 
-    public PlayerType AssignRole(PlayerRef playerRef)
+    public void SpawnPlayer(NetworkRunner runner, PlayerRef playerRef)
     {
-        if (_wizard == 0)
-        {
-            _wizard = playerRef;
-            return PlayerType.WIZARD;
-        }
-
-        _knight = playerRef;
-        return PlayerType.KNIGHT;
+        runner.Spawn(_playerKnightPrefab, Vector3.zero, Quaternion.identity, playerRef);
     }
 }

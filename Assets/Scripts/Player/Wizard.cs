@@ -11,7 +11,6 @@ namespace Sapphire
             {
                 GameObject.Find("Sapphires").SetActive(false);
                 GameObject.Find("Ammo").SetActive(false);
-
             }
         }
     }

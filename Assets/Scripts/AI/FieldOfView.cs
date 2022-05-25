@@ -96,7 +96,7 @@ public class FieldOfView : NetworkBehaviour
 
                 foreach (var hitCollider in hitColliders)
                 {
-                    if (hitCollider.gameObject.CompareTag("Player") && hitCollider.gameObject.GetComponent<Player>().PlayerType == PlayerType.KNIGHT)
+                    if (hitCollider.gameObject.CompareTag("Player") && hitCollider.gameObject.GetComponent<Knight>() != null)
                     {
                         playerOnFocus = hitCollider.gameObject;
                        

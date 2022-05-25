@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using Fusion;
+using Sapphire;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -43,6 +44,11 @@ public class LevelManager : NetworkSceneManagerBase
     protected override IEnumerator SwitchScene(SceneRef prevScene, SceneRef newScene, FinishedLoadingDelegate finished)
     {
         Debug.Log($"Switching Scene from {prevScene} to {newScene}");
+        if (newScene <= 0)
+        {
+            finished(new List<NetworkObject>());
+            yield break;
+        }
 
         List<NetworkObject> sceneObjects = new List<NetworkObject>();
         if (newScene >= 1)
@@ -60,5 +66,18 @@ public class LevelManager : NetworkSceneManagerBase
         yield return null;
 
         NetworkManager.SetConnectionStatus(NetworkManager.ConnectionStatus.Loaded, "");
+        
+        StartCoroutine(RespawnPlayer());
+    }
+
+    private IEnumerator RespawnPlayer()
+    {
+        yield return new WaitForSeconds(1.0f);
+        foreach (var player in Player.Players)
+        {
+            print($"Respawning player: {player}");
+            player.Respawn(0);
+            yield return new WaitForSeconds(0.3f);
+        }
     }
 }

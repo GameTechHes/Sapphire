@@ -1484,7 +1484,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
   InterpolationSpace: 0
-  InterpolationTarget: {fileID: 2489830036299000158}
+  InterpolationTarget: {fileID: 7847526492137982366}
   InterpolateErrorCorrection: 1
   InterpolatedErrorCorrectionSettings:
     MinRate: 3.3
@@ -1533,7 +1533,6 @@ MonoBehaviour:
   - {fileID: 1705527501573786363}
   minimapCamera: {fileID: 6939635576196296052}
   _Username: 
-  _PlayerType: 0
   _IsReady:
     _value: 0
   _Health: 0
