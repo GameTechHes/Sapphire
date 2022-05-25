@@ -9,11 +9,13 @@ namespace Sapphire
     public class Shoot : NetworkBehaviour
     {
         public float initialAngleCorrector = 4.3f;
-        public NetworkPrefabRef projectile;
+        public Arrow projectile;
         public GameObject launchStart;
-        public int timeBetweenShots = 1;
+        public float timeBetweenShots = 1.0f;
 
-        [Networked(OnChanged = nameof(OnAmmoChange))] public int ammoCount { get; set; }
+        [Networked(OnChanged = nameof(OnAmmoChange))]
+        public int ammoCount { get; set; }
+
         [Networked] private NetworkBool _canShoot { get; set; }
 
         private Text _ammoText;
@@ -22,22 +24,20 @@ namespace Sapphire
         private Camera _mainCamera;
         private Quaternion _launchRotation;
 
-        private void Awake()
-        {
-            _ammoText = GameObject.Find("AmmoCounter").GetComponent<Text>();
-            _crosshair = GameObject.Find("Crosshair");
-            _audioManager = FindObjectOfType<AudioManager>();
-        }
-
         public override void Spawned()
         {
             ammoCount = 100;
-            RPC_SetCanShoot(true);
+
+            _canShoot = true;
+
             if (Object.HasInputAuthority)
             {
+                _ammoText = GameObject.Find("AmmoCounter").GetComponent<Text>();
                 _ammoText.text = ammoCount.ToString();
                 _mainCamera = Camera.main;
+                _crosshair = GameObject.Find("Crosshair");
                 _crosshair.gameObject.SetActive(false);
+                _audioManager = FindObjectOfType<AudioManager>();
             }
         }
 
@@ -47,24 +47,24 @@ namespace Sapphire
             {
                 if (input.shoot && input.aim)
                 {
-                    Debug.Log("Tried to shoot"); ;
                     if (_canShoot && ammoCount > 0)
                     {
-                        Debug.Log("can_shoot and ammo");
                         if (Object.HasInputAuthority)
+                        {
                             _audioManager.Play("ShootingBow");
-                        RPC_SetCanShoot(false);
-                        RPC_AddAmmo(-1);
-                        Quaternion rotation = _mainCamera.transform.rotation * Quaternion.Euler(new Vector3(0, 180, 0)) *
-                                  Quaternion.Euler(initialAngleCorrector, 0.5f, 0);
-                        Runner.Spawn(projectile, launchStart.transform.position, rotation);
-                        StartCoroutine(Fire());
-                    }
-                    else
-                    {
-                        Debug.Log("_can_shoot :" + _canShoot.ToString() + "ammoCount: " + ammoCount.ToString());
-                    }
+                            Quaternion rotation = _mainCamera.transform.rotation *
+                                                  Quaternion.Euler(new Vector3(0, 180, 0)) *
+                                                  Quaternion.Euler(initialAngleCorrector, 0.5f, 0);
+                            RPC_SpawnArrow(launchStart.transform.position, rotation);
+                            StartCoroutine(Fire());
+                        }
 
+                        if (Object.HasStateAuthority)
+                        {
+                            _canShoot = false;
+                            ammoCount -= 1;
+                        }
+                    }
                 }
 
                 if (Object.HasInputAuthority)
@@ -74,12 +74,15 @@ namespace Sapphire
             }
         }
 
+        [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+        void RPC_SpawnArrow(Vector3 position, Quaternion rotation)
+        {
+            Runner.Spawn(projectile, position, rotation);
+        }
+
         IEnumerator Fire()
         {
-           
-
             yield return new WaitForSeconds(timeBetweenShots);
-
             RPC_SetCanShoot(true);
         }
 
@@ -100,15 +103,10 @@ namespace Sapphire
             _canShoot = canShoot;
         }
 
-        public void AddAmmo(int amount)
-        {
-            ammoCount += amount;
-        }
-
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
         public void RPC_AddAmmo(int amount)
         {
-            AddAmmo(amount);
+            ammoCount += amount;
         }
 
         public override void Render()

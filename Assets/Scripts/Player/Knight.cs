@@ -1,3 +1,4 @@
+using Items;
 using UnityEngine;
 
 namespace Sapphire
@@ -8,6 +9,7 @@ namespace Sapphire
 
         public override void FixedUpdateNetwork()
         {
+            base.FixedUpdateNetwork();
             if (GetInput(out NetworkInputData input))
             {
                 _controller.SetBool("Aim", input.aim);
@@ -47,27 +49,28 @@ namespace Sapphire
         {
             if (other.gameObject.CompareTag("Spell"))
             {
-                var ran = Random.Range(1, 4);
-                FindObjectOfType<AudioManager>().Play("Hurt_" + ran);
-                SetPlayerHealth(Health - 10);
+                if (Object.HasInputAuthority)
+                {
+                    var ran = Random.Range(1, 4);
+                    FindObjectOfType<AudioManager>().Play("Hurt_" + ran);
+                    RPC_AddHealth(-10);
+                }
             }
 
-            if (other.gameObject.CompareTag("Arrow"))
+            var arrow = other.gameObject.GetComponent<Arrow>();
+            if (arrow != null && Object.HasInputAuthority)
             {
-                SetPlayerHealth(Health - 20);
+                var ran = Random.Range(1, 4);
+                FindObjectOfType<AudioManager>().Play("Hurt_" + ran);
+                RPC_AddHealth(-Arrow.damage);
             }
         }
 
         public override void Spawned()
         {
             base.Spawned();
-            SetUI();
-        }
-
-        // TODO: convert to RPC
-        public void SetPlayerHealth(int newHealth)
-        {
-            Health = Mathf.Clamp(newHealth, 0, 100);
+            if (Object.HasInputAuthority)
+                SetUI();
         }
 
         public void SetUI()
@@ -85,10 +88,9 @@ namespace Sapphire
                 GameObject.Find("Sbires").SetActive(false);
             }
 
-            ammoUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(baseXPosition, baseYPosition+200);
-            sapphireUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(baseXPosition, baseYPosition+100);
+            ammoUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(baseXPosition, baseYPosition + 200);
+            sapphireUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(baseXPosition, baseYPosition + 100);
             timerUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(baseXPosition, baseYPosition);
-
         }
     }
 }

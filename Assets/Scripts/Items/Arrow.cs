@@ -53,18 +53,6 @@ namespace Items
 
         private void OnTriggerEnter(Collider other)
         {
-            GameObject go = other.gameObject;
-            var netOjb = go.GetComponent<NetworkObject>();
-            if (netOjb != null && netOjb.InputAuthority != Object.InputAuthority)
-                if (go.CompareTag("Player"))
-                {
-                    Player player = go.GetComponent<Player>();
-                    player.SetHealth(player.Health - damage);
-                    int rdm = Random.Range(1, 5);
-                    string sound = "Hurt_" + rdm.ToString();
-                    FindObjectOfType<AudioManager>().Play(sound);
-                }
-
             if (Object != null && Object.IsValid)
                 Runner.Despawn(Object);
         }

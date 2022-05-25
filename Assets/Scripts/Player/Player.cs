@@ -26,7 +26,7 @@ namespace Sapphire
         [Networked(OnChanged = nameof(OnHealthChange))]
         public int Health { get; set; }
 
-        private const byte MaxHealth = 50;
+        private const byte MAX_HEALTH = 100;
 
         private float _respawnInSeconds = -1;
 
@@ -46,7 +46,7 @@ namespace Sapphire
 
         public override void Spawned()
         {
-            Health = MaxHealth;
+            Health = MAX_HEALTH / 2;
 
             _controller = GetComponent<Animator>();
 
@@ -55,7 +55,7 @@ namespace Sapphire
                 Local = this;
                 RPC_SetPlayerStats(ClientInfo.Username);
                 _healthBar = FindObjectOfType<HealthBar>();
-                _healthBar.SetMaxHealth(MaxHealth);
+                _healthBar.SetMaxHealth(MAX_HEALTH);
                 _healthBar.SetProgress(Health);
                 _followCamera = FindObjectOfType<CinemachineVirtualCamera>();
                 _followCamera.Follow = cameraRoot;
@@ -112,6 +112,14 @@ namespace Sapphire
         public void RPC_AddHealth(int health)
         {
             Health += health;
+            if (Health > MAX_HEALTH)
+            {
+                Health = MAX_HEALTH;
+            }
+            if (Health < 0)
+            {
+                Health = 0;
+            }
         }
 
         public static void OnHealthChange(Changed<Player> changed)
