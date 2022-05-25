@@ -69,3 +69,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
+  _sbireNumber: 0
+  botPrefab: {fileID: 6275840277604807505, guid: f8d61b92649bad15991a448eb0eedbc8, type: 3}

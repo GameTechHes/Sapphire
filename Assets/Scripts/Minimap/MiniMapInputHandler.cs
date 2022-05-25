@@ -8,11 +8,9 @@ namespace Minimap
     public class MiniMapInputHandler : MonoBehaviour, IPointerClickHandler, IScrollHandler
     {
         public Camera minicam;
-        private NetworkManager nm;
         private const float ScrollMultiplier = 0.2f;
 
         private int MaxSbire = 10;
-        private Text SbireText;
 
         private void Update()
         {
@@ -21,13 +19,7 @@ namespace Minimap
                 minicam = Player.Local.GetMinimapCamera();
             }
         }
-        private void Awake()
-        {
-            nm = FindObjectOfType<NetworkManager>();
 
-            SbireText = GameObject.Find("SbiresCounter").GetComponent<Text>();
-        }
-        
         public void OnScroll(PointerEventData eventData)
         {
             if (minicam != null)
@@ -91,14 +83,10 @@ namespace Minimap
                     Debug.DrawRay(mapRay.origin, mapRay.direction * 1000, Color.green, 5);
                     Debug.Log(miniMapHit.collider.name);
 
-                    int nbSbire = int.Parse(SbireText.text);
 
-                    if (miniMapHit.collider.GetComponent<SpawnArea>() != null && nbSbire < MaxSbire)
+                    if (miniMapHit.collider.GetComponent<SpawnArea>() != null && GameManager.instance.sbireNumber < MaxSbire)
                     {
-                        nm.SpawnABotPlease(miniMapHit.collider.transform.position, Quaternion.identity);
-
-                        nbSbire++;
-                        SbireText.text = nbSbire.ToString();
+                        GameManager.instance.SpawnSbire(miniMapHit.collider.transform.position, Quaternion.identity);
                     }
                 }
             }

@@ -5,36 +5,26 @@ using UnityEngine;
 public class FireBall : NetworkBehaviour
 {
     public GameObject explosionEffet;
-    public int damage = 10;
+    public const int damage = 10;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            if (other.GetComponent<Player>().PlayerType == PlayerType.KNIGHT)
-            {
-                Player player = other.GetComponent<Player>();
-                player.SetHealth(player.Health - damage);
-                int rdm = Random.Range(1, 5);
-                string sound = "Hurt_" + rdm.ToString();
-                FindObjectOfType<AudioManager>().Play(sound);
-            }
-            else
-            {
-                return;
-            }
-        }
+        // Prevent self collision with the wizard
+        if (other.GetComponent<Wizard>() != null)
+            return;
 
         var obj = Instantiate(explosionEffet, transform.position, transform.rotation);
-        FindObjectOfType<AudioManager>().Play("Fireball");
         Destroy(obj, 1);
-        // Destroy(this.gameObject);
-        RPC_Despawn();
+        FindObjectOfType<AudioManager>().Play("Fireball");
+
+        if (Object.HasStateAuthority)
+            RPC_Despawn();
     }
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RPC_Despawn()
     {
-            Runner.Despawn(Object, true);
+        if (Object != null && Object.IsValid)
+            Runner.Despawn(Object);
     }
 }

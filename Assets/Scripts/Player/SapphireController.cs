@@ -18,8 +18,11 @@ namespace Sapphire
         {
             _sapphireCounter = 0;
             _totalSapphire = FindObjectsOfType<PowerUpSapphire>().Length;
-            _sapphireText = GameObject.Find("SapphireCounter").GetComponent<Text>();
-            SetText();
+            if (Object.HasInputAuthority)
+            {
+                _sapphireText = GameObject.Find("SapphireCounter").GetComponent<Text>();
+                SetText();
+            }
         }
 
         [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]

@@ -1,9 +1,9 @@
-using UnityEngine;
-using UnityEngine.UI;
-using Sapphire;
+using System.Collections;
 using Fusion;
+using Sapphire;
+using UnityEngine;
 
-public class FieldOfView : NetworkBehaviour 
+public class FieldOfView : NetworkBehaviour
 {
     public int viewAngle = 30;
     public float detectionRadius = 2;
@@ -20,11 +20,10 @@ public class FieldOfView : NetworkBehaviour
     private bool playeffet;
     private bool isDead = false;
 
-    private Text SbireText;
-
     [SerializeField] private float wanderTimer;
 
     [SerializeField] private float wanderRadius;
+
     enum BotState
     {
         Idle,
@@ -36,14 +35,12 @@ public class FieldOfView : NetworkBehaviour
 
     private BotState state = BotState.Idle;
 
-    void Start()
+    public override void Spawned()
     {
         bot = GetComponent<Bot>();
         animator = GetComponent<Animator>();
         animator.SetBool("attack", false);
         if (viewAngle > 90) viewAngle = 90;
-
-        SbireText = GameObject.Find("SbiresCounter").GetComponent<Text>();
     }
 
     void OnDrawGizmosSelected()
@@ -93,10 +90,11 @@ public class FieldOfView : NetworkBehaviour
 
                 foreach (var hitCollider in hitColliders)
                 {
-                    if (hitCollider.gameObject.CompareTag("Player") && hitCollider.gameObject.GetComponent<Player>().PlayerType == PlayerType.KNIGHT)
+                    if (hitCollider.gameObject.CompareTag("Player") &&
+                        hitCollider.gameObject.GetComponent<Player>().PlayerType == PlayerType.KNIGHT)
                     {
                         playerOnFocus = hitCollider.gameObject;
-                       
+
                         Vector3 directionIdle = playerOnFocus.transform.position - transform.position;
                         if (IsInViewAngle(directionIdle) && IsInRaycast(directionIdle))
                         {
@@ -108,15 +106,16 @@ public class FieldOfView : NetworkBehaviour
                         }
                     }
                 }
+
                 //No valid target --> Just chilling
                 if (time >= wanderTimer)
                 {
-
                     time = 0;
                     Vector3 randDirection = Random.insideUnitSphere * wanderRadius;
                     randDirection += transform.position;
                     bot.SetNewDestination(randDirection);
                 }
+
                 break;
 
             case BotState.Focus:
@@ -158,17 +157,20 @@ public class FieldOfView : NetworkBehaviour
                 {
                     state = BotState.Idle;
                 }
-                if(bot.canShoot) {
+
+                if (bot.canShoot)
+                {
                     animator.SetBool("attack", true);
-                }else{
+                }
+                else
+                {
                     animator.SetBool("attack", false);
                 }
+
                 bot.Attack();
                 Quaternion rot = Quaternion.LookRotation(directionAttack);
                 transform.rotation = Quaternion.Slerp(transform.rotation, rot, 0.8f);
                 break;
-
-
         }
 
         time += Runner.DeltaTime;
@@ -179,27 +181,27 @@ public class FieldOfView : NetworkBehaviour
         if (other.gameObject.CompareTag("Arrow"))
         {
             isDead = true;
-            Debug.Log("Toucher");
             bot.ResetCurrentPath();
             animator.SetBool("attack", false);
             animator.SetBool("die", true);
-            Destroy(this.gameObject, animator.GetCurrentAnimatorStateInfo(0).length + animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
-            Invoke("spawnEffet", 1.0f);
-
-            int nbSbire = int.Parse(SbireText.text);
-            nbSbire--;
-            SbireText.text = nbSbire.ToString();
-
+            StartCoroutine(Despawn());
+            Invoke("SpawnEffect", 1.0f);
         }
     }
 
-    void spawnEffet()
+    private IEnumerator Despawn()
     {
-        Debug.Log("Invoke!!!!");
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length +
+                                        animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
+        if (Object != null && Object.IsValid)
+        {
+            Runner.Despawn(Object);
+        }
+    }
+
+    void SpawnEffect()
+    {
         var obj = Instantiate(dieEffet, transform.position, transform.rotation) as GameObject;
         Destroy(obj, 2);
     }
-
-
-
 }

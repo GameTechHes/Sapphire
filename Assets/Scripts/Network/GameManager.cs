@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Fusion;
 using Sapphire;
@@ -11,6 +12,9 @@ public class GameManager : NetworkBehaviour
 
     [Networked] private int _wizard { get; set; }
     [Networked] private int _knight { get; set; }
+    [Networked] public int sbireNumber { get; set; }
+
+    [SerializeField] private NetworkObject botPrefab;
 
     public enum PlayState
     {
@@ -44,10 +48,16 @@ public class GameManager : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
-        if (Object.HasStateAuthority && Player.Players.Count == 2 && Player.Players.All(p => p.IsReady))
+        if (Object.HasStateAuthority)
         {
-            _levelManager.LoadLevel(2);
+            sbireNumber = FindObjectsOfType<Bot>().Length;
         }
+    }
+
+    public void SpawnSbire(Vector3 position, Quaternion rotation)
+    {
+        if (Object.HasStateAuthority)
+            Runner.Spawn(botPrefab, position, rotation);
     }
 
     public PlayerType AssignRole(PlayerRef playerRef)

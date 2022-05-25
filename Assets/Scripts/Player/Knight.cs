@@ -1,4 +1,3 @@
-using Items;
 using UnityEngine;
 
 namespace Sapphire
@@ -53,16 +52,8 @@ namespace Sapphire
                 {
                     var ran = Random.Range(1, 4);
                     FindObjectOfType<AudioManager>().Play("Hurt_" + ran);
-                    RPC_AddHealth(-10);
+                    RPC_AddHealth(-FireBall.damage);
                 }
-            }
-
-            var arrow = other.gameObject.GetComponent<Arrow>();
-            if (arrow != null && Object.HasInputAuthority)
-            {
-                var ran = Random.Range(1, 4);
-                FindObjectOfType<AudioManager>().Play("Hurt_" + ran);
-                RPC_AddHealth(-Arrow.damage);
             }
         }
 

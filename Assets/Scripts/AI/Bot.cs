@@ -1,7 +1,7 @@
 using System.Collections;
+using Fusion;
 using UnityEngine;
 using UnityEngine.AI;
-using Fusion;
 
 public class Bot : NetworkBehaviour
 {
@@ -18,23 +18,25 @@ public class Bot : NetworkBehaviour
     private NavMeshAgent agent;
     private float wanderTimer;
 
-    void Start()
+    public override void Spawned()
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         animator.SetBool("die", false);
     }
 
-    void Update()
+    public override void Render()
     {
         if (!GetComponent<NavMeshAgent>().enabled) return;
 
         animator.SetFloat("animationBlend", agent.velocity.magnitude);
-       
     }
-    public void SetStoppingDistance(float dist){
+
+    public void SetStoppingDistance(float dist)
+    {
         agent.stoppingDistance = dist;
     }
+
     public void SetNewDestination(Vector3 dest)
     {
         if (animator.GetBool("die")) return;
@@ -48,14 +50,12 @@ public class Bot : NetworkBehaviour
     public void SetAgentSpeed(float speed)
     {
         agent.speed = speed;
-
     }
 
     public void ResetCurrentPath()
     {
         agent.ResetPath();
     }
-
 
 
     public void Attack()
@@ -65,19 +65,22 @@ public class Bot : NetworkBehaviour
             StartCoroutine(SendSpell());
             canShoot = false;
             animator.SetBool("attack", true);
-
         }
     }
+
     IEnumerator SendSpell()
     {
         yield return new WaitForSeconds(0.5f); //just to sync with animation
-        FireBall fb = Runner.Spawn(fireball, launchStart.transform.position, transform.rotation);
-        Rigidbody rb = fb.GetComponent<Rigidbody>();
-        rb.velocity = transform.forward * 20;
+        if (Object.HasStateAuthority)
+        {
+            FireBall fb = Runner.Spawn(fireball, launchStart.transform.position, transform.rotation);
+            Rigidbody rb = fb.GetComponent<Rigidbody>();
+            rb.velocity = transform.forward * 20;
 
-        yield return new WaitForSeconds(3);
-        canShoot = true;
-        yield return new WaitForSeconds(2);
-        fb.RPC_Despawn();
+            yield return new WaitForSeconds(3);
+            canShoot = true;
+            yield return new WaitForSeconds(2);
+            fb.RPC_Despawn();
+        }
     }
 }

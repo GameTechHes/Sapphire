@@ -191,10 +191,6 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     public void OnSceneLoadStart(NetworkRunner runner)
     {
     }
-
-    public void SpawnABotPlease(Vector3 pos, Quaternion rot){
-        _runner.Spawn(botPrefab, pos, rot);
-    }
 }
 
 public struct NetworkInputData : INetworkInput
