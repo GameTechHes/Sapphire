@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class LobbyUI : MonoBehaviour
 {
-    [SerializeField] private TMP_Text _knightText;
-    [SerializeField] private TMP_Text _wizardText;
-    [SerializeField] private TMP_Text _wizardReady;
-    [SerializeField] private TMP_Text _knightReady;
 
     private Player _wizardPlayer;
     private Player _knightPlayer;
@@ -33,19 +29,19 @@ public class LobbyUI : MonoBehaviour
     {
         if (_wizardPlayer != null && _wizardPlayer.Object != null && _wizardPlayer.Object.IsValid)
         {
-            _wizardText.text = $"Wizard: {_wizardPlayer.Username}";
-            _wizardReady.text = _wizardPlayer.IsReady ? "Ready" : "Not ready";
+            Player.Local._uiManager.WizardText.text = $"Wizard: {_wizardPlayer.Username}";
+            Player.Local._uiManager.WizardReady.text = _wizardPlayer.IsReady ? "Ready" : "Not ready";
         }
         
         if (_knightPlayer != null && _knightPlayer.Object != null && _knightPlayer.Object.IsValid)
         {
-            _knightText.text = $"Knight: {_knightPlayer.Username}";
-            _knightReady.text = _knightPlayer.IsReady ? "Ready" : "Not ready";
+            Player.Local._uiManager.KnightText.text = $"Knight: {_knightPlayer.Username}";
+            Player.Local._uiManager.KnightReady.text = _knightPlayer.IsReady ? "Ready" : "Not ready";
         }
 
         if (GameManager.playState == GameManager.PlayState.INGAME)
         {
-            gameObject.SetActive(false);
+            Player.Local._uiManager.HideLobbyUI();
         }
     }
 }

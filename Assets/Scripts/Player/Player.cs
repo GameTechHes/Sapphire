@@ -23,7 +23,7 @@ namespace Sapphire
 
         private float _respawnInSeconds = -1;
 
-        protected UIManager _uiManager;
+        public UIManager _uiManager;
 
         public Transform cameraRoot;
         private CinemachineVirtualCamera _followCamera;

@@ -10,8 +10,6 @@ namespace Minimap
     {
         private StarterAssetsInputs _starterAssetsInputs;
         private PlayerInput _playerInput;
-        private GameObject _minicamUI;
-        private GameObject _minicamBackground;
         private AudioManager _audioManager;
 
         private bool _displayMap;
@@ -22,8 +20,6 @@ namespace Minimap
 
         private void Awake()
         {
-            _minicamUI = GameObject.Find("MiniCameraUI");
-            _minicamBackground = GameObject.Find("MinimapBackground");
             _starterAssetsInputs = FindObjectOfType<StarterAssetsInputs>();
             _playerInput = FindObjectOfType<PlayerInput>();
             _audioManager = FindObjectOfType<AudioManager>();
@@ -31,8 +27,7 @@ namespace Minimap
 
         void Start()
         {
-            _minicamUI.SetActive(_displayMap);
-            _minicamBackground.SetActive(_displayMap);
+            Player.Local._uiManager.MinimapDisplay(false);
             ResumeGame();
         }
 
@@ -60,8 +55,8 @@ namespace Minimap
         private IEnumerator ToggleMiniMap()
         {
             _displayMap = !_displayMap;
-            _minicamUI.SetActive(_displayMap);
-            _minicamBackground.SetActive(_displayMap);
+            Player.Local._uiManager.MinimapDisplay(_displayMap); 
+
             
             if (_displayMap)
             {

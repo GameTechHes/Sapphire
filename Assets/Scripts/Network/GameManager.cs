@@ -12,7 +12,8 @@ public class GameManager : NetworkBehaviour
     private LevelManager _levelManager;
     public static GameManager instance { get; private set; }
 
-    [Networked] public int sbireNumber { get; set; }
+    [Networked(OnChanged = nameof(OnSbireNumberChange))]
+    public int sbireNumber { get; set; }
 
     [SerializeField] private NetworkObject botPrefab;
 
@@ -38,6 +39,16 @@ public class GameManager : NetworkBehaviour
             if (instance != null && instance.Object != null && instance.Object.IsValid)
                 instance._networkedPlayState = value;
         }
+    }
+
+    private void OnSbireNumberChange()
+    {
+        Player.Local._uiManager.sbireCounter.text = sbireNumber.ToString();
+    }
+
+    public static void OnSbireNumberChange(Changed<GameManager> changed)
+    {
+        changed.Behaviour.OnSbireNumberChange();
     }
 
     public override void Spawned()
