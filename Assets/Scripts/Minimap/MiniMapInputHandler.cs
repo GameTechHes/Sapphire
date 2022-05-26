@@ -26,15 +26,15 @@ namespace Minimap
             {
                 var minSize = 5.0f;
                 var maxSize = 200.0f;
-                var scrollingUnit = ScrollMultiplier;
                 var scroll = eventData.scrollDelta.y;
-                
-                if (scroll < 0 ) //&& minicam.orthographicSize - scrollingUnit > minSize)
+
+                float scrollingUnit;
+                if (scroll < 0) //&& minicam.orthographicSize - scrollingUnit > minSize)
                 {
                     // Zoom out
                     scrollingUnit = ScrollMultiplier * minicam.orthographicSize;
                 }
-                else if (scroll > 0 ) // && minicam.orthographicSize + scrollingUnit < maxSize)
+                else if (scroll > 0) // && minicam.orthographicSize + scrollingUnit < maxSize)
                 {
                     // Zoom in
                     scrollingUnit = -ScrollMultiplier * (minicam.orthographicSize - minicam.orthographicSize * ScrollMultiplier);
@@ -44,7 +44,9 @@ namespace Minimap
                     scrollingUnit = 0;
                 }
 
-                minicam.orthographicSize += scrollingUnit;
+                if (minicam.orthographicSize + scrollingUnit > minSize && minicam.orthographicSize + scrollingUnit < maxSize){
+                    minicam.orthographicSize += scrollingUnit;
+                }
             }
         }
 
