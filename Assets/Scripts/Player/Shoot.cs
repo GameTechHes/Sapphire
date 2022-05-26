@@ -18,7 +18,6 @@ namespace Sapphire
 
         [Networked] private NetworkBool _canShoot { get; set; }
 
-        private Text _ammoText;
         private GameObject _crosshair;
         private AudioManager _audioManager;
         private Camera _mainCamera;
@@ -32,8 +31,7 @@ namespace Sapphire
 
             if (Object.HasInputAuthority)
             {
-                _ammoText = GameObject.Find("AmmoCounter").GetComponent<Text>();
-                _ammoText.text = ammoCount.ToString();
+                Player.Local._uiManager.AmmoText.text = ammoCount.ToString();
                 _mainCamera = Camera.main;
                 _crosshair = GameObject.Find("Crosshair");
                 _crosshair.gameObject.SetActive(false);
@@ -92,7 +90,7 @@ namespace Sapphire
         private void OnAmmoChange()
         {
             if (Object.HasInputAuthority)
-                _ammoText.text = ammoCount.ToString();
+                Player.Local._uiManager.AmmoText.text = ammoCount.ToString();
         }
 
         [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]

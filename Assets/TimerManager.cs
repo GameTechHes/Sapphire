@@ -18,7 +18,7 @@ public class TimerManager : NetworkBehaviour
             var remainingTime = _startingTimer.RemainingTime(Runner);
             if (remainingTime != null)
             {
-                Player.Local._uiManager.SetCountDown((float)remainingTime + 1);
+                Player.Local._uiManager.CountDownText.text = ((int)remainingTime + 1).ToString();
                 //uiCountdown.SetText(((int) _startingTimer.RemainingTime(Runner) + 1).ToString());
             }
         }
@@ -27,7 +27,7 @@ public class TimerManager : NetworkBehaviour
         {
             // timerText.text = "GO !";
             // uiCountdown.SetText("Gooo !");
-            Player.Local._uiManager.SetCountDown("Gooo !");
+            Player.Local._uiManager.CountDownText.text = "Gooo !";
 
             StartCoroutine(Player.Local._uiManager.HideCountdown());
             GameManager.instance.StartGame();
@@ -38,14 +38,14 @@ public class TimerManager : NetworkBehaviour
             var remainingTime = _gameTimer.RemainingTime(Runner);
             if (remainingTime != null)
             {
-                Player.Local._uiManager.SetTimeLeft((float)remainingTime);
+                Player.Local._uiManager.TimerUIText.text = ((int)remainingTime).ToString();
                 //timerText.text = ((int) _gameTimer.RemainingTime(Runner) + 1).ToString();
             }
         }
         
         if (_gameTimer.Expired(Runner))
         {
-            Player.Local._uiManager.SetTimeLeft("Time's up !");
+            Player.Local._uiManager.TimerUIText.text = "Time's up !";
 
             //timerText.text = "Time's up !";
         }

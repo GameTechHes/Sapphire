@@ -1235,6 +1235,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bf4c09e8f80ce443a442d163a469296, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sbireText: {fileID: 0}
 --- !u!1 &732970540
 GameObject:
   m_ObjectHideFlags: 0
@@ -2357,21 +2358,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timerUI: {fileID: 1274653069}
   countDownUI: {fileID: 327086237}
-  sbiresUI: {fileID: 1530110808}
-  sapphireUI: {fileID: 1782778062}
-  ammoUI: {fileID: 57476842}
-  lobbyUI: {fileID: 914668770}
-  minimapUI: {fileID: 1152992653}
-  healthUI: {fileID: 1237885399}
-  _healthSlider: {fileID: 1237885402}
-  healthCount: {fileID: 616122659}
   timerUIText: {fileID: 208831183}
-  sbireCounter: {fileID: 732397352}
   countDownText: {fileID: 732970542}
+  sapphireUI: {fileID: 1782778062}
+  _sapphireText: {fileID: 928162998}
+  sbiresUI: {fileID: 1530110808}
+  sbireCounter: {fileID: 732397352}
+  ammoUI: {fileID: 57476842}
+  _ammoText: {fileID: 574265333}
+  healthUI: {fileID: 1237885399}
+  healthSlider: {fileID: 1237885402}
+  healthCount: {fileID: 616122659}
+  lobbyUI: {fileID: 914668770}
   _knightText: {fileID: 2119597276}
   _wizardText: {fileID: 1479535922}
   _wizardReady: {fileID: 658488440}
   _knightReady: {fileID: 993463837}
+  minimapUI: {fileID: 1152992653}
 --- !u!4 &1236884737
 Transform:
   m_ObjectHideFlags: 0

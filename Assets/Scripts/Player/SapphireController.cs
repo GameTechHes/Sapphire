@@ -7,7 +7,6 @@ namespace Sapphire
 {
     public class SapphireController : NetworkBehaviour
     {
-        private Text _sapphireText;
 
         private int _totalSapphire;
 
@@ -20,8 +19,7 @@ namespace Sapphire
             _totalSapphire = FindObjectsOfType<PowerUpSapphire>().Length;
             if (Object.HasInputAuthority)
             {
-                _sapphireText = GameObject.Find("SapphireCounter").GetComponent<Text>();
-                SetText();
+                Player.Local._uiManager.SetSapphire(_sapphireCounter, _totalSapphire);
             }
         }
 
@@ -39,12 +37,8 @@ namespace Sapphire
         private void OnCountChange()
         {
             if (Object.HasInputAuthority)
-                SetText();
+                Player.Local._uiManager.SetSapphire(_sapphireCounter, _totalSapphire);
         }
 
-        private void SetText()
-        {
-            _sapphireText.text = _sapphireCounter + " / " + _totalSapphire;
-        }
     }
 }

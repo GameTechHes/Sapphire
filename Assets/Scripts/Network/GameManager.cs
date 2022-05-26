@@ -43,7 +43,7 @@ public class GameManager : NetworkBehaviour
 
     private void OnSbireNumberChange()
     {
-        Player.Local._uiManager.sbireCounter.text = sbireNumber.ToString();
+        Player.Local._uiManager.SbireCounter.text = sbireNumber.ToString();
     }
 
     public static void OnSbireNumberChange(Changed<GameManager> changed)

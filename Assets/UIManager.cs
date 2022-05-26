@@ -7,32 +7,61 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-    public GameObject timerUI;
-    public GameObject countDownUI;
-    public GameObject sbiresUI;
-    public GameObject sapphireUI;
-    public GameObject ammoUI;
-    public GameObject lobbyUI;
-    public GameObject minimapUI;
+    [Header("Timers")]
+    [SerializeField] private GameObject timerUI;
+    [SerializeField] private GameObject countDownUI;
+    [SerializeField] private Text timerUIText;
+    [SerializeField] private TextMeshProUGUI countDownText;
 
-    public GameObject healthUI;
-    public Slider _healthSlider;
-    public TextMeshProUGUI healthCount;
-    public Text timerUIText;
-    public Text sbireCounter;
+    [Header("Sapphires")]
+    [SerializeField] private GameObject sapphireUI;
+    [SerializeField] private Text _sapphireText;
 
-    public TextMeshProUGUI countDownText;
+    [Header("Sbires")]
+    [SerializeField] private GameObject sbiresUI;
+    [SerializeField] private Text sbireCounter;
 
+    [Header("Ammo")]
+    [SerializeField] private GameObject ammoUI;
+    [SerializeField] private Text _ammoText;
+
+
+    [Header("Health")]
+    [SerializeField] private GameObject healthUI;
+    [SerializeField] private Slider healthSlider;
+    [SerializeField] private TextMeshProUGUI healthCount;
+
+    [Header("Lobby")]
+    [SerializeField] private GameObject lobbyUI;
     [SerializeField] private TMP_Text _knightText;
     [SerializeField] private TMP_Text _wizardText;
     [SerializeField] private TMP_Text _wizardReady;
     [SerializeField] private TMP_Text _knightReady;
+
+    [Header("Minimap")]
+    [SerializeField] private GameObject minimapUI;
+
 
 
     public TMP_Text KnightText { get => _knightText; set => _knightText = value; }
     public TMP_Text WizardText { get => _wizardText; set => _wizardText = value; }
     public TMP_Text WizardReady { get => _wizardReady; set => _wizardReady = value; }
     public TMP_Text KnightReady { get => _knightReady; set => _knightReady = value; }
+    public GameObject TimerUI { get => timerUI; set => timerUI = value; }
+    public GameObject CountDownUI { get => countDownUI; set => countDownUI = value; }
+    public GameObject SbiresUI { get => sbiresUI; set => sbiresUI = value; }
+    public GameObject SapphireUI { get => sapphireUI; set => sapphireUI = value; }
+    public GameObject AmmoUI { get => ammoUI; set => ammoUI = value; }
+    public GameObject LobbyUI { get => lobbyUI; set => lobbyUI = value; }
+    public GameObject MinimapUI { get => minimapUI; set => minimapUI = value; }
+    public GameObject HealthUI { get => healthUI; set => healthUI = value; }
+    public Slider HealthSlider { get => healthSlider; set => healthSlider = value; }
+    public TextMeshProUGUI HealthCount { get => healthCount; set => healthCount = value; }
+    public Text TimerUIText { get => timerUIText; set => timerUIText = value; }
+    public Text SbireCounter { get => sbireCounter; set => sbireCounter = value; }
+    public TextMeshProUGUI CountDownText { get => countDownText; set => countDownText = value; }
+    public Text AmmoText { get => _ammoText; set => _ammoText = value; }
+    public Text SapphireText { get => _sapphireText; set => _sapphireText = value; }
 
     public void SetUIPosition()
     {
@@ -43,9 +72,9 @@ public class UIManager : MonoBehaviour
         {
             GameObject.Find("Sbires").SetActive(false);
 
-            ammoUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(baseXPosition, baseYPosition + 200);
-            sapphireUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(baseXPosition, baseYPosition + 100);
-            timerUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(baseXPosition, baseYPosition);
+            AmmoUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(baseXPosition, baseYPosition + 200);
+            SapphireUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(baseXPosition, baseYPosition + 100);
+            TimerUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(baseXPosition, baseYPosition);
 
         }
         else
@@ -53,63 +82,46 @@ public class UIManager : MonoBehaviour
             GameObject.Find("Sapphires").SetActive(false);
             GameObject.Find("Ammo").SetActive(false);
 
-            timerUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(baseXPosition, baseYPosition);
-            sapphireUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(baseXPosition, baseYPosition + 100);
+            TimerUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(baseXPosition, baseYPosition);
+            SapphireUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(baseXPosition, baseYPosition + 100);
         }
 
-        healthUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(-300, 100);
+        HealthUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(-300, 100);
 
     }
-
-    public void SetTimeLeft(float timeLeft)
-    {
-        timerUIText.text = ((int)timeLeft).ToString();
-    }
-
-    public void SetTimeLeft(string message)
-    {
-        timerUIText.text = message;
-    }
-
-    public void SetCountDown(float timeLeft)
-    {
-        countDownText.text = ((int)timeLeft).ToString();
-    }
-
-    public void SetCountDown(string message)
-    {
-        countDownText.text = message;
-    }
-
 
     public IEnumerator HideCountdown()
     {
         yield return new WaitForSeconds(3.0f);
         Debug.Log("HideCountDown");
-        countDownUI.SetActive(false);
+        CountDownUI.SetActive(false);
     }
 
+    public void SetSapphire(int current, int total)
+    {
+        SapphireText.text = current + " / " + total;
+    }
     public void SetHealth(int health, int maxHealth)
     {
-        if (health >= 0 && _healthSlider != null)
+        if (health >= 0 && HealthSlider != null)
         {
-            _healthSlider.value = health / (float)maxHealth;
-            healthCount.text = health.ToString();
+            HealthSlider.value = health / (float)maxHealth;
+            HealthCount.text = health.ToString();
         }
     }
 
     public void HideLobbyUI()
     {
-        lobbyUI.SetActive(false);
+        LobbyUI.SetActive(false);
     }
 
     public void MinimapDisplay(bool shouldDisplay)
     {
-        minimapUI.SetActive(shouldDisplay);
+        MinimapUI.SetActive(shouldDisplay);
     }
 
     public void DisplayMinimap()
     {
-        minimapUI.SetActive(true);
+        MinimapUI.SetActive(true);
     }
 }
