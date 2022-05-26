@@ -1,4 +1,5 @@
 using System.Collections;
+using Sapphire;
 using StarterAssets;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -37,7 +38,7 @@ namespace Minimap
 
         void Update()
         {
-            if ((_starterAssetsInputs.resumeGame || _starterAssetsInputs.displayMap) && _canToggle)
+            if ((_starterAssetsInputs.resumeGame || _starterAssetsInputs.displayMap) && _canToggle && Player.Local.GetType() == typeof(Wizard))
             {
                 _starterAssetsInputs.displayMap = false;
                 StartCoroutine(ToggleMiniMap());
