@@ -23,7 +23,7 @@ namespace Sapphire
 
         private float _respawnInSeconds = -1;
 
-        private HealthBar _healthBar;
+        protected UIManager _uiManager;
 
         public Transform cameraRoot;
         private CinemachineVirtualCamera _followCamera;
@@ -39,6 +39,7 @@ namespace Sapphire
 
         public override void Spawned()
         {
+            _uiManager = FindObjectOfType<UIManager>();
             Health = MAX_HEALTH;
 
             _controller = GetComponent<Animator>();
@@ -50,9 +51,10 @@ namespace Sapphire
             {
                 Local = this;
                 RPC_SetPlayerStats(ClientInfo.Username);
-                _healthBar = FindObjectOfType<HealthBar>();
-                _healthBar.SetMaxHealth(MAX_HEALTH);
-                _healthBar.SetProgress(Health);
+                if(_uiManager != null)
+                {
+                    _uiManager.SetHealth((int)MAX_HEALTH, (int)MAX_HEALTH);
+                }
                 _followCamera = FindObjectOfType<CinemachineVirtualCamera>();
                 _followCamera.Follow = cameraRoot;
                 _cinemachine3RdPersonFollow = _followCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
@@ -117,7 +119,9 @@ namespace Sapphire
         private void OnHealthChange()
         {
             if (Object.HasInputAuthority)
-                _healthBar.SetProgress(Health);
+            {
+                _uiManager.SetHealth(Health, MAX_HEALTH);
+            }
         }
 
         public override void FixedUpdateNetwork()
@@ -200,12 +204,6 @@ namespace Sapphire
         public Camera GetMinimapCamera()
         {
             return minimapCamera;
-        }
-
-        public void SetHealth(int newHealth)
-        {
-            Health = newHealth;
-            _healthBar.SetProgress(Health);
         }
     }
 }

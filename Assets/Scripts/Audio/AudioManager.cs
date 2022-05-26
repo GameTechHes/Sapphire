@@ -8,8 +8,10 @@ public class AudioManager : MonoBehaviour
     void Awake (){
 
         AudioSource sp = FindObjectOfType<AudioSource>();
-        sp.Stop();
-
+        if(sp != null)
+        {
+            sp.Stop();
+        }
         float MusiqueVolume = SoundVolume.volumeMusique;
         float BruitageVolume = SoundVolume.volumeBruitage;
 
