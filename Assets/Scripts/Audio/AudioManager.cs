@@ -6,10 +6,26 @@ public class AudioManager : MonoBehaviour
     public Sound[] sounds;
 
     void Awake (){
+
+        AudioSource sp = FindObjectOfType<AudioSource>();
+        sp.Stop();
+
+        float MusiqueVolume = SoundVolume.volumeMusique;
+        float BruitageVolume = SoundVolume.volumeBruitage;
+
         foreach (Sound s in sounds){
             s.source = gameObject.AddComponent<AudioSource>();
             s.source.clip = s.clip;
-            s.source.volume = s.volume;
+            if(s.name == "Music")
+            {
+                s.source.volume = MusiqueVolume;
+                s.source.loop = true;
+                s.source.Play();
+            }
+            else
+            {
+                s.source.volume = BruitageVolume;
+            }
             s.source.pitch = s.pitch;
         }
     }

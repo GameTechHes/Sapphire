@@ -70,6 +70,7 @@ public class GameLauncher : MonoBehaviour
             OnSpawnPlayer, OnDespawnPlayer, OnSceneLoadDone);
 
         _roomPanel.gameObject.SetActive(false);
+
     }
 
     private void OnConnectionStatusUpdate(NetworkRunner runner, NetworkManager.ConnectionStatus status, string reason)

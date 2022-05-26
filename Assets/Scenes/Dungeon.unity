@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3060,6 +3060,11 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: CollectingPotion
     clip: {fileID: 8300000, guid: 7d832bac0ca6bca06bbe347006b149ab, type: 3}
+    volume: 0.49
+    pitch: 0.9
+    source: {fileID: 0}
+  - name: Music
+    clip: {fileID: 8300000, guid: 6665462902f5f794da80b215cccff4b6, type: 3}
     volume: 0.49
     pitch: 0.9
     source: {fileID: 0}
