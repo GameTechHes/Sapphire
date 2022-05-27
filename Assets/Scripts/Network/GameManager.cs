@@ -99,13 +99,13 @@ public class GameManager : NetworkBehaviour
         if(_timerManager != null && _timerManager.CheckEndGame())
         {
             Debug.Log("Time's up!");
-            Player.Local._uiManager.RPC_Victory(false, "Bravo, vous avez protégé vos Sapphires!", "Vous n'avez pas récupéré vos sapphires à temps...");
+            Player.Local._uiManager.RPC_Victory(false, " You defended your Sapphires!", "You did not get your Sapphire back on time...");
             return true;
         }
         if(_sapphireController != null && _sapphireController.CheckEndGame())
         {
             Debug.Log("All sapphires collected");
-            Player.Local._uiManager.RPC_Victory(true, "Bravo, vous avez récupéré vos Sapphires", "Le chevalier a volé tous vos Sapphires...");
+            Player.Local._uiManager.RPC_Victory(true, "You got your Sapphires back!", "The Knight stole all of your Sapphires...");
             return true;
         }
         foreach(Player p in Player.Players)
@@ -114,11 +114,11 @@ public class GameManager : NetworkBehaviour
             {
                 if(p.GetType() == typeof(Wizard))
                 {
-                    Player.Local._uiManager.RPC_Victory(true, "Vous avez occis le voleur de Sapphire!", "Pas de bol, vous êtes mort");
+                    Player.Local._uiManager.RPC_Victory(true, "You killed this naughty thief!", "No luck, you just died...");
                 }
                 else
                 {
-                    Player.Local._uiManager.RPC_Victory(false, "Vous avez occis le voleur de Sapphire!", "Pas de bol, vous êtes mort");
+                    Player.Local._uiManager.RPC_Victory(false, "You killed this naughty thief!", "No luck, you just died...");
 
                 }
                 return true;
