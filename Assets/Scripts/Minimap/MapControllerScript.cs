@@ -27,7 +27,7 @@ namespace Minimap
 
         void Start()
         {
-            UIManager.Instance.MinimapDisplay(false);
+            Player.Local._uiManager.MinimapDisplay(false);
             ResumeGame();
         }
 
@@ -55,7 +55,7 @@ namespace Minimap
         private IEnumerator ToggleMiniMap()
         {
             _displayMap = !_displayMap;
-            UIManager.Instance.MinimapDisplay(_displayMap); 
+            Player.Local._uiManager.MinimapDisplay(_displayMap); 
 
             
             if (_displayMap)

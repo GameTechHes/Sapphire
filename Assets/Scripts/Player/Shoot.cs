@@ -31,7 +31,7 @@ namespace Sapphire
 
             if (Object.HasInputAuthority)
             {
-                UIManager.Instance.AmmoText.text = ammoCount.ToString();
+                Player.Local._uiManager.AmmoText.text = ammoCount.ToString();
                 _mainCamera = Camera.main;
                 _crosshair = GameObject.Find("Crosshair");
                 _crosshair.gameObject.SetActive(false);
@@ -90,7 +90,7 @@ namespace Sapphire
         private void OnAmmoChange()
         {
             if (Object.HasInputAuthority)
-                UIManager.Instance.AmmoText.text = ammoCount.ToString();
+                Player.Local._uiManager.AmmoText.text = ammoCount.ToString();
         }
 
         [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]

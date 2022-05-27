@@ -4,12 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Fusion;
+using System;
 
-public class UIManager : MonoBehaviour
+public class UIManager : NetworkBehaviour
 {
-
-    private static UIManager _instance;
-
 
     [Header("Timers")]
     [SerializeField] private GameObject timerUI;
@@ -47,7 +46,10 @@ public class UIManager : MonoBehaviour
 
     [Header("End game messages")]
     [SerializeField] private GameObject victoryUI;
+    [SerializeField] private TMP_Text victoryText;
     [SerializeField] private GameObject gameOverUI;
+    [SerializeField] private TMP_Text gameOverText;
+
 
 
 
@@ -74,8 +76,24 @@ public class UIManager : MonoBehaviour
     public Text SapphireText { get => _sapphireText; set => _sapphireText = value; }
     public GameObject VictoryUI { get => victoryUI; set => victoryUI = value; }
     public GameObject GameOverUI { get => gameOverUI; set => gameOverUI = value; }
-    public static UIManager Instance { get => _instance; set => _instance = value; }
 
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_Victory(NetworkBool hasKnightWin, string victoryMessage, string gameOverMessage)
+    {
+        Type t = hasKnightWin ? typeof(Knight) : typeof(Wizard);
+
+        if(Player.Local.GetType() == t)
+        {
+            victoryText.text = victoryMessage;
+            StartCoroutine(DisplayVictory());
+        }
+        else
+        {
+            gameOverText.text = gameOverMessage;
+            StartCoroutine(DisplayGameOver());
+        }
+    }
     public void SetUIPosition()
     {
         int baseXPosition = 90;
@@ -165,15 +183,19 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void Awake()
+    private IEnumerator DisplayGameOver()
     {
-        if (_instance != null && _instance != this)
-        {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            _instance = this;
-        }
+        GameOverUI.SetActive(true);
+        yield return new WaitForSeconds(3.0f);
+        GameOverUI.SetActive(false);
     }
+
+    private IEnumerator DisplayVictory()
+    {
+        VictoryUI.SetActive(true);
+        yield return new WaitForSeconds(3.0f);
+        VictoryUI.SetActive(false);
+    }
+
+
 }

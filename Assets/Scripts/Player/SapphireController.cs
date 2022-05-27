@@ -19,7 +19,7 @@ namespace Sapphire
             _totalSapphire = FindObjectsOfType<PowerUpSapphire>().Length;
             if (Object.HasInputAuthority)
             {
-                UIManager.Instance.SetSapphire(_sapphireCounter, _totalSapphire);
+                Player.Local._uiManager.SetSapphire(_sapphireCounter, _totalSapphire);
             }
         }
 
@@ -37,7 +37,7 @@ namespace Sapphire
         private void OnCountChange()
         {
             if (Object.HasInputAuthority)
-                UIManager.Instance.SetSapphire(_sapphireCounter, _totalSapphire);
+                Player.Local._uiManager.SetSapphire(_sapphireCounter, _totalSapphire);
         }
 
         public bool CheckEndGame()

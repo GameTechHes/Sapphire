@@ -47,7 +47,7 @@ public class GameManager : NetworkBehaviour
 
     private void OnSbireNumberChange()
     {
-        UIManager.Instance.SbireCounter.text = SbireNumber.ToString();
+       Player.Local._uiManager.SbireCounter.text = SbireNumber.ToString();
     }
 
     public static void OnSbireNumberChange(Changed<GameManager> changed)
@@ -99,13 +99,13 @@ public class GameManager : NetworkBehaviour
         if(_timerManager != null && _timerManager.CheckEndGame())
         {
             Debug.Log("Time's up!");
-            UIManager.Instance.DisplayKnightLostWizzardWon();
+            Player.Local._uiManager.RPC_Victory(false, "Bravo, vous avez protégé vos Sapphires!", "Vous n'avez pas récupéré vos sapphires à temps...");
             return true;
         }
         if(_sapphireController != null && _sapphireController.CheckEndGame())
         {
             Debug.Log("All sapphires collected");
-            UIManager.Instance.DisplayWizzardLostKnightWon();
+            Player.Local._uiManager.RPC_Victory(true, "Bravo, vous avez récupéré vos Sapphires", "Le chevalier a volé tous vos Sapphires...");
             return true;
         }
         foreach(Player p in Player.Players)
@@ -114,11 +114,12 @@ public class GameManager : NetworkBehaviour
             {
                 if(p.GetType() == typeof(Wizard))
                 {
-                    Player.Players.ForEach((p) => UIManager.Instance.DisplayWizzardLostKnightWon());
+                    Player.Local._uiManager.RPC_Victory(true, "Vous avez occis le voleur de Sapphire!", "Pas de bol, vous êtes mort");
                 }
                 else
                 {
-                    Player.Players.ForEach((p) => UIManager.Instance.DisplayKnightLostWizzardWon());
+                    Player.Local._uiManager.RPC_Victory(false, "Vous avez occis le voleur de Sapphire!", "Pas de bol, vous êtes mort");
+
                 }
                 return true;
             }

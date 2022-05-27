@@ -23,6 +23,8 @@ namespace Sapphire
 
         private float _respawnInSeconds = -1;
 
+        public UIManager _uiManager;
+
         public Transform cameraRoot;
         private CinemachineVirtualCamera _followCamera;
         protected Animator _controller;
@@ -37,6 +39,7 @@ namespace Sapphire
 
         public override void Spawned()
         {
+            _uiManager = FindObjectOfType<UIManager>();
             Health = MAX_HEALTH;
 
             _controller = GetComponent<Animator>();
@@ -48,9 +51,9 @@ namespace Sapphire
             {
                 Local = this;
                 RPC_SetPlayerStats(ClientInfo.Username);
-                if(UIManager.Instance != null)
+                if(_uiManager != null)
                 {
-                    UIManager.Instance.SetHealth((int)MAX_HEALTH, (int)MAX_HEALTH);
+                    _uiManager.SetHealth((int)MAX_HEALTH, (int)MAX_HEALTH);
                 }
                 _followCamera = FindObjectOfType<CinemachineVirtualCamera>();
                 _followCamera.Follow = cameraRoot;
@@ -117,7 +120,7 @@ namespace Sapphire
         {
             if (Object.HasInputAuthority)
             {
-                UIManager.Instance.SetHealth(Health, MAX_HEALTH);
+                _uiManager.SetHealth(Health, MAX_HEALTH);
             }
         }
 

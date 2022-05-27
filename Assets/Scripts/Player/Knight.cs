@@ -61,7 +61,7 @@ namespace Sapphire
         {
             base.Spawned();
             if (Object.HasInputAuthority)
-                UIManager.Instance.SetUIPosition();
+                this._uiManager.SetUIPosition();
         }
     }
 }

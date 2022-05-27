@@ -9,7 +9,7 @@ namespace Sapphire
         {
             base.Spawned();
             if (Object.HasInputAuthority)
-                UIManager.Instance.SetUIPosition();
+                Player.Local._uiManager.SetUIPosition();
         }
 
         private void OnTriggerEnter(Collider other)
