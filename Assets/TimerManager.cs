@@ -1,15 +1,12 @@
-using System.Collections;
 using Fusion;
 using Sapphire;
-using UnityEngine;
-using UnityEngine.UI;
 
 public class TimerManager : NetworkBehaviour
 {
     [Networked] private TickTimer _startingTimer { get; set; }
     [Networked] private TickTimer _gameTimer { get; set; }
-    
-    private bool started = false;
+
+    public int gameDurationInSeconds;
 
     public override void FixedUpdateNetwork()
     {
@@ -18,7 +15,7 @@ public class TimerManager : NetworkBehaviour
             var remainingTime = _startingTimer.RemainingTime(Runner);
             if (remainingTime != null)
             {
-                Player.Local._uiManager.CountDownText.text = ((int)remainingTime + 1).ToString();
+                UIManager.Instance.CountDownText.text = ((int)remainingTime + 1).ToString();
                 //uiCountdown.SetText(((int) _startingTimer.RemainingTime(Runner) + 1).ToString());
             }
         }
@@ -27,9 +24,9 @@ public class TimerManager : NetworkBehaviour
         {
             // timerText.text = "GO !";
             // uiCountdown.SetText("Gooo !");
-            Player.Local._uiManager.CountDownText.text = "Gooo !";
+            UIManager.Instance.CountDownText.text = "Gooo !";
 
-            StartCoroutine(Player.Local._uiManager.HideCountdown());
+            StartCoroutine(UIManager.Instance.HideCountdown());
             GameManager.instance.StartGame();
         }
 
@@ -38,14 +35,14 @@ public class TimerManager : NetworkBehaviour
             var remainingTime = _gameTimer.RemainingTime(Runner);
             if (remainingTime != null)
             {
-                Player.Local._uiManager.TimerUIText.text = ((int)remainingTime).ToString();
+                UIManager.Instance.TimerUIText.text = ((int)remainingTime).ToString();
                 //timerText.text = ((int) _gameTimer.RemainingTime(Runner) + 1).ToString();
             }
         }
         
         if (_gameTimer.Expired(Runner))
         {
-            Player.Local._uiManager.TimerUIText.text = "Time's up !";
+            UIManager.Instance.TimerUIText.text = "-";
 
             //timerText.text = "Time's up !";
         }
@@ -60,6 +57,11 @@ public class TimerManager : NetworkBehaviour
     public void StartGameTimer()
     {
         if(!_gameTimer.IsRunning)
-            _gameTimer = TickTimer.CreateFromSeconds(Runner, 3 * 60);
+            _gameTimer = TickTimer.CreateFromSeconds(Runner, gameDurationInSeconds);
+    }
+
+    public bool CheckEndGame()
+    {
+        return _gameTimer.Expired(Runner);
     }
 }

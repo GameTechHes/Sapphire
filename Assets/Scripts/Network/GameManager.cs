@@ -13,18 +13,22 @@ public class GameManager : NetworkBehaviour
     public static GameManager instance { get; private set; }
 
     [Networked(OnChanged = nameof(OnSbireNumberChange))]
-    public int sbireNumber { get; set; }
+    public int SbireNumber { get; set; }
 
     [SerializeField] private NetworkObject botPrefab;
 
     private PlayerRef _knightPlayer;
     private Player _wizardPlayer;
 
+    private TimerManager _timerManager;
+    private SapphireController _sapphireController;
+
     public enum PlayState
     {
         LOBBY,
         STARTING,
         INGAME,
+        ENDING,
     }
 
     [Networked] private PlayState _networkedPlayState { get; set; }
@@ -43,7 +47,7 @@ public class GameManager : NetworkBehaviour
 
     private void OnSbireNumberChange()
     {
-        Player.Local._uiManager.SbireCounter.text = sbireNumber.ToString();
+        UIManager.Instance.SbireCounter.text = SbireNumber.ToString();
     }
 
     public static void OnSbireNumberChange(Changed<GameManager> changed)
@@ -64,9 +68,17 @@ public class GameManager : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
-        if (Object.HasStateAuthority)
+        if (Object.HasStateAuthority && playState == PlayState.INGAME)
         {
-            sbireNumber = FindObjectsOfType<FieldOfView>().Where(b => !b.IsDead).ToArray().Length;
+            if (CheckEndGame())
+            {
+                playState = PlayState.ENDING;
+                Debug.Log("GAAAAME TERMINEEEEE");
+            }
+        }
+            if (Object.HasStateAuthority)
+        {
+            SbireNumber = FindObjectsOfType<FieldOfView>().Where(b => !b.IsDead).ToArray().Length;
 
             if (playState == PlayState.LOBBY && Player.Players.Count == 2 && Player.Players.All(p => p.IsReady))
             {
@@ -80,6 +92,38 @@ public class GameManager : NetworkBehaviour
     public void RPC_SpawnSbire(Vector3 position, Quaternion rotation)
     {
         Runner.Spawn(botPrefab, position, rotation);
+    }
+
+    private bool CheckEndGame()
+    {
+        if(_timerManager != null && _timerManager.CheckEndGame())
+        {
+            Debug.Log("Time's up!");
+            UIManager.Instance.DisplayKnightLostWizzardWon();
+            return true;
+        }
+        if(_sapphireController != null && _sapphireController.CheckEndGame())
+        {
+            Debug.Log("All sapphires collected");
+            UIManager.Instance.DisplayWizzardLostKnightWon();
+            return true;
+        }
+        foreach(Player p in Player.Players)
+        {
+            if(p.Health == 0)
+            {
+                if(p.GetType() == typeof(Wizard))
+                {
+                    Player.Players.ForEach((p) => UIManager.Instance.DisplayWizzardLostKnightWon());
+                }
+                else
+                {
+                    Player.Players.ForEach((p) => UIManager.Instance.DisplayKnightLostWizzardWon());
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
 
@@ -118,8 +162,9 @@ public class GameManager : NetworkBehaviour
                 knight.transform.position = spawnpt.transform.position;
                 cc.enabled = true;
             }
-
-            FindObjectOfType<TimerManager>().StartGameTimer();
+            _timerManager = FindObjectOfType<TimerManager>();
+            _timerManager.StartGameTimer();
+            _sapphireController = FindObjectOfType<SapphireController>();
         }
     }
 }

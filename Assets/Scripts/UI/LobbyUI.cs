@@ -29,19 +29,19 @@ public class LobbyUI : MonoBehaviour
     {
         if (_wizardPlayer != null && _wizardPlayer.Object != null && _wizardPlayer.Object.IsValid)
         {
-            Player.Local._uiManager.WizardText.text = $"Wizard: {_wizardPlayer.Username}";
-            Player.Local._uiManager.WizardReady.text = _wizardPlayer.IsReady ? "Ready" : "Not ready";
+            UIManager.Instance.WizardText.text = $"Wizard: {_wizardPlayer.Username}";
+            UIManager.Instance.WizardReady.text = _wizardPlayer.IsReady ? "Ready" : "Not ready";
         }
         
         if (_knightPlayer != null && _knightPlayer.Object != null && _knightPlayer.Object.IsValid)
         {
-            Player.Local._uiManager.KnightText.text = $"Knight: {_knightPlayer.Username}";
-            Player.Local._uiManager.KnightReady.text = _knightPlayer.IsReady ? "Ready" : "Not ready";
+            UIManager.Instance.KnightText.text = $"Knight: {_knightPlayer.Username}";
+            UIManager.Instance.KnightReady.text = _knightPlayer.IsReady ? "Ready" : "Not ready";
         }
 
         if (GameManager.playState == GameManager.PlayState.INGAME)
         {
-            Player.Local._uiManager.HideLobbyUI();
+            UIManager.Instance.HideLobbyUI();
         }
     }
 }

@@ -7,6 +7,10 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
+
+    private static UIManager _instance;
+
+
     [Header("Timers")]
     [SerializeField] private GameObject timerUI;
     [SerializeField] private GameObject countDownUI;
@@ -41,6 +45,12 @@ public class UIManager : MonoBehaviour
     [Header("Minimap")]
     [SerializeField] private GameObject minimapUI;
 
+    [Header("End game messages")]
+    [SerializeField] private GameObject victoryUI;
+    [SerializeField] private GameObject gameOverUI;
+
+
+
 
 
     public TMP_Text KnightText { get => _knightText; set => _knightText = value; }
@@ -62,6 +72,9 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI CountDownText { get => countDownText; set => countDownText = value; }
     public Text AmmoText { get => _ammoText; set => _ammoText = value; }
     public Text SapphireText { get => _sapphireText; set => _sapphireText = value; }
+    public GameObject VictoryUI { get => victoryUI; set => victoryUI = value; }
+    public GameObject GameOverUI { get => gameOverUI; set => gameOverUI = value; }
+    public static UIManager Instance { get => _instance; set => _instance = value; }
 
     public void SetUIPosition()
     {
@@ -76,6 +89,7 @@ public class UIManager : MonoBehaviour
             SapphireUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(baseXPosition, baseYPosition + 100);
             TimerUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(baseXPosition, baseYPosition);
 
+
         }
         else
         {
@@ -87,13 +101,14 @@ public class UIManager : MonoBehaviour
         }
 
         HealthUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(-300, 100);
+        VictoryUI.SetActive(false);
+        GameOverUI.SetActive(false);
 
     }
 
     public IEnumerator HideCountdown()
     {
         yield return new WaitForSeconds(3.0f);
-        Debug.Log("HideCountDown");
         CountDownUI.SetActive(false);
     }
 
@@ -123,5 +138,42 @@ public class UIManager : MonoBehaviour
     public void DisplayMinimap()
     {
         MinimapUI.SetActive(true);
+    }
+
+    //Désolé pour ce nom de fonction
+    public void DisplayWizzardLostKnightWon()
+    {
+        if(Player.Local.GetType() == typeof(Knight)){
+            VictoryUI.SetActive(true);
+        }
+        else
+        {
+            GameOverUI.SetActive(true);
+        }
+    }
+
+    public void DisplayKnightLostWizzardWon()
+    {
+        if (Player.Local.GetType() == typeof(Knight))
+        {
+            GameOverUI.SetActive(true);
+        }
+        else
+        {
+            VictoryUI.SetActive(true);
+
+        }
+    }
+
+    private void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
+        }
     }
 }

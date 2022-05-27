@@ -84,7 +84,7 @@ namespace Minimap
                 if (Physics.Raycast(mapRay, out var miniMapHit, Mathf.Infinity, layerMask))
                 {
                     Debug.DrawRay(mapRay.origin, mapRay.direction * 1000, Color.green, 5);
-                    if (miniMapHit.collider.GetComponent<SpawnArea>() != null && GameManager.instance.sbireNumber < MaxSbire)
+                    if (miniMapHit.collider.GetComponent<SpawnArea>() != null && GameManager.instance.SbireNumber < MaxSbire)
                     {
                         GameManager.instance.RPC_SpawnSbire(miniMapHit.collider.transform.position, Quaternion.identity);
                     }
