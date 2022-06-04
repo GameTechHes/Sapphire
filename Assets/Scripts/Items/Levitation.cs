@@ -16,7 +16,7 @@ namespace Items
         private float timeEllapsed;
         private bool levitate;
 
-        private void Awake()
+        private void Start()
         {
             // Store the starting position & rotation of the object
             posOffset = transform.position;
@@ -37,7 +37,7 @@ namespace Items
                 tempPos.y += Mathf.Sin(timeEllapsed * Mathf.PI * frequency) * amplitude;
 
                 transform.position = tempPos;
-                timeEllapsed += Time.deltaTime;
+                timeEllapsed += Runner.DeltaTime;
             }
             // Float up/down with a Sin()
         }

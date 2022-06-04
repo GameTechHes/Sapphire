@@ -72,8 +72,8 @@ namespace Items
                     spawnPosition.y += 1;
 
                     int randomIndex = Random.Range(0, powerupPrefabs.Count);
-
-                    Runner.Spawn(powerupPrefabs[randomIndex], spawnPosition, Quaternion.Euler(260, 0, 0),
+                    Quaternion prefabRotation = powerupPrefabs[randomIndex].transform.rotation;
+                    Runner.Spawn(powerupPrefabs[randomIndex], spawnPosition, Quaternion.Euler(prefabRotation.x, prefabRotation.y, prefabRotation.z),
                         Object.StateAuthority);
                     spawnPoint.GetComponent<SpawningPoint>().isTaken = true;
                 }
