@@ -1,9 +1,9 @@
 using System.Collections;
 using UnityEngine;
-
+using Fusion;
 namespace Items
 {
-    public class Levitation : MonoBehaviour
+    public class Levitation : NetworkBehaviour
     {
         public bool shouldWait;
         public float degreesPerSecond;
@@ -26,7 +26,7 @@ namespace Items
                 levitate = true;
         }
 
-        void Update()
+        public override void FixedUpdateNetwork()
         {
             // Spin object around Y-Axis
             transform.Rotate(new Vector3(0f, Time.deltaTime * degreesPerSecond, 0f), Space.World);
