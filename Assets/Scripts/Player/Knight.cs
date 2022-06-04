@@ -6,6 +6,8 @@ namespace Sapphire
     {
         public float aimSpeed = 4.0f;
 
+        private bool PlaySoundBow = true;
+
         public override void FixedUpdateNetwork()
         {
             base.FixedUpdateNetwork();
@@ -21,6 +23,13 @@ namespace Sapphire
                         _cinemachine3RdPersonFollow.CameraSide = Mathf.Lerp(_cinemachine3RdPersonFollow.CameraSide,
                             1.0f,
                             Runner.DeltaTime * aimSpeed);
+
+                        if(PlaySoundBow)
+                        {
+                            PlaySoundBow = false;
+                            FindObjectOfType<AudioManager>().Play("AimingBow");
+                        }
+                        
                     }
                     else
                     {
@@ -29,6 +38,8 @@ namespace Sapphire
                         _cinemachine3RdPersonFollow.CameraSide = Mathf.Lerp(_cinemachine3RdPersonFollow.CameraSide,
                             0.5f,
                             Runner.DeltaTime * aimSpeed);
+
+                        PlaySoundBow = true;
                     }
                 }
             }
