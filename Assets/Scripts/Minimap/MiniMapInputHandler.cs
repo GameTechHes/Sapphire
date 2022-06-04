@@ -10,7 +10,7 @@ namespace Minimap
         public Camera minicam;
         private const float ScrollMultiplier = 0.2f;
 
-        private int MaxSbire = 10;
+        private int MaxSbire = 6;
 
         private void Update()
         {
