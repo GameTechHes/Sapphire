@@ -27,6 +27,8 @@ public class UIManager : NetworkBehaviour
     [Header("Ammo")]
     [SerializeField] private GameObject ammoUI;
     [SerializeField] private Text _ammoText;
+    [SerializeField] private GameObject crossHair;
+
 
 
     [Header("Health")]
@@ -76,7 +78,7 @@ public class UIManager : NetworkBehaviour
     public Text SapphireText { get => _sapphireText; set => _sapphireText = value; }
     public GameObject VictoryUI { get => victoryUI; set => victoryUI = value; }
     public GameObject GameOverUI { get => gameOverUI; set => gameOverUI = value; }
-
+    public GameObject CrossHair { get => crossHair; set => crossHair = value; }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_Victory(NetworkBool hasKnightWin, string victoryMessage, string gameOverMessage)
@@ -122,6 +124,15 @@ public class UIManager : NetworkBehaviour
         VictoryUI.SetActive(false);
         GameOverUI.SetActive(false);
 
+
+        // tmp
+        HealthUI.SetActive(false);
+        LobbyUI.SetActive(false);
+        sapphireUI.SetActive(false);
+        TimerUI.SetActive(false);
+        LobbyUI.SetActive(false);
+        AmmoUI.SetActive(false);
+        sbiresUI.SetActive(false);
     }
 
     public IEnumerator HideCountdown()

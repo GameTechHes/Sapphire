@@ -348,7 +348,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &100654495
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2270,7 +2270,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
-  gameDurationInSeconds: 300
+  gameDurationInSeconds: 6000
 --- !u!4 &924527586
 Transform:
   m_ObjectHideFlags: 0
@@ -2967,6 +2967,7 @@ MonoBehaviour:
   sbireCounter: {fileID: 732397352}
   ammoUI: {fileID: 57476842}
   _ammoText: {fileID: 574265333}
+  crossHair: {fileID: 1632314797}
   healthUI: {fileID: 1237885399}
   healthSlider: {fileID: 1237885402}
   healthCount: {fileID: 616122659}
@@ -3838,7 +3839,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1756175223
 RectTransform:
   m_ObjectHideFlags: 0

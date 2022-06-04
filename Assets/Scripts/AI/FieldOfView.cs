@@ -79,6 +79,7 @@ public class FieldOfView : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
+        return;
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius);
         if (IsDead) return;
         switch (state)
