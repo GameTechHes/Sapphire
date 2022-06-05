@@ -132,9 +132,16 @@ public class UIManager : NetworkBehaviour
     public IEnumerator HideIcon()
     {
         knightIcon = GameObject.FindGameObjectWithTag("KnightIcon");
-        knightIcon.GetComponent<MeshRenderer>().enabled = true;
-        yield return new WaitForSeconds(5.0f);
-        knightIcon.GetComponent<MeshRenderer>().enabled = false;
+        if(knightIcon != null)
+        {
+            knightIcon.GetComponent<MeshRenderer>().enabled = true;
+            yield return new WaitForSeconds(5.0f);
+            knightIcon.GetComponent<MeshRenderer>().enabled = false;
+        }
+        else
+        {
+            yield return null;
+        }
     }
     public IEnumerator HideCountdown()
     {
