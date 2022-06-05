@@ -9,10 +9,16 @@ public class FireBall : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+
         // Prevent self collision with the wizard
         if (other.GetComponent<Wizard>() != null || other.GetComponent<Bot>() != null)
             return;
 
+
+        if (other.GetComponent<Player>())
+        {
+            Player.Local._uiManager.triggerFlash();
+        }
         var obj = Instantiate(explosionEffet, transform.position, transform.rotation);
         Destroy(obj, 1);
         FindObjectOfType<AudioManager>().Play("Fireball");

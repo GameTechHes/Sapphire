@@ -1,11 +1,11 @@
 using Sapphire;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Fusion;
 using System;
+using UnityEngine.Rendering;
 
 public class UIManager : NetworkBehaviour
 {
@@ -52,7 +52,13 @@ public class UIManager : NetworkBehaviour
     [SerializeField] private GameObject gameOverUI;
     [SerializeField] private TMP_Text gameOverText;
 
-  
+    [Header("Flash")]
+    [SerializeField] private Volume volume;
+    [SerializeField] private CanvasGroup alphaController;
+    private bool flashOn;
+
+
+
     public TMP_Text KnightText { get => _knightText; set => _knightText = value; }
     public TMP_Text WizardText { get => _wizardText; set => _wizardText = value; }
     public TMP_Text WizardReady { get => _wizardReady; set => _wizardReady = value; }
@@ -74,6 +80,8 @@ public class UIManager : NetworkBehaviour
     public Text SapphireText { get => _sapphireText; set => _sapphireText = value; }
     public GameObject VictoryUI { get => victoryUI; set => victoryUI = value; }
     public GameObject GameOverUI { get => gameOverUI; set => gameOverUI = value; }
+    public Volume Volume { get => volume; set => volume = value; }
+    public CanvasGroup AlphaController { get => alphaController; set => alphaController = value; }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_Victory(NetworkBool hasKnightWin, string victoryMessage, string gameOverMessage)
@@ -216,5 +224,27 @@ public class UIManager : NetworkBehaviour
         VictoryUI.SetActive(false);
     }
 
+    public void triggerFlash()
+    {
+        flashOn = true;
+        Time.timeScale = 0.5f;
+        volume.weight = 1;
+        AlphaController.alpha = 1;
+    }
 
+    void Update()
+    {
+        if (flashOn)
+        {
+            alphaController.alpha -= Time.deltaTime;
+            volume.weight -= Time.deltaTime;
+            if (alphaController.alpha <= 0)
+            {
+                volume.weight = 0;
+                alphaController.alpha = 0;
+                flashOn = false;
+                Time.timeScale = 1f;
+            }
+        }
+    }
 }

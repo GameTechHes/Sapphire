@@ -15,6 +15,7 @@ namespace Items
                     var player = other.GetComponent<Player>();
                     if (player)
                     {
+                        Player.Local._uiManager.triggerFlash();
                         Player.Local._uiManager.RPC_ShowKnightPosition();
                         ApplyEffects(player);
                     }
