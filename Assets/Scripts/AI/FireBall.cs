@@ -15,7 +15,7 @@ public class FireBall : NetworkBehaviour
             return;
 
 
-        if (other.GetComponent<Player>())
+        if (other.GetComponent<Player>() && other.GetComponent<NetworkObject>().HasInputAuthority)
         {
             Player.Local._uiManager.triggerFlash();
         }

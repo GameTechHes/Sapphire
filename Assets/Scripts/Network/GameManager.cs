@@ -91,7 +91,12 @@ public class GameManager : NetworkBehaviour
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RPC_SpawnSbire(Vector3 position, Quaternion rotation)
     {
-        Runner.Spawn(botPrefab, position, rotation);
+        NetworkObject bot = Runner.Spawn(botPrefab, position, rotation);
+        GameObject knight = GameObject.Find("Knight_v2(Clone)");
+        if (knight != null)
+        {
+            bot.transform.LookAt(GameObject.Find("Knight_v2(Clone)").transform);
+        }
     }
 
     private bool CheckEndGame()
