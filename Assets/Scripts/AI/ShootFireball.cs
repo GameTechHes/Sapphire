@@ -7,6 +7,8 @@ public class ShootFireball : NetworkBehaviour
     [SerializeField] private FireBall fireball;
     [SerializeField] private GameObject launchStart;
     private bool _canShoot = true;
+    public int maxShoot = 3;
+    private int currentShoot = 0;
 
     public override void FixedUpdateNetwork()
     {
@@ -23,8 +25,13 @@ public class ShootFireball : NetworkBehaviour
     {
         if (_canShoot)
         {
+            currentShoot++;
+            if (currentShoot == maxShoot)
+            {
+                _canShoot = false;
+                currentShoot = 0;
+            }
             StartCoroutine(SendSpell());
-            _canShoot = false;
         }
     }
 
