@@ -43,6 +43,8 @@ public class UIManager : NetworkBehaviour
 
     [Header("Minimap")]
     [SerializeField] private GameObject minimapUI;
+    private GameObject knightIcon;
+
 
     [Header("End game messages")]
     [SerializeField] private GameObject victoryUI;
@@ -50,11 +52,7 @@ public class UIManager : NetworkBehaviour
     [SerializeField] private GameObject gameOverUI;
     [SerializeField] private TMP_Text gameOverText;
 
-
-
-
-
-
+  
     public TMP_Text KnightText { get => _knightText; set => _knightText = value; }
     public TMP_Text WizardText { get => _wizardText; set => _wizardText = value; }
     public TMP_Text WizardReady { get => _wizardReady; set => _wizardReady = value; }
@@ -76,7 +74,6 @@ public class UIManager : NetworkBehaviour
     public Text SapphireText { get => _sapphireText; set => _sapphireText = value; }
     public GameObject VictoryUI { get => victoryUI; set => victoryUI = value; }
     public GameObject GameOverUI { get => gameOverUI; set => gameOverUI = value; }
-
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_Victory(NetworkBool hasKnightWin, string victoryMessage, string gameOverMessage)
@@ -124,6 +121,21 @@ public class UIManager : NetworkBehaviour
 
     }
 
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void RPC_ShowKnightPosition()
+    {
+        if (Player.Local.GetType() == typeof(Wizard))
+        {
+            StartCoroutine(HideIcon());
+        }
+    }
+    public IEnumerator HideIcon()
+    {
+        knightIcon = GameObject.FindGameObjectWithTag("KnightIcon");
+        knightIcon.GetComponent<MeshRenderer>().enabled = true;
+        yield return new WaitForSeconds(5.0f);
+        knightIcon.GetComponent<MeshRenderer>().enabled = false;
+    }
     public IEnumerator HideCountdown()
     {
         yield return new WaitForSeconds(3.0f);
