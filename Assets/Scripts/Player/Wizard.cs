@@ -5,13 +5,6 @@ namespace Sapphire
 {
     public class Wizard : Player
     {
-        public override void Spawned()
-        {
-            base.Spawned();
-            if (Object.HasInputAuthority)
-                Player.Local._uiManager.SetUIPosition();
-        }
-
         private void OnTriggerEnter(Collider other)
         {
             var arrow = other.gameObject.GetComponent<Arrow>();
@@ -20,12 +13,10 @@ namespace Sapphire
                 var ran = Random.Range(1, 4);
                 FindObjectOfType<AudioManager>().Play("Hurt_" + ran);
                 RPC_AddHealth(-Arrow.DAMAGE);
-                
+
                 // Delete in local to prevent multiple trigger
                 Destroy(other);
             }
         }
-
-
     }
 }

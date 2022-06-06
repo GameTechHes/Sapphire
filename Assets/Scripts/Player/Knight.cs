@@ -8,6 +8,20 @@ namespace Sapphire
 
         private bool PlaySoundBow = true;
 
+        public override void Spawned()
+        {
+            base.Spawned();
+            var spawnPt = GameObject.Find("KnightSpawnPoint");
+            if (spawnPt != null)
+            {
+                ThirdPersonController tpc = GetComponent<ThirdPersonController>();
+                if (tpc)
+                    tpc.SetTeleportPosition(spawnPt.transform.position);
+
+                Debug.Log($"Player respawned {Object.InputAuthority}");
+            }
+        }
+
         public override void FixedUpdateNetwork()
         {
             base.FixedUpdateNetwork();
@@ -24,12 +38,11 @@ namespace Sapphire
                             1.0f,
                             Runner.DeltaTime * aimSpeed);
 
-                        if(PlaySoundBow)
+                        if (PlaySoundBow)
                         {
                             PlaySoundBow = false;
                             FindObjectOfType<AudioManager>().Play("AimingBow");
                         }
-                        
                     }
                     else
                     {
@@ -66,13 +79,6 @@ namespace Sapphire
                     RPC_AddHealth(-FireBall.DAMAGE);
                 }
             }
-        }
-
-        public override void Spawned()
-        {
-            base.Spawned();
-            if (Object.HasInputAuthority)
-                this._uiManager.SetUIPosition();
         }
     }
 }

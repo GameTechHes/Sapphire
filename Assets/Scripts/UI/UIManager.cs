@@ -106,21 +106,19 @@ public class UIManager : NetworkBehaviour
 
         if (Player.Local.GetType() == typeof(Knight))
         {
-            GameObject.Find("Sbires").SetActive(false);
+            // SbiresUI.SetActive(false);
 
             AmmoUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(baseXPosition, baseYPosition + 200);
             SapphireUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(baseXPosition, baseYPosition + 100);
             TimerUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(baseXPosition, baseYPosition);
-
-
         }
         else
         {
-            GameObject.Find("Sapphires").SetActive(false);
-            GameObject.Find("Ammo").SetActive(false);
+            // SapphireUI.SetActive(false);
+            // AmmoUI.SetActive(false);
 
             TimerUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(baseXPosition, baseYPosition);
-            SapphireUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(baseXPosition, baseYPosition + 100);
+            // SapphireUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(baseXPosition, baseYPosition + 100);
         }
 
         HealthUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(-300, 100);
@@ -137,10 +135,11 @@ public class UIManager : NetworkBehaviour
             StartCoroutine(HideIcon());
         }
     }
+
     public IEnumerator HideIcon()
     {
         knightIcon = GameObject.FindGameObjectWithTag("KnightIcon");
-        if(knightIcon != null)
+        if (knightIcon != null)
         {
             knightIcon.GetComponent<MeshRenderer>().enabled = true;
             yield return new WaitForSeconds(5.0f);
@@ -150,11 +149,6 @@ public class UIManager : NetworkBehaviour
         {
             yield return null;
         }
-    }
-    public IEnumerator HideCountdown()
-    {
-        yield return new WaitForSeconds(3.0f);
-        CountDownUI.SetActive(false);
     }
 
     public void SetSapphire(int current, int total)
@@ -170,58 +164,55 @@ public class UIManager : NetworkBehaviour
         }
     }
 
-    public void HideLobbyUI()
-    {
-        LobbyUI.SetActive(false);
-    }
-
     public void MinimapDisplay(bool shouldDisplay)
     {
         MinimapUI.SetActive(shouldDisplay);
     }
 
-    public void DisplayMinimap()
-    {
-        MinimapUI.SetActive(true);
-    }
-
-    //Désolé pour ce nom de fonction
-    public void DisplayWizzardLostKnightWon()
-    {
-        if(Player.Local.GetType() == typeof(Knight)){
-            VictoryUI.SetActive(true);
-        }
-        else
-        {
-            GameOverUI.SetActive(true);
-        }
-    }
-
-    public void DisplayKnightLostWizzardWon()
-    {
-        if (Player.Local.GetType() == typeof(Knight))
-        {
-            GameOverUI.SetActive(true);
-        }
-        else
-        {
-            VictoryUI.SetActive(true);
-
-        }
-    }
+    // public void DisplayMinimap()
+    // {
+    //     MinimapUI.SetActive(true);
+    // }
+    //
+    // //DÃ©solÃ© pour ce nom de fonction
+    // public void DisplayWizzardLostKnightWon()
+    // {
+    //     if(Player.Local.GetType() == typeof(Knight)){
+    //         VictoryUI.SetActive(true);
+    //     }
+    //     else
+    //     {
+    //         GameOverUI.SetActive(true);
+    //     }
+    // }
+    //
+    // public void DisplayKnightLostWizzardWon()
+    // {
+    //     if (Player.Local.GetType() == typeof(Knight))
+    //     {
+    //         GameOverUI.SetActive(true);
+    //     }
+    //     else
+    //     {
+    //         VictoryUI.SetActive(true);
+    //
+    //     }
+    // }
 
     private IEnumerator DisplayGameOver()
     {
         GameOverUI.SetActive(true);
-        yield return new WaitForSeconds(3.0f);
-        GameOverUI.SetActive(false);
+        yield return null;
+        // yield return new WaitForSeconds(3.0f);
+        // GameOverUI.SetActive(false);
     }
 
     private IEnumerator DisplayVictory()
     {
         VictoryUI.SetActive(true);
-        yield return new WaitForSeconds(3.0f);
-        VictoryUI.SetActive(false);
+        yield return null;
+        // yield return new WaitForSeconds(3.0f);
+        // VictoryUI.SetActive(false);
     }
 
     public void triggerFlash()
@@ -246,5 +237,29 @@ public class UIManager : NetworkBehaviour
                 Time.timeScale = 1f;
             }
         }
+    }
+
+    public override void FixedUpdateNetwork()
+    {
+        LobbyUI.SetActive(GameManager.playState == GameManager.PlayState.LOBBY);
+        CountDownUI.SetActive(GameManager.playState == GameManager.PlayState.STARTING);
+        TimerUI.SetActive(GameManager.playState == GameManager.PlayState.INGAME);
+        if (Player.Local)
+        {
+            AmmoUI.SetActive(Player.Local.GetType() == typeof(Knight));
+            SapphireUI.SetActive(Player.Local.GetType() == typeof(Knight));
+            SbiresUI.SetActive(Player.Local.GetType() == typeof(Wizard));
+        }
+    }
+
+    public void StartNewGame()
+    {
+        RPC_StartNewGame();
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    private void RPC_StartNewGame()
+    {
+        GameManager.instance.StartNewGame();
     }
 }

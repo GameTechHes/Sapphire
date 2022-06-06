@@ -38,10 +38,5 @@ public class LobbyUI : MonoBehaviour
             Player.Local._uiManager.KnightText.text = $"Knight: {_knightPlayer.Username}";
             Player.Local._uiManager.KnightReady.text = _knightPlayer.IsReady ? "Ready" : "Not ready";
         }
-
-        if (GameManager.playState == GameManager.PlayState.INGAME)
-        {
-            Player.Local._uiManager.HideLobbyUI();
-        }
     }
 }

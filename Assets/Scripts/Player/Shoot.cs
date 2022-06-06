@@ -62,7 +62,7 @@ namespace Sapphire
                     }
                 }
 
-                if (Object.HasInputAuthority)
+                if (Object.HasInputAuthority && _crosshair != null)
                 {
                     _crosshair.SetActive(input.aim);
                 }
@@ -107,7 +107,7 @@ namespace Sapphire
 
         public override void Render()
         {
-            if (Object.HasInputAuthority)
+            if (Object.HasInputAuthority && _mainCamera != null)
             {
                 var worldPos = _mainCamera.ScreenToWorldPoint(_crosshair.transform.position);
 

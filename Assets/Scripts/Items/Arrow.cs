@@ -7,7 +7,7 @@ namespace Items
     public class Arrow : NetworkBehaviour
     {
         private const float InitialSpeed = 35;
-        public const int DAMAGE = 10;
+        public const int DAMAGE = 100;
 
         const float G = 9.81f;
         [Networked] private Vector3 velocity { get; set; }

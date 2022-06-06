@@ -4,7 +4,6 @@ using Cinemachine;
 using Fusion;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UserInterface;
 
 namespace Sapphire
 {
@@ -32,7 +31,6 @@ namespace Sapphire
         protected Cinemachine3rdPersonFollow _cinemachine3RdPersonFollow;
 
         public static Action<Player> PlayerJoined;
-        public static Action<Player> PlayerLeft;
 
         public static readonly List<Player> Players = new List<Player>();
         public static Player Local;
@@ -51,10 +49,12 @@ namespace Sapphire
             {
                 Local = this;
                 RPC_SetPlayerStats(ClientInfo.Username);
-                if(_uiManager != null)
+                if (_uiManager != null)
                 {
-                    _uiManager.SetHealth((int)MAX_HEALTH, (int)MAX_HEALTH);
+                    _uiManager.SetHealth((int) MAX_HEALTH, (int) MAX_HEALTH);
+                    _uiManager.SetUIPosition();
                 }
+
                 _followCamera = FindObjectOfType<CinemachineVirtualCamera>();
                 _followCamera.Follow = cameraRoot;
                 _cinemachine3RdPersonFollow = _followCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
@@ -78,7 +78,6 @@ namespace Sapphire
             {
                 Cursor.lockState = CursorLockMode.Locked;
             }
-
 
             Debug.Log("Spawned [" + this + "] IsClient=" + Runner.IsClient + " IsServer=" + Runner.IsServer +
                       " HasInputAuth=" + Object.HasInputAuthority + " HasStateAuth=" + Object.HasStateAuthority);
@@ -144,7 +143,6 @@ namespace Sapphire
         public override void Despawned(NetworkRunner runner, bool hasState)
         {
             Players.Remove(this);
-            PlayerLeft?.Invoke(this);
         }
 
         public void Respawn(float inSeconds)
@@ -156,21 +154,6 @@ namespace Sapphire
         {
             if (_respawnInSeconds > 0)
                 _respawnInSeconds -= Runner.DeltaTime;
-
-            var spawnPt = GameObject.Find("KnightSpawnPoint");
-            if (spawnPt != null && _respawnInSeconds <= 0)
-            {
-                Debug.Log($"Respawning {Object.InputAuthority}");
-                _respawnInSeconds = -1;
-
-                Health = MAX_HEALTH;
-
-                ThirdPersonController tpc = GetComponent<ThirdPersonController>();
-                if (tpc)
-                    tpc.SetTeleportPosition(spawnPt.transform.position);
-
-                Debug.Log($"Player respawned {Object.InputAuthority}");
-            }
         }
 
         public void TriggerDespawn()

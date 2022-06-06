@@ -15,16 +15,20 @@ namespace Items
 
         public override void Spawned()
         {
+            SpawnAll();
+        }
+
+        public void SpawnAll()
+        {
             // Only the server will spawn powerups
             if (!Object.HasStateAuthority)
                 return;
 
-            spawnSapphires();
-            spawnPowerups();
-
+            SpawnSapphires();
+            SpawnPowerups();
         }
 
-        void spawnSapphires()
+        void SpawnSapphires()
         {
             int spawnedSapphire = 0;
             // Each element contains all the spawning points in its own room.
@@ -35,6 +39,7 @@ namespace Items
                 {
                     return;
                 }
+
                 int nbChildren = spawnPointRoom.transform.childCount;
                 int randIndex = Random.Range(0, nbChildren);
                 GameObject chosenChild = spawnPointRoom.transform.GetChild(randIndex).gameObject;
@@ -54,10 +59,10 @@ namespace Items
             return randomized;
         }
 
-        void spawnPowerups()
+        void SpawnPowerups()
         {
             spawnPointsList = shuffleList(GameObject.FindGameObjectsWithTag("SpawningPoint").ToList());
-            
+
 
             foreach (GameObject spawnPoint in spawnPointsList)
             {
@@ -65,6 +70,7 @@ namespace Items
                 {
                     continue;
                 }
+
                 float randomNumber = Random.Range(0, 100);
                 if (randomNumber >= threshold)
                 {

@@ -22,25 +22,6 @@ public class LevelManager : NetworkSceneManagerBase
         Runner.SetActiveScene(nextLevelIndex);
     }
 
-    protected override void Shutdown(NetworkRunner runner)
-    {
-        base.Shutdown(runner);
-        if (_loadedScene != default)
-        {
-            foreach (var obj in FindObjectsOfType<GameObject>())
-            {
-                if (obj.GetType() != typeof(LevelManager))
-                {
-                    // Destroy(obj);
-                }
-            }
-            SceneManager.LoadSceneAsync(0);
-        }
-
-        _loadedScene = default;
-        // Destroy(gameObject);
-    }
-
     protected override IEnumerator SwitchScene(SceneRef prevScene, SceneRef newScene, FinishedLoadingDelegate finished)
     {
         Debug.Log($"Switching Scene from {prevScene} to {newScene}");
@@ -48,6 +29,11 @@ public class LevelManager : NetworkSceneManagerBase
         {
             finished(new List<NetworkObject>());
             yield break;
+        }
+
+        if (prevScene == 1 && newScene == 1)
+        {
+            yield return SceneManager.UnloadSceneAsync(newScene);
         }
 
         List<NetworkObject> sceneObjects = new List<NetworkObject>();
