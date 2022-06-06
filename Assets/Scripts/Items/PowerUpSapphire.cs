@@ -10,7 +10,7 @@ namespace Items
             if (sapphireController != null)
             {
                 FindObjectOfType<AudioManager>().Play("CollectingSapphire");
-                sapphireController.RPC_AddSapphire();
+                // sapphireController.RPC_AddSapphire();
                 gameObject.SetActive(false);
                 RPC_Despawn();
             }

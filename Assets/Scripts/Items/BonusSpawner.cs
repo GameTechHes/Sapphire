@@ -30,11 +30,7 @@ namespace Items
 
         void SpawnSapphires()
         {
-            if (FindObjectsOfType<PowerUpSapphire>().Length != 0)
-            {
-                return;
-            }
-            int spawnedSapphire = 0;
+            var spawnedSapphire = 0;
             // Each element contains all the spawning points in its own room.
             var spawnPointsPerRoom = GameObject.FindGameObjectsWithTag("SpawningPoints");
             foreach (GameObject spawnPointRoom in spawnPointsPerRoom)
@@ -44,10 +40,10 @@ namespace Items
                     return;
                 }
 
-                int nbChildren = spawnPointRoom.transform.childCount;
-                int randIndex = Random.Range(0, nbChildren);
-                GameObject chosenChild = spawnPointRoom.transform.GetChild(randIndex).gameObject;
-                Vector3 spawnPosition = chosenChild.transform.position;
+                var nbChildren = spawnPointRoom.transform.childCount;
+                var randIndex = Random.Range(0, nbChildren);
+                var chosenChild = spawnPointRoom.transform.GetChild(randIndex).gameObject;
+                var spawnPosition = chosenChild.transform.position;
                 spawnPosition.y += 1;
                 Runner.Spawn(sapphire, spawnPosition, Quaternion.identity, Object.StateAuthority);
                 spawnedSapphire += 1;

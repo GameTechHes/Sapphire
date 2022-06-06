@@ -72,6 +72,13 @@ public class GameManager : NetworkBehaviour
         {
             if (CheckEndGame())
             {
+                foreach (var sbire in FindObjectsOfType<Bot>())
+                {
+                    if (sbire.Object != null && sbire.Object.IsValid)
+                    {
+                        Runner.Despawn(sbire.Object);
+                    }
+                }
                 playState = PlayState.ENDING;
             }
         }
@@ -188,7 +195,23 @@ public class GameManager : NetworkBehaviour
         if (Object.HasStateAuthority && playState == PlayState.ENDING)
         {
             playState = PlayState.LOBBY;
-
+            
+            foreach (var powerup in FindObjectsOfType<PowerUpBase>())
+            {
+                if (powerup.Object != null && powerup.Object.IsValid)
+                {
+                    Runner.Despawn(powerup.Object);
+                }
+            }
+            
+            foreach (var sbire in FindObjectsOfType<Bot>())
+            {
+                if (sbire.Object != null && sbire.Object.IsValid)
+                {
+                    Runner.Despawn(sbire.Object);
+                }
+            }
+            
             foreach (var player in Player.Players.ToList())
             {
                 if (player.Object != null && player.Object.IsValid)
@@ -196,30 +219,22 @@ public class GameManager : NetworkBehaviour
                     Runner.Despawn(player.Object);
                 }
             }
-
-            (_knightPlayer, _wizardPlayer) = (_wizardPlayer, _knightPlayer);
-
-            Runner.Spawn(_playerKnightPrefab, Vector3.zero, Quaternion.identity, _knightPlayer);
-            Runner.Spawn(_playerWizardPrefab, Vector3.zero, Quaternion.identity, _wizardPlayer);
-
-            foreach (var powerup in FindObjectsOfType<PowerUpBase>(true))
-            {
-                if (powerup.Object != null && powerup.Object.IsValid)
-                {
-                    Runner.Despawn(powerup.Object);
-                }
-            }
-
+            
             foreach (var sp in GameObject.FindGameObjectsWithTag("SpawningPoint"))
             {
                 sp.GetComponent<SpawningPoint>().isTaken = false;
             }
 
             var bs = FindObjectOfType<BonusSpawner>();
-            if (bs)
+            if (bs != null)
             {
                 bs.SpawnAll();
             }
+
+            (_knightPlayer, _wizardPlayer) = (_wizardPlayer, _knightPlayer);
+
+            Runner.Spawn(_playerKnightPrefab, Vector3.zero, Quaternion.identity, _knightPlayer);
+            Runner.Spawn(_playerWizardPrefab, Vector3.zero, Quaternion.identity, _wizardPlayer);
         }
     }
 }
