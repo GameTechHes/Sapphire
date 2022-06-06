@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SoundVolume : MonoBehaviour
 {
-    public static float volumeMusique = 1;
-    public static float volumeBruitage = 1;
+    public static float volumeMusique = 0.1f;
+    public static float volumeBruitage = 0.2f;
 
     public void Musique(float newVolume)
     {

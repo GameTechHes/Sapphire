@@ -30,6 +30,10 @@ namespace Items
 
         void SpawnSapphires()
         {
+            if (FindObjectsOfType<PowerUpSapphire>().Length != 0)
+            {
+                return;
+            }
             int spawnedSapphire = 0;
             // Each element contains all the spawning points in its own room.
             var spawnPointsPerRoom = GameObject.FindGameObjectsWithTag("SpawningPoints");

@@ -24,7 +24,7 @@ public class AudioManager : MonoBehaviour
             {
                 s.source.volume = MusiqueVolume;
                 s.source.loop = true;
-                // s.source.Play();
+                s.source.Play();
             }
             else
             {
