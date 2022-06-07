@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using Fusion;
 using System;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 
 public class UIManager : NetworkBehaviour
@@ -243,6 +244,11 @@ public class UIManager : NetworkBehaviour
                 flashOn = false;
                 Time.timeScale = 1f;
             }
+        }
+
+        if (Keyboard.current.altKey.wasPressedThisFrame)
+        {
+            Cursor.lockState = Cursor.lockState == CursorLockMode.Locked ? CursorLockMode.None : CursorLockMode.Locked;
         }
     }
 
