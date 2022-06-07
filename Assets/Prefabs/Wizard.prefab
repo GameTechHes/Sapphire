@@ -754,13 +754,13 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 1.8
-  m_Radius: 0.4
+  m_Height: 2
+  m_Radius: 0.5
   m_SlopeLimit: 45
   m_StepOffset: 0.5
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.9, z: 0}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &306872425011100814
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -776,6 +776,7 @@ MonoBehaviour:
   _interpolationDataSource: 0
   fireball: {fileID: 2689184236050669419, guid: 6836f5eaa96f845c4ac0909f84272556, type: 3}
   launchStart: {fileID: 4067782370591337463}
+  maxShoot: 3
 --- !u!114 &7547794475521165770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -839,10 +840,10 @@ MonoBehaviour:
   - {fileID: 8281484588912600389}
   minimapCamera: {fileID: 2041774897894400625}
   _Username: 
-  _PlayerType: 1
   _IsReady:
     _value: 0
   _Health: 0
+  _uiManager: {fileID: 0}
   cameraRoot: {fileID: 8103794195785498517}
 --- !u!1 &1251583507443948
 GameObject:
@@ -2808,7 +2809,6 @@ GameObject:
   - component: {fileID: 328119738888994585}
   - component: {fileID: 3253569561484571026}
   - component: {fileID: 4977154708771874074}
-  - component: {fileID: 9021472520588511328}
   m_Layer: 7
   m_Name: Quad
   m_TagString: Untagged
@@ -2879,20 +2879,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &9021472520588511328
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6903525812981509436}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &7038304902176044926
 GameObject:
   m_ObjectHideFlags: 0

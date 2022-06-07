@@ -5,6 +5,13 @@ namespace Sapphire
 {
     public class Wizard : Player
     {
+        public override void Spawned()
+        {
+            base.Spawned();
+            if(Object.HasInputAuthority)
+                _uiManager.Crosshair.SetActive(true);
+        }
+
         private void OnTriggerEnter(Collider other)
         {
             var arrow = other.gameObject.GetComponent<Arrow>();

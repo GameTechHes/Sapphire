@@ -185,7 +185,6 @@ public class FieldOfView : NetworkBehaviour
             animator.SetBool("attack", false);
             animator.SetBool("die", true);
             StartCoroutine(Despawn());
-            Invoke("SpawnEffect", 1.0f);
         }
     }
 
@@ -197,18 +196,10 @@ public class FieldOfView : NetworkBehaviour
 
     private IEnumerator Despawn()
     {
-        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length +
-                                        animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
+        yield return new WaitForSeconds(5.0f);
         if (Object != null && Object.IsValid)
         {
             Runner.Despawn(Object);
         }
-    }
-
-    void SpawnEffect()
-    {
-        // Pourquoi on spawn un effet ?? C'est le même que la fireball, c'est bizarre non ?
-        // var obj = Instantiate(dieEffet, transform.position, transform.rotation) as GameObject;
-        // Destroy(obj, 2);
     }
 }

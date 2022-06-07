@@ -3200,6 +3200,7 @@ MonoBehaviour:
   sbireCounter: {fileID: 732397352}
   ammoUI: {fileID: 57476842}
   _ammoText: {fileID: 574265333}
+  _crosshair: {fileID: 1632314797}
   healthUI: {fileID: 1237885399}
   healthSlider: {fileID: 1237885402}
   healthCount: {fileID: 616122659}

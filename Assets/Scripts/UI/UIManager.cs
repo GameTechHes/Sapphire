@@ -27,6 +27,7 @@ public class UIManager : NetworkBehaviour
     [Header("Ammo")]
     [SerializeField] private GameObject ammoUI;
     [SerializeField] private Text _ammoText;
+    [SerializeField] private GameObject _crosshair;
 
 
     [Header("Health")]
@@ -82,6 +83,12 @@ public class UIManager : NetworkBehaviour
     public GameObject GameOverUI { get => gameOverUI; set => gameOverUI = value; }
     public Volume Volume { get => volume; set => volume = value; }
     public CanvasGroup AlphaController { get => alphaController; set => alphaController = value; }
+
+    public GameObject Crosshair
+    {
+        get => _crosshair;
+        set => _crosshair = value;
+    }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_Victory(NetworkBool hasKnightWin, string victoryMessage, string gameOverMessage)

@@ -18,7 +18,6 @@ namespace Sapphire
 
         [Networked] private NetworkBool _canShoot { get; set; }
 
-        private GameObject _crosshair;
         private AudioManager _audioManager;
         private Camera _mainCamera;
         private Quaternion _launchRotation;
@@ -33,8 +32,6 @@ namespace Sapphire
             {
                 Player.Local._uiManager.AmmoText.text = ammoCount.ToString();
                 _mainCamera = Camera.main;
-                _crosshair = GameObject.Find("Crosshair");
-                _crosshair.gameObject.SetActive(false);
                 _audioManager = FindObjectOfType<AudioManager>();
             }
         }
@@ -62,9 +59,9 @@ namespace Sapphire
                     }
                 }
 
-                if (Object.HasInputAuthority && _crosshair != null)
+                if (Object.HasInputAuthority && Player.Local._uiManager.Crosshair != null)
                 {
-                    _crosshair.SetActive(input.aim);
+                    Player.Local._uiManager.Crosshair.SetActive(input.aim);
                 }
             }
         }
@@ -109,7 +106,7 @@ namespace Sapphire
         {
             if (Object.HasInputAuthority && _mainCamera != null)
             {
-                var worldPos = _mainCamera.ScreenToWorldPoint(_crosshair.transform.position);
+                var worldPos = _mainCamera.ScreenToWorldPoint(Player.Local._uiManager.Crosshair.transform.position);
 
                 if (Physics.Raycast(worldPos, _mainCamera.transform.forward, out var hit, 100.0f))
                 {

@@ -79,13 +79,15 @@ public class GameManager : NetworkBehaviour
                         Runner.Despawn(sbire.Object);
                     }
                 }
+
                 playState = PlayState.ENDING;
             }
         }
 
         if (Object.HasStateAuthority)
         {
-            SbireNumber = FindObjectsOfType<FieldOfView>().Where(b => !b.IsDead).ToArray().Length;
+            SbireNumber = FindObjectsOfType<FieldOfView>().Where(b => b.Object != null && b.Object.IsValid && !b.IsDead)
+                .ToArray().Length;
 
             if (playState == PlayState.LOBBY && Player.Players.Count == 2 && Player.Players.All(p => p.IsReady))
             {
@@ -98,12 +100,15 @@ public class GameManager : NetworkBehaviour
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RPC_SpawnSbire(Vector3 position, Quaternion rotation)
     {
-        NetworkObject bot = Runner.Spawn(botPrefab, position, rotation);
-        var knight = FindObjectOfType<Knight>();
-        if (knight != null)
+        Runner.Spawn(botPrefab, position, rotation, null, (_, o) =>
         {
-            bot.transform.LookAt(knight.transform);
-        }
+            var knight = FindObjectOfType<Knight>();
+            if (knight != null)
+            {
+                o.transform.LookAt(knight.transform);
+            }
+        });
+        
     }
 
     private bool CheckEndGame()
@@ -195,7 +200,7 @@ public class GameManager : NetworkBehaviour
         if (Object.HasStateAuthority && playState == PlayState.ENDING)
         {
             playState = PlayState.LOBBY;
-            
+
             foreach (var powerup in FindObjectsOfType<PowerUpBase>())
             {
                 if (powerup.Object != null && powerup.Object.IsValid)
@@ -203,7 +208,7 @@ public class GameManager : NetworkBehaviour
                     Runner.Despawn(powerup.Object);
                 }
             }
-            
+
             foreach (var sbire in FindObjectsOfType<Bot>())
             {
                 if (sbire.Object != null && sbire.Object.IsValid)
@@ -211,7 +216,7 @@ public class GameManager : NetworkBehaviour
                     Runner.Despawn(sbire.Object);
                 }
             }
-            
+
             foreach (var player in Player.Players.ToList())
             {
                 if (player.Object != null && player.Object.IsValid)
@@ -219,7 +224,7 @@ public class GameManager : NetworkBehaviour
                     Runner.Despawn(player.Object);
                 }
             }
-            
+
             foreach (var sp in GameObject.FindGameObjectsWithTag("SpawningPoint"))
             {
                 sp.GetComponent<SpawningPoint>().isTaken = false;
