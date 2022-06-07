@@ -25,5 +25,17 @@ namespace Sapphire
                 Destroy(other);
             }
         }
+        
+        public override void FixedUpdateNetwork()
+        {
+            base.FixedUpdateNetwork();
+            if (GetInput(out NetworkInputData input))
+            {
+                if (Object.HasInputAuthority)
+                {
+                    _uiManager.Crosshair.SetActive(input.aim);
+                }
+            }
+        }
     }
 }
